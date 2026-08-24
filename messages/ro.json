@@ -1,10 +1,14 @@
 {
+  "meta": {
+    "title": "hailmary.ro",
+    "description": "Fotbal american NFL, în română."
+  },
   "nav": {
-    "home": "Acasă",
     "news": "Știri",
     "teams": "Echipe",
     "rules": "Regulament",
     "history": "Istorie",
+    "schedule": "Program",
     "glossary": "Glosar"
   },
   "localeSwitcher": {

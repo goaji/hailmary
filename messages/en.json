@@ -1,10 +1,14 @@
 {
+  "meta": {
+    "title": "hailmary.ro",
+    "description": "American football NFL coverage, in Romanian."
+  },
   "nav": {
-    "home": "Home",
     "news": "News",
     "teams": "Teams",
     "rules": "Rules",
     "history": "History",
+    "schedule": "Schedule",
     "glossary": "Glossary"
   },
   "localeSwitcher": {

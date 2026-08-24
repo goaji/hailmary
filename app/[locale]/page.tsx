@@ -1,5 +1,15 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+import { getLanguageAlternates } from "@/i18n";
 import styles from "./page.module.css";
+
+export function generateMetadata(): Metadata {
+  return {
+    alternates: {
+      languages: getLanguageAlternates("/"),
+    },
+  };
+}
 
 export default function Home() {
   return (
