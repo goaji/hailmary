@@ -14,7 +14,7 @@ Romanian-language American football site: NFL news (~2/3 of content) plus evergr
 ## Non-negotiables
 
 1. **No Tailwind, no styled-components, no CSS-in-JS.** Styling lives in `.module.scss` files. This is a deliberate choice — the project doubles as an interview portfolio piece and should demonstrate CSS fundamentals.
-2. **Team accent colors are CSS custom properties**, never hardcoded hex in component SCSS. `TeamColorProvider` sets `--accent-1` / `--accent-2` on a root wrapper; components read `var(--accent-1)`. This is what makes the "Echipa mea" team-color switcher work without per-component logic.3. **No hardcoded UI copy.** Every label, button, error, and empty state comes from `messages/ro.json` / `messages/en.json` via `next-intl` — even in v1 where Romanian is the only complete locale. Romanian is the primary voice: diacritics required (Știri, nu Stiri). Football jargon stays in English (touchdown, quarterback, blitz) since that's how Romanian fans actually speak, but terms in the glosary will be explained via a pop-up on hover (short explanation) or via a side-panel on click (long explanation). 
+2. **Team accent colors are CSS custom properties**, never hardcoded hex in component SCSS. `TeamColorProvider` sets `--accent-1` / `--accent-2` on a root wrapper; components read `var(--accent-1)`. This is what makes the "Echipa mea" team-color switcher work without per-component logic. The page background does **not** change with the team — the dark base is the brand, the accent is the personalisation.3. **No hardcoded UI copy.** Every label, button, error, and empty state comes from `messages/ro.json` / `messages/en.json` via `next-intl` — even in v1 where Romanian is the only complete locale. Romanian is the primary voice: diacritics required (Știri, nu Stiri). Football jargon stays in English (touchdown, quarterback, blitz) since that's how Romanian fans actually speak, but explain it on first use in beginner-facing content.
 4. **Content access goes through the data layer**, never a direct `fs.readFile` in a component. All reads use `getAllArticles` / `getArticleBySlug` / `getTeam` etc. from `lib/`. This keeps the future CMS swap a one-file change.
 5. **Server Components by default.** Add `'use client'` only where interaction demands it (glossary filter, team-color picker, explainer panel, mobile nav).
 6. **No global state store.** See below.
@@ -119,7 +119,36 @@ Defined once in `types/index.ts`, imported everywhere. `ArticleFrontmatter`, `Te
 - Dates formatted with `Intl.DateTimeFormat(locale)` — locale from `next-intl`, never hardcoded, never a hand-rolled formatter
 - Internal links use `next-intl`'s locale-aware `Link`, never a bare `next/link` with a hand-built `/ro/...` path
 - Images via `next/image` with explicit dimensions; placeholder images live in `public/placeholder/`
-- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent (some NFL colors fail on dark backgrounds — adjust the token, not the component)
+- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `lib/teams.ts`, never the component and never the surface
+
+## Semantic markup
+
+**Use the real element; don't paint a `role` onto a `div`.** A `<button>` already carries `role="button"`, keyboard activation, focus, and disabled semantics. `<div role="button">` gives you the role and none of the behaviour, and then you hand-roll `tabindex`, Enter/Space handling and focus styling — and get one of them wrong.
+
+The reference mockup is a prototype: its controls are `<div>`s and `<span>`s. **Do not reproduce that.** In the build:
+
+- Team swatches — `<button>` each, inside a `role="radiogroup"` with an accessible group label, `aria-checked` on the selected one
+- Nav items — real `<a>` (locale-aware `Link`), never a `<span>` with a click handler
+- `TermLink` — a `<button>` in the JS path; the no-JS fallback is an `<a>` to `/glosar#slug`
+- Origin strip close — `<button aria-label="Ascunde">`
+- Explainer panel — `role="dialog"` with `aria-modal`, labelled by the term heading
+
+Explicit `role` is right only where no element expresses the thing: `dialog`, `alert`, `tablist`/`tab`/`tabpanel`, `radiogroup`. That's the whole list.
+
+The test for whether markup is good enough: if `getByRole(role, { name })` can't find a control, a screen reader user can't either.
+
+## Testing
+
+**Playwright** for end-to-end and accessibility; it is the primary test layer. Unit tests only for pure logic in `lib/` (frontmatter parsing, score normalization, tag validation) — don't unit-test components.
+
+- **Locate by role and accessible name.** `getByRole('button', { name: 'Ascunde' })`, never a CSS class or `data-testid`. Role locators survive refactors and double as an accessibility assertion. Reach for `data-testid` only when there is genuinely no accessible handle, and treat that as a markup smell to fix instead.
+- **Assert behaviour, not implementation** — that the panel opened with the right term, not that a state variable flipped. One exception worth making: the team switcher is asserted on the computed `--accent-1` custom property, because that is the actual contract between the provider and every component.
+- **`@axe-core/playwright` on each page type**, and loop all six team accents — contrast is the failure mode most likely to slip through, since some NFL colors fail on the dark base.
+- **Visual regression** via `toHaveScreenshot()` per accent and per breakpoint (375 / 768 / 1440). Cheap, and it catches the header-crowding class of bug.
+- **Test the no-JS path** with a JS-disabled browser context: `TermLink` must still be a working link to the glossary.
+- **A smoke suite runs against the live Hostinger deploy** after deploy — homepage renders, an article renders, `/en` resolves, the cron route rejects an unauthenticated call with 401.
+
+CI runs the full suite on every PR. A failing accessibility assertion blocks the merge, same as a failing behaviour test.
 
 ## Localization scope (v1)
 
@@ -140,13 +169,3 @@ Scaffold + tokens + **i18n routing** → layout shell → UI primitives → cont
 The explainer panel comes right after article pages because it's the site's differentiator, not a nice-to-have — it's what lets one article serve both a beginner and a fan. Score/odds/social widgets are explicitly *after* it, and after the reference pages it depends on.
 
 Locale routing goes in at scaffold time. Retrofitting `/[locale]/` later means touching every route, every link, and every `generateStaticParams` — the one decision in this plan that is genuinely expensive to defer.
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
