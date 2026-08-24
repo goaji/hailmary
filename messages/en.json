@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "home": "Home",
+    "news": "News",
+    "teams": "Teams",
+    "rules": "Rules",
+    "history": "History",
+    "glossary": "Glossary"
+  },
+  "localeSwitcher": {
+    "label": "Language selector"
+  }
+}

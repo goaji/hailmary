@@ -1,0 +1,10 @@
+.localeSwitcher {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.option {
+  &[aria-current="true"] {
+    font-weight: 700;
+  }
+}

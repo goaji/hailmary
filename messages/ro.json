@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "home": "Acasă",
+    "news": "Știri",
+    "teams": "Echipe",
+    "rules": "Regulament",
+    "history": "Istorie",
+    "glossary": "Glosar"
+  },
+  "localeSwitcher": {
+    "label": "Selector de limbă"
+  }
+}
