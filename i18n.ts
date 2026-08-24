@@ -6,6 +6,7 @@ import { hasLocale } from "next-intl";
 export const routing = defineRouting({
   locales: ["ro", "en"],
   defaultLocale: "ro",
+  localeDetection: false,
 });
 
 export type Locale = (typeof routing.locales)[number];
