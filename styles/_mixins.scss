@@ -1,0 +1,39 @@
+@use "sass:map";
+
+// Mobile-first breakpoints. Every media query in the codebase goes through
+// mq() — a raw @media is a review failure.
+$breakpoints: (
+  sm: 375px,
+  md: 768px,
+  lg: 1440px,
+);
+
+@mixin mq($breakpoint) {
+  @if not map.has-key($breakpoints, $breakpoint) {
+    @error "Unknown breakpoint `#{$breakpoint}`. Available breakpoints: #{map.keys($breakpoints)}.";
+  }
+
+  @media (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Used on every interactive element (nav links, team-picker buttons etc)∂ :focus-visible.
+@mixin focus-ring {
+  outline: 2px solid var(--accent-1);
+  outline-offset: 2px;
+}
+
+// Single-line ellipsis at 1 (the common case); -webkit-line-clamp above.
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $lines;
+    overflow: hidden;
+  }
+}
