@@ -2,18 +2,20 @@ import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bebas_Neue, Work_Sans } from "next/font/google";
 import { routing } from "@/i18n";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher/LocaleSwitcher";
-import "../globals.css";
+import "../../styles/globals.scss";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  variable: "--font-bebas-neue",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const workSans = Work_Sans({
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-work-sans",
   subsets: ["latin"],
 });
 
@@ -47,7 +49,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <LocaleSwitcher />

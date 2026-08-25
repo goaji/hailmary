@@ -42,7 +42,8 @@ $fs-body-lg: 16px; // lead paragraphs, larger body
 $fs-h3: 22px; // subheadings
 $fs-h2: 28px; // section headings
 
-// Font stacks. Step 3 points these at the CSS variables next/font/google
-// exposes in app/[locale]/layout.tsx once those are wired up.
-$font-display: "Bebas Neue", sans-serif;
-$font-body: "Work Sans", sans-serif;
+// Font stacks. The CSS variables come from next/font/google in
+// app/[locale]/layout.tsx; the literal names are the fallback before
+// those load.
+$font-display: var(--font-bebas-neue), "Bebas Neue", sans-serif;
+$font-body: var(--font-work-sans), "Work Sans", sans-serif;
