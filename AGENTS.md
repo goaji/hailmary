@@ -15,7 +15,7 @@ Romanian-language American football site: NFL news (~2/3 of content) plus evergr
 
 1. **No Tailwind, no styled-components, no CSS-in-JS.** Styling lives in `.module.scss` files. This is a deliberate choice — the project doubles as an interview portfolio piece and should demonstrate CSS fundamentals.
 2. **Team accent colors are CSS custom properties**, never hardcoded hex in component SCSS. `TeamColorProvider` sets `--accent-1` / `--accent-2` on a root wrapper; components read `var(--accent-1)`. This is what makes the "Echipa mea" team-color switcher work without per-component logic. The page background does **not** change with the team — the dark base is the brand, the accent is the personalisation.3. **No hardcoded UI copy.** Every label, button, error, and empty state comes from `messages/ro.json` / `messages/en.json` via `next-intl` — even in v1 where Romanian is the only complete locale. Romanian is the primary voice: diacritics required (Știri, nu Stiri). Football jargon stays in English (touchdown, quarterback, blitz) since that's how Romanian fans actually speak, but explain it on first use in beginner-facing content.
-4. **Content access goes through the data layer**, never a direct `fs.readFile` in a component. All reads use `getAllArticles` / `getArticleBySlug` / `getTeam` etc. from `lib/`. This keeps the future CMS swap a one-file change.
+4. **Content access goes through the data layer**, never a direct `fs.readFile` in a component. All reads use `getAllArticles` / `getArticleBySlug` / `getTeam` etc. from `utils/`. This keeps the future CMS swap a one-file change.
 5. **Server Components by default.** Add `'use client'` only where interaction demands it (glossary filter, team-color picker, explainer panel, mobile nav).
 6. **No global state store.** See below.
 
@@ -90,7 +90,7 @@ components/
   layout/               # SiteHeader, SiteFooter, TeamColorProvider, LocaleSwitcher
   home/ articles/ teams/ reference/ schedule/
   explainer/            # ExplainerProvider, ExplainerPanel, ExplainerContent, TermLink
-lib/
+utils/
   articles.ts           # MDX read + frontmatter parse (locale-aware)
   glossary.ts           # glossary entries, keyed by slug
   teams.ts              # 32-team static data
@@ -119,7 +119,7 @@ Defined once in `types/index.ts`, imported everywhere. `ArticleFrontmatter`, `Te
 - Dates formatted with `Intl.DateTimeFormat(locale)` — locale from `next-intl`, never hardcoded, never a hand-rolled formatter
 - Internal links use `next-intl`'s locale-aware `Link`, never a bare `next/link` with a hand-built `/ro/...` path
 - Images via `next/image` with explicit dimensions; placeholder images live in `public/placeholder/`
-- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `lib/teams.ts`, never the component and never the surface
+- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `utils/teams.ts`, never the component and never the surface
 
 ## Semantic markup
 
@@ -139,7 +139,7 @@ The test for whether markup is good enough: if `getByRole(role, { name })` can't
 
 ## Testing
 
-**Playwright** for end-to-end and accessibility; it is the primary test layer. Unit tests only for pure logic in `lib/` (frontmatter parsing, score normalization, tag validation) — don't unit-test components.
+**Playwright** for end-to-end and accessibility; it is the primary test layer. Unit tests only for pure logic in `utils/` (frontmatter parsing, score normalization, tag validation) — don't unit-test components.
 
 - **Locate by role and accessible name.** `getByRole('button', { name: 'Ascunde' })`, never a CSS class or `data-testid`. Role locators survive refactors and double as an accessibility assertion. Reach for `data-testid` only when there is genuinely no accessible handle, and treat that as a markup smell to fix instead.
 - **Assert behaviour, not implementation** — that the panel opened with the right term, not that a state variable flipped. One exception worth making: the team switcher is asserted on the computed `--accent-1` custom property, because that is the actual contract between the provider and every component.

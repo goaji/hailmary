@@ -1,0 +1,48 @@
+@use "sass:map";
+
+// Base colors. The only place colors are written as hex — team colors live
+// in utils/teams.ts, nothing else may hardcode one. Accents are never
+// defined here; they only ever arrive as var(--accent-1) / var(--accent-2)
+// from TeamColorProvider.
+$c-header: #0d0e12;
+$c-page: #14151a;
+$c-surface: #191b21;
+$c-border: #2a2c34;
+$c-text: #f5f4f2;
+$c-text-dim: #cfd0d6;
+$c-text-muted: #9a9ba3;
+
+// Spacing scale. Access via space($step), never the map or a raw px value.
+$space: (
+  4: 4px,
+  8: 8px,
+  12: 12px,
+  16: 16px,
+  18: 18px,
+  20: 20px,
+  32: 32px,
+  48: 48px,
+  64: 64px,
+);
+
+@function space($step) {
+  @if not map.has-key($space, $step) {
+    @error "Unknown spacing step `#{$step}`. Available steps: #{map.keys($space)}.";
+  }
+
+  @return map.get($space, $step);
+}
+
+// Type scale, UI chrome through section headings. Bebas display sizes
+// (hero/headline) are separate tokens, added when those components land.
+$fs-ui: 12px; // nav labels, footer, badges
+$fs-meta: 14px; // captions, secondary/meta text
+$fs-body: 15px; // body copy
+$fs-body-lg: 16px; // lead paragraphs, larger body
+$fs-h3: 22px; // subheadings
+$fs-h2: 28px; // section headings
+
+// Font stacks. Step 3 points these at the CSS variables next/font/google
+// exposes in app/[locale]/layout.tsx once those are wired up.
+$font-display: "Bebas Neue", sans-serif;
+$font-body: "Work Sans", sans-serif;
