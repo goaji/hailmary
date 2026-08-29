@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Bebas_Neue, Work_Sans } from "next/font/google";
 import { routing } from "@/i18n";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher/LocaleSwitcher";
+import { TeamColorProvider } from "@/components/layout/TeamColorProvider/TeamColorProvider";
 import "../../styles/globals.scss";
 
 const bebasNeue = Bebas_Neue({
@@ -52,8 +53,10 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <LocaleSwitcher />
-          {children}
+          <TeamColorProvider>
+            <LocaleSwitcher />
+            {children}
+          </TeamColorProvider>
         </NextIntlClientProvider>
       </body>
     </html>

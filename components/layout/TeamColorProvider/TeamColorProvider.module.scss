@@ -1,0 +1,5 @@
+.wrapper {
+  // Exists only to carry --accent-1/--accent-2 as inline custom properties;
+  // must not introduce a box that disrupts the layout it wraps.
+  display: contents;
+}
