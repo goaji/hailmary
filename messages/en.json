@@ -5,6 +5,7 @@
   },
   "nav": {
     "mainLabel": "Main navigation",
+    "toggleLabel": "Menu",
     "news": "News",
     "teams": "Teams",
     "rules": "Rules",
