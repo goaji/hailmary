@@ -42,6 +42,11 @@ $fs-body-lg: 16px; // lead paragraphs, larger body
 $fs-h3: 22px; // subheadings
 $fs-h2: 28px; // section headings
 
+// Bebas display sizes, added as those components land — kept separate from
+// the UI type scale above since a display size and a body heading can
+// diverge even where their px values start out matching.
+$fs-logo: 28px;
+
 // Font stacks. The CSS variables come from next/font/google in
 // app/[locale]/layout.tsx; the literal names are the fallback before
 // those load.

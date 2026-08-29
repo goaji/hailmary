@@ -1,0 +1,74 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: v.space(20);
+  padding: v.space(18) v.space(32);
+  background: v.$c-header;
+  border-bottom: 2px solid var(--accent-1);
+}
+
+.logo {
+  display: flex;
+  align-items: baseline;
+  gap: v.space(4);
+  font-family: v.$font-display;
+  font-size: v.$fs-logo;
+  letter-spacing: 1px;
+  text-decoration: none;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.logoHail {
+  color: v.$c-text;
+}
+
+.logoMary {
+  color: var(--accent-1);
+}
+
+.logoRo {
+  color: v.$c-text-muted;
+  font-size: v.$fs-body-lg;
+  margin-left: v.space(4);
+}
+
+.nav {
+  display: flex;
+  gap: v.space(16);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.navLink,
+.navLinkActive {
+  display: inline-block;
+  font-size: v.$fs-ui;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: v.$c-text-dim;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding-bottom: v.space(4);
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.navLinkActive {
+  color: var(--accent-1);
+  border-bottom-color: var(--accent-1);
+}

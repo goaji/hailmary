@@ -4,6 +4,7 @@
     "description": "American football NFL coverage, in Romanian."
   },
   "nav": {
+    "mainLabel": "Main navigation",
     "news": "News",
     "teams": "Teams",
     "rules": "Rules",

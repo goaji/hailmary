@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Bebas_Neue, Work_Sans } from "next/font/google";
 import { routing } from "@/i18n";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher/LocaleSwitcher";
+import { SiteHeader } from "@/components/layout/SiteHeader/SiteHeader";
 import { TeamColorProvider } from "@/components/layout/TeamColorProvider/TeamColorProvider";
 import "../../styles/globals.scss";
 
@@ -54,6 +55,7 @@ export default async function LocaleLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <TeamColorProvider>
+            <SiteHeader />
             <LocaleSwitcher />
             {children}
           </TeamColorProvider>

@@ -4,6 +4,7 @@
     "description": "Fotbal american NFL, în română."
   },
   "nav": {
+    "mainLabel": "Navigare principală",
     "news": "Știri",
     "teams": "Echipe",
     "rules": "Regulament",
