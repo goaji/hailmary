@@ -1,10 +1,28 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
 .localeSwitcher {
   display: flex;
-  gap: 0.5rem;
+  gap: v.space(8);
+  font-size: v.$fs-ui;
 }
 
 .option {
+  // Fixed, always-AA-safe color — not var(--accent-1), which is only
+  // calibrated for large text/UI (>=3.0), not small chrome like this.
+  color: v.$c-text-dim;
+  text-decoration: none;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
   &[aria-current="true"] {
+    color: v.$c-text;
     font-weight: 700;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
   }
 }
