@@ -18,5 +18,11 @@
   },
   "teamPicker": {
     "label": "Echipa mea preferată"
+  },
+  "siteFooter": {
+    "copyright": "© {year} Hail Mary.ro"
+  },
+  "home": {
+    "placeholder": "Pagina principală vine mai tarziu."
   }
 }

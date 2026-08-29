@@ -18,5 +18,11 @@
   },
   "teamPicker": {
     "label": "My favorite team"
+  },
+  "siteFooter": {
+    "copyright": "© {year} Hail Mary.ro"
+  },
+  "home": {
+    "placeholder": "Homepage lands later."
   }
 }
