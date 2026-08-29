@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n";
+import { TeamPicker } from "@/components/layout/TeamPicker/TeamPicker";
 import styles from "./SiteHeader.module.scss";
 
 const NAV_ITEMS = [
@@ -44,6 +45,8 @@ export function SiteHeader() {
           })}
         </ul>
       </nav>
+
+      <TeamPicker />
     </header>
   );
 }

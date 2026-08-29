@@ -14,5 +14,8 @@
   },
   "localeSwitcher": {
     "label": "Language selector"
+  },
+  "teamPicker": {
+    "label": "My favorite team"
   }
 }

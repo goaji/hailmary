@@ -1,0 +1,28 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.picker {
+  display: flex;
+  align-items: center;
+  gap: v.space(4);
+  flex-shrink: 0;
+}
+
+.swatch {
+  width: 15px;
+  height: 15px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--swatch);
+  appearance: none;
+  cursor: pointer;
+
+  &[aria-checked="true"] {
+    border-color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
