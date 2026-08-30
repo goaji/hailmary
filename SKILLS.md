@@ -21,7 +21,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
    ---
    ```
 3. Write the body in MDX. Jargon gets a short parenthetical gloss on first use in any article tagged for beginners.
-4. Tag it three ways: `category` for content type, `teams` for who it's about, `tags` for what it's about. `tags` is a controlled vocabulary in `lib/tags.ts` — add a new one there first if none fits, and only if at least two articles will use it. Never invent a tag inline; free-form tags fragment into near-duplicates and leave tag pages with one article on them. The first tag in the array renders as the card chip, so order it deliberately.
+4. Tag it three ways: `category` for content type, `teams` for who it's about, `tags` for what it's about. `tags` is a controlled vocabulary in `utils/tags.ts` — add a new one there first if none fits, and only if at least two articles will use it. Never invent a tag inline; free-form tags fragment into near-duplicates and leave tag pages with one article on them. The first tag in the array renders as the card chip, so order it deliberately.
 5. Only one article may have `featured: true` — it fills the homepage hero. Unset the previous one in the same commit.
 6. `generateStaticParams` picks the file up on the next build; ISR surfaces it without a redeploy.
 7. News is Romanian-only in v1 — don't create an `en/` twin for `category: "stiri"`. English readers get the Romanian article with a fallback notice.
@@ -37,7 +37,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 
 ## Add a new route
 
-1. `app/[locale]/<segment>/page.tsx` — never outside the locale segment. Keep it thin: fetch data via `lib/`, compose components, return.
+1. `app/[locale]/<segment>/page.tsx` — never outside the locale segment. Keep it thin: fetch data via `utils/`, compose components, return.
 2. Export `generateMetadata` (not a static `metadata`) so `title`/`description` come from the locale's messages, plus `openGraph.images` and `alternates.languages` for `hreflang`.
 3. `generateStaticParams` returns the cross product of locales × dynamic params.
 4. Add the route to `SiteHeader` nav only if it's a top-level destination; otherwise link contextually. Links use the locale-aware `Link`.
@@ -45,11 +45,11 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 
 ## Wire up a team accent color
 
-1. Team colors live in `lib/teams.ts` — the single source of truth, all 32 teams. Each record carries four colors with two distinct jobs:
+1. Team colors live in `utils/teams.ts` — the single source of truth, all 32 teams. Each record carries four colors with two distinct jobs:
    - `brand1` / `brand2` — the team's **true** brand colors. Badges, swatches, logo lockups: anything that must be correct rather than legible.
    - `accent1` / `accent2` — **UI-safe** derivatives for the dark base. Most NFL primaries are near-black navies that are unreadable as text there, so those are lightened. Where the brand color already passes, accent equals brand.
 2. `TeamColorProvider` reads the selected team from context (persisted to `localStorage`) and sets `--accent-1` / `--accent-2` from the *accent* pair as inline custom properties on its wrapper element.
-3. Components consume `var(--accent-1)` in SCSS. Never import `lib/teams.ts` into a presentational component just to read a color — the only legitimate imports are the picker and the teams pages, which need names and logos.
+3. Components consume `var(--accent-1)` in SCSS. Never import `utils/teams.ts` into a presentational component just to read a color — the only legitimate imports are the picker and the teams pages, which need names and logos.
 4. Adding or changing a team means clearing both contrast bars, which differ because the two accents have different jobs:
    - `accent1` ≥ **3.0** against the page `#14151a` — large Bebas headings and UI
    - `accent2` ≥ **4.5** against the panel `#1e2027` — small 10-11px bold category chips
@@ -58,7 +58,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 
 ## Consume live score data
 
-1. All sports-API access is inside `lib/scores.ts` — components never call the API.
+1. All sports-API access is inside `utils/scores.ts` — components never call the API.
 2. Fetch, then normalize into the `Game` type immediately. Nothing raw from the API crosses into app code.
 3. Cache with ISR (`export const revalidate = 60` on live pages, longer elsewhere). Never fetch third-party data per-request.
 4. `/api/cron/sync-scores` is the refresh path: it calls the API, writes normalized `Game` records to the cache store, and is invoked by a Vercel cron.
@@ -110,11 +110,12 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 ## Before opening a PR
 
 - `tsc --noEmit` and lint clean, no `any`, no unused exports
-- No hardcoded hex outside `_variables.scss` and `lib/teams.ts`
+- No hardcoded hex outside `_variables.scss` and `utils/teams.ts`
 - All new copy in Romanian with correct diacritics, and every string pulled from `messages/`, not inlined
 - `ro.json` and `en.json` have identical key sets
 - Every interactive element is a real `<button>` / `<a>`, reachable by `getByRole` with an accessible name
 - Playwright suite green, including the axe pass across all six team accents
+- Vitest green, and every pure function added or touched in `utils/` has a test — not deferred to a later "testing step"
 - Viewed in both locales; checked that Romanian's longer strings don't break the layout
 - Keyboard-navigable: tab through the new UI and confirm visible focus
 - Checked at 375px, 768px, 1440px

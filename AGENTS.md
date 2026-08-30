@@ -139,7 +139,9 @@ The test for whether markup is good enough: if `getByRole(role, { name })` can't
 
 ## Testing
 
-**Playwright** for end-to-end and accessibility; it is the primary test layer. Unit tests only for pure logic in `utils/` (frontmatter parsing, score normalization, tag validation) — don't unit-test components.
+**Playwright** for end-to-end and accessibility; it is the primary test layer. Unit tests (Vitest) are for pure logic in `utils/` (frontmatter parsing, score normalization, tag validation, fallback contracts like `getTeam`) — don't unit-test components.
+
+**Add the unit test in the same commit as the logic, every time — don't wait to be asked.** Whenever a step introduces or touches a pure function in `utils/`, that step's commit includes its test. This applies retroactively too: if you notice existing pure logic in `utils/` has no coverage, add it then, not "later" or "in the dedicated testing step" — a plan that reserves one step for "write the tests" produces gaps everywhere else in the meantime.
 
 - **Locate by role and accessible name.** `getByRole('button', { name: 'Ascunde' })`, never a CSS class or `data-testid`. Role locators survive refactors and double as an accessibility assertion. Reach for `data-testid` only when there is genuinely no accessible handle, and treat that as a markup smell to fix instead.
 - **Assert behaviour, not implementation** — that the panel opened with the right term, not that a state variable flipped. One exception worth making: the team switcher is asserted on the computed `--accent-1` custom property, because that is the actual contract between the provider and every component.
