@@ -56,8 +56,8 @@ export default async function ScratchPage() {
       </section>
 
       <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <Byline author="Andrei Mocanu" publishedAt={hoursAgo(2)} />
-        <Byline author="Andrei Mocanu" publishedAt={hoursAgo(9)} />
+        <Byline author="Admin" publishedAt={hoursAgo(2)} />
+        <Byline author="Admin" publishedAt={hoursAgo(9)} />
       </section>
 
       <section style={{ display: "flex", gap: 24 }}>

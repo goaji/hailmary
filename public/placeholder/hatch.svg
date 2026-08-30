@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-hidden="true">
+  <defs>
+    <pattern id="hatch" width="20" height="20" patternTransform="rotate(135)" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#26282f" />
+      <rect width="10" height="20" fill="#2d2f37" />
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#hatch)" />
+</svg>
