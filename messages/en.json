@@ -24,5 +24,14 @@
   },
   "home": {
     "placeholder": "Homepage lands later."
+  },
+  "categories": {
+    "transferuri": "Transfers",
+    "accidentari": "Injuries",
+    "analiza": "Analysis",
+    "antrenori": "Coaches",
+    "draft": "Draft",
+    "program": "Schedule",
+    "regulament": "Rules"
   }
 }

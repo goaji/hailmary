@@ -24,5 +24,14 @@
   },
   "home": {
     "placeholder": "Pagina principală vine mai tarziu."
+  },
+  "categories": {
+    "transferuri": "Transferuri",
+    "accidentari": "Accidentări",
+    "analiza": "Analiză",
+    "antrenori": "Antrenori",
+    "draft": "Draft",
+    "program": "Program",
+    "regulament": "Regulament"
   }
 }
