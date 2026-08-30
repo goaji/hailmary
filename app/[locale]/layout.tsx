@@ -4,7 +4,6 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Bebas_Neue, Work_Sans } from "next/font/google";
 import { routing } from "@/i18n";
-import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher/LocaleSwitcher";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader/SiteHeader";
 import { TeamColorProvider } from "@/components/layout/TeamColorProvider/TeamColorProvider";
@@ -57,7 +56,6 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <TeamColorProvider>
             <SiteHeader />
-            <LocaleSwitcher />
             <main>{children}</main>
             <SiteFooter />
           </TeamColorProvider>

@@ -13,7 +13,7 @@
     "schedule": "Program",
     "glossary": "Glosar"
   },
-  "localeSwitcher": {
+  "languageSwitcher": {
     "label": "Selector de limbă"
   },
   "teamPicker": {

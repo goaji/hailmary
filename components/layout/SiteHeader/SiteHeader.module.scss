@@ -63,6 +63,20 @@
   margin-left: v.space(4);
 }
 
+// Holds the team picker + language switcher together as one right-side
+// cluster. At md+, ordered after .nav (order: 2) so the header reads
+// logo / nav / picker+switcher — without this, both would keep their
+// default order: 0 and sort ahead of nav by source position instead.
+.rightGroup {
+  display: flex;
+  align-items: center;
+  gap: v.space(16);
+
+  @include mix.mq(md) {
+    order: 3;
+  }
+}
+
 // Collapsed by default below md; shown behind .navToggle instead.
 .navRegion {
   display: none;

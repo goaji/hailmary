@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.localeSwitcher {
+.languageSwitcher {
   display: flex;
   gap: v.space(8);
   font-size: v.$fs-ui;

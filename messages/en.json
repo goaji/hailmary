@@ -13,7 +13,7 @@
     "schedule": "Schedule",
     "glossary": "Glossary"
   },
-  "localeSwitcher": {
+  "languageSwitcher": {
     "label": "Language selector"
   },
   "teamPicker": {

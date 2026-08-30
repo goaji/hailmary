@@ -2,20 +2,20 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Link, routing, usePathname } from "@/i18n";
-import styles from "./LocaleSwitcher.module.scss";
+import styles from "./LanguageSwitcher.module.scss";
 
 const localeNames: Record<(typeof routing.locales)[number], string> = {
-  ro: "Română",
-  en: "English",
+  ro: "RO",
+  en: "EN",
 };
 
-export function LocaleSwitcher() {
-  const t = useTranslations("localeSwitcher");
+export function LanguageSwitcher() {
+  const t = useTranslations("languageSwitcher");
   const locale = useLocale();
   const pathname = usePathname();
 
   return (
-    <nav className={styles.localeSwitcher} aria-label={t("label")}>
+    <nav className={styles.languageSwitcher} aria-label={t("label")}>
       {routing.locales.map((cur) => (
         <Link
           key={cur}

@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher/LanguageSwitcher";
 import { TeamPicker } from "@/components/layout/TeamPicker/TeamPicker";
 import styles from "./SiteHeader.module.scss";
 
@@ -44,7 +45,10 @@ export function SiteHeader() {
         </svg>
       </button>
 
-      <TeamPicker />
+      <div className={styles.rightGroup}>
+        <TeamPicker />
+        <LanguageSwitcher />
+      </div>
 
       <nav
         id={navId}
