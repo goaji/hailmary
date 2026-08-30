@@ -3,7 +3,7 @@ import type { Team } from "@/utils/teams";
 
 export type { Locale, Team };
 
-// Article categories — six to eight ids covering the mockup's four card
+// Categories for ARTICLES — six to eight ids covering the mockup's four card
 // chips (transferuri, accidentari, analiza, antrenori) plus Draft, Program and Regulament. 
 // this file stays the single source of truth for which ids are allowed to exist.
 export const CATEGORY_IDS = [
@@ -54,11 +54,26 @@ export type Game = {
   status: GameStatus;
 };
 
-export type GlossaryEntry = {
+// Categories for GLOSSARY terms,
+export const GLOSSARY_CATEGORY_IDS = [
+  "reguli",
+  "pozitii",
+  "pariuri",
+  "generale",
+] as const;
+
+export type GlossaryCategory = (typeof GLOSSARY_CATEGORY_IDS)[number];
+
+export type GlossaryEntryFrontmatter = {
   slug: string;
   term: string;
   shortDef: string;
-  body: string;
+  category: GlossaryCategory;
   related?: string[];
-  category: string; // string for now, will be tighten once lib/glossary.ts establishes a real set.
+};
+
+export type GlossaryEntry = GlossaryEntryFrontmatter & {
+  body: string;
+  /** Which locale actually served this entry — the i18n fallback contract. */
+  servedLocale: Locale;
 };
