@@ -1,0 +1,16 @@
+@use "variables" as v;
+
+.tag {
+  font-size: v.$fs-chip;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.tagAccent1 {
+  color: var(--accent-1);
+}
+
+.tagAccent2 {
+  color: var(--accent-2);
+}

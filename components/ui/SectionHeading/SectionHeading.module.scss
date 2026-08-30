@@ -1,0 +1,11 @@
+@use "variables" as v;
+
+.heading {
+  margin: 0;
+  font-family: v.$font-display;
+  font-size: v.$fs-section-heading;
+  letter-spacing: 1px;
+  color: var(--accent-1);
+  border-bottom: 2px solid v.$c-border;
+  padding-bottom: v.space(10);
+}

@@ -1,0 +1,8 @@
+@use "variables" as v;
+
+.card {
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border;
+  border-radius: 6px;
+  padding: v.space(22);
+}
