@@ -1,0 +1,44 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: v.$fs-meta;
+}
+
+.row {
+  padding-bottom: v.space(10);
+  border-bottom: 1px solid v.$c-border-soft;
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.rowContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: v.space(8);
+  color: v.$c-text-dim;
+  text-decoration: none;
+}
+
+.rowLink {
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.chevron,
+.value {
+  color: v.$c-text-muted;
+  flex-shrink: 0;
+}

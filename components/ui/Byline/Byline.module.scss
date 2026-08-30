@@ -1,0 +1,9 @@
+@use "variables" as v;
+
+.byline {
+  margin: 0;
+  // 12px, within the task's stated 12-13px range and already the token
+  // used for other small UI chrome.
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+}
