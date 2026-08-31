@@ -1,22 +1,18 @@
-"use client"; // re-triggers native fragment targeting after a client-routed arrival
+"use client"; // reads location.hash and keeps a data-target attribute in sync with it
 
 import { useEffect } from "react";
 
-// history.pushState (what next-intl's Link uses) never runs the browser's fragment-target algorithm — reassigning the hash does.
+function markTarget() {
+  document.querySelectorAll("[data-target]").forEach((el) => el.removeAttribute("data-target"));
+  document.getElementById(window.location.hash.slice(1))?.setAttribute("data-target", "");
+}
+
+// CSS :target never fires after a pushState-based arrival (what next-intl's Link uses) — RuleSection keys its highlight off this attribute instead, which this keeps in sync on mount and on every hashchange.
 export function TargetRefresh() {
   useEffect(() => {
-    const hash = window.location.hash;
-    if (!hash) {
-      return;
-    }
-
-    const alreadyTargeted = document.querySelector(":target")?.id === hash.slice(1);
-    if (alreadyTargeted) {
-      return;
-    }
-
-    history.replaceState(null, "", window.location.pathname + window.location.search);
-    window.location.hash = hash;
+    markTarget();
+    window.addEventListener("hashchange", markTarget);
+    return () => window.removeEventListener("hashchange", markTarget);
   }, []);
 
   return null;
