@@ -1,0 +1,57 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: v.space(10);
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  height: 180px; // mobile, bespoke to this component
+  border-radius: 3px;
+  overflow: hidden;
+
+  @include mix.mq(md) {
+    height: 150px;
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 17px; // bespoke to this component
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.titleLink {
+  color: v.$c-text;
+  text-decoration: none;
+
+  // Stretches the click target to the whole card (positioned against
+  // .card, the nearest ancestor with `position` set) while keeping a
+  // single real <a> as the only focusable/accessible element — not a
+  // div onClick around the whole card.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.time {
+  margin: 0;
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+}

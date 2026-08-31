@@ -1,13 +1,13 @@
 // Temporary review route for task 4 — deleted before step 5's commit.
-import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
-import { getFeaturedArticle } from "@/utils/articles";
+import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
+import { getAllArticles } from "@/utils/articles";
 
 export default function ScratchPage() {
-  const featured = getFeaturedArticle("ro");
+  const articles = getAllArticles("ro").slice(0, 4);
 
-  if (!featured) {
-    return <p>No featured article.</p>;
-  }
-
-  return <HeroArticle article={featured} />;
+  return (
+    <div style={{ padding: 40, maxWidth: 900 }}>
+      <NewsGrid articles={articles} />
+    </div>
+  );
 }

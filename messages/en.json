@@ -42,5 +42,8 @@
     "phrase4": " Pearson caught it in the end zone. The first Hail Mary in NFL history.",
     "readMore": "Read",
     "dismiss": "Hide"
+  },
+  "newsGrid": {
+    "heading": "LATEST NEWS"
   }
 }
