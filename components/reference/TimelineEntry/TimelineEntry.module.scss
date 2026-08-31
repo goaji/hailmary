@@ -1,0 +1,61 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Each entry's own border-left segment chains into one continuous rail — the one other left-border treatment AGENTS.md allows besides blockquote.
+.entry {
+  position: relative;
+  padding: 0 0 v.space(32) v.space(20);
+  border-left: 2px solid v.$c-border;
+
+  @include mix.mq(md) {
+    padding-left: v.space(32);
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.dot {
+  position: absolute;
+  top: 4px;
+  left: -5px; // centers the 9px dot on the entry's 2px border-left
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-1);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(4);
+  margin-bottom: v.space(8);
+
+  @include mix.mq(md) {
+    flex-direction: row;
+    align-items: baseline;
+    gap: v.space(16);
+  }
+}
+
+.year {
+  font-family: v.$font-display;
+  font-size: 34px; // bespoke display size, specific to this component
+  line-height: 1;
+  color: var(--accent-1);
+}
+
+.title {
+  font-size: v.$fs-article-body;
+  font-weight: 700;
+  color: v.$c-text;
+}
+
+.body {
+  margin: 0;
+  font-size: v.$fs-article-body;
+  line-height: 1.7;
+  color: v.$c-text-dim;
+  text-wrap: pretty;
+}

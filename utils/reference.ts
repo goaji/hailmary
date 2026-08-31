@@ -115,6 +115,28 @@ export function validateEntryEras(
   }
 }
 
+export type EraGroup = {
+  section: ReferenceSection;
+  entries: TimelineEntry[];
+  /** 1-based ordinal of this group's first entry, continuing the count across eras (an <ol> per era otherwise restarts at 1). */
+  startOrdinal: number;
+};
+
+/** Buckets timeline entries under their declared era section, in section order, tracking a running ordinal across the whole timeline. */
+export function groupEntriesByEra(
+  entries: TimelineEntry[],
+  sections: ReferenceSection[],
+): EraGroup[] {
+  let ordinal = 1;
+
+  return sections.map((section) => {
+    const group = entries.filter((entry) => entry.era === section.id);
+    const startOrdinal = ordinal;
+    ordinal += group.length;
+    return { section, entries: group, startOrdinal };
+  });
+}
+
 const SEE_ALSO_PATTERN = /^\/([a-z0-9-]+)(?:#([a-z0-9-]+))?$/;
 
 /** Parses a glossary `seeAlso` route like "/regulament#pase". */

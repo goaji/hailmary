@@ -1,0 +1,30 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+.intro {
+  margin: v.space(32) 0 v.space(48) 0;
+}
+
+.era {
+  margin-bottom: v.space(48);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.list {
+  margin: v.space(20) 0 0 0;
+  padding: 0;
+  list-style: none;
+}

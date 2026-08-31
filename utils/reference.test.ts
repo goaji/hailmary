@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   extractH2Headings,
+  groupEntriesByEra,
   parseReferenceFrontmatter,
   parseSeeAlso,
   splitSectionContent,
@@ -162,6 +163,48 @@ describe("validateEntryEras", () => {
     expect(() => validateEntryEras(entries, sections, "content/reference/ro/istorie.mdx")).toThrow(
       'content/reference/ro/istorie.mdx: timeline entry "Extinderea ligii" (1995) references unknown era "era-libera"',
     );
+  });
+});
+
+describe("groupEntriesByEra", () => {
+  const sections = [
+    { id: "origini", title: "Origini", level: 2 as const },
+    { id: "era-moderna", title: "Era modernă", level: 2 as const },
+  ];
+
+  it("buckets entries under their era, in section order", () => {
+    const entries = [
+      { year: "1920", title: "A", body: "B", era: "origini" },
+      { year: "1970", title: "C", body: "D", era: "era-moderna" },
+      { year: "1906", title: "E", body: "F", era: "origini" },
+    ];
+
+    const groups = groupEntriesByEra(entries, sections);
+
+    expect(groups).toHaveLength(2);
+    expect(groups[0].section.id).toBe("origini");
+    expect(groups[0].entries.map((e) => e.title)).toEqual(["A", "E"]);
+    expect(groups[1].entries.map((e) => e.title)).toEqual(["C"]);
+  });
+
+  it("tracks a running ordinal across eras rather than restarting each group at 1", () => {
+    const entries = [
+      { year: "1920", title: "A", body: "B", era: "origini" },
+      { year: "1906", title: "C", body: "D", era: "origini" },
+      { year: "1970", title: "E", body: "F", era: "era-moderna" },
+    ];
+
+    const groups = groupEntriesByEra(entries, sections);
+
+    expect(groups[0].startOrdinal).toBe(1);
+    expect(groups[1].startOrdinal).toBe(3);
+  });
+
+  it("returns an empty entries array for an era with no matching entries", () => {
+    const groups = groupEntriesByEra([], sections);
+
+    expect(groups[0].entries).toEqual([]);
+    expect(groups[1].startOrdinal).toBe(1);
   });
 });
 
