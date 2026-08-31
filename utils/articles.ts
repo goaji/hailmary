@@ -143,6 +143,32 @@ export function resolveServedLocale(
   return undefined;
 }
 
+/**
+ * Reading time from MDX body word count at ~200 wpm (a reasonable rate for
+ * Romanian). Strips the markdown syntax that would otherwise inflate the
+ * count as if it were prose — code, images, link targets (keeping link
+ * text), heading/quote/list markers, and table pipes — without touching
+ * mid-word characters like hyphens, so compound words aren't split.
+ * Always at least 1 minute, even for a very short article.
+ */
+export function estimateReadingTimeMinutes(content: string, wordsPerMinute = 200): number {
+  const plainText = content
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`[^`]*`/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/gm, " ")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^>\s?/gm, "")
+    .replace(/^[-*+]\s+/gm, "")
+    .replace(/^\d+\.\s+/gm, "")
+    .replace(/\|/g, " ");
+
+  const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+
+  return Math.max(1, Math.round(wordCount / wordsPerMinute));
+}
+
 function articleFilePath(locale: Locale, slug: string): string {
   return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
 }
@@ -153,7 +179,12 @@ function readArticleFile(locale: Locale, slug: string): Article {
   const { data, content } = matter(raw);
   const frontmatter = parseArticleFrontmatter(data, filePath);
 
-  return { ...frontmatter, content, servedLocale: locale };
+  return {
+    ...frontmatter,
+    content,
+    servedLocale: locale,
+    readingTimeMinutes: estimateReadingTimeMinutes(content),
+  };
 }
 
 function listSlugs(locale: Locale): string[] {

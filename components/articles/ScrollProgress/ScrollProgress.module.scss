@@ -1,0 +1,15 @@
+// Sticky, not fixed: the header isn't fixed/sticky itself, so a fixed bar
+// at top:0 would sit exactly on top of it. Starting the bar in normal flow
+// right after the header and letting it stick to the viewport top gives
+// "under the header while at the top of the page, pinned once you scroll
+// past it" without hardcoding the header's height (which varies by
+// breakpoint and whether the mobile nav is open).
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  height: 2px;
+  width: 100%;
+  background: var(--accent-1);
+  transform-origin: left;
+}

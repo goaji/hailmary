@@ -57,11 +57,15 @@
       "heading": "PROGRAMUL SĂPTĂMÂNII"
     }
   },
+  "byline": {
+    "readingTime": "{minutes} min citire"
+  },
   "article": {
     "fallbackNotice": "Acest articol este disponibil doar în română."
   },
   "articleBody": {
-    "tableScrollLabel": "Tabel derulabil orizontal"
+    "tableScrollLabel": "Tabel derulabil orizontal",
+    "tagsLabel": "Etichete"
   },
   "relatedArticles": {
     "heading": "Citește și"

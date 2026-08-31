@@ -122,3 +122,21 @@
     font-weight: 700;
   }
 }
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin: v.space(32) 0 0 0;
+  padding: v.space(20) 0 0 0;
+  border-top: 1px solid v.$c-border;
+  list-style: none;
+}
+
+.tag {
+  padding: v.space(4) v.space(12);
+  border: 1px solid v.$c-border-soft;
+  border-radius: 3px;
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+}

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  estimateReadingTimeMinutes,
   excludeArticleBySlug,
   parseArticleFrontmatter,
   resolveServedLocale,
@@ -184,6 +185,48 @@ describe("selectAdjacentArticles", () => {
 
   it("returns both undefined when the slug isn't found", () => {
     expect(selectAdjacentArticles(sorted, "missing")).toEqual({});
+  });
+});
+
+describe("estimateReadingTimeMinutes", () => {
+  it("rounds to the nearest minute at the given rate", () => {
+    const words400 = Array(400).fill("cuvânt").join(" ");
+    expect(estimateReadingTimeMinutes(words400, 200)).toBe(2);
+  });
+
+  it("never returns less than 1 minute, even for a few words", () => {
+    expect(estimateReadingTimeMinutes("Un titlu scurt.", 200)).toBe(1);
+  });
+
+  it("doesn't count markdown syntax as words", () => {
+    const content = [
+      "## Un titlu",
+      "",
+      "Text **bold** și *italic* cu un [link intern](/stiri/altul) și o imagine:",
+      "",
+      "![alt text](/img.png)",
+      "",
+      "> Un citat scurt.",
+      "",
+      "- primul",
+      "- al doilea",
+      "",
+      "| a | b |",
+      "| --- | --- |",
+      "| 1 | 2 |",
+    ].join("\n");
+
+    // Real prose words only: Un titlu Text bold și italic cu un link intern
+    // și o imagine Un citat scurt primul al doilea a b 1 2 = 22 words.
+    expect(estimateReadingTimeMinutes(content, 1000)).toBe(1);
+    expect(estimateReadingTimeMinutes(content, 22)).toBe(1);
+    expect(estimateReadingTimeMinutes(content, 11)).toBe(2);
+  });
+
+  it("keeps compound words with hyphens intact", () => {
+    // "touchdown-ul" must count as one word, not two.
+    const content = Array(200).fill("touchdown-ul").join(" ");
+    expect(estimateReadingTimeMinutes(content, 200)).toBe(1);
   });
 });
 

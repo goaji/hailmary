@@ -7,6 +7,7 @@ import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
 import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
 import { ArticlePrevNext } from "@/components/articles/ArticlePrevNext/ArticlePrevNext";
+import { ScrollProgress } from "@/components/articles/ScrollProgress/ScrollProgress";
 import {
   getAllArticles,
   getArticleBySlug,
@@ -85,17 +86,20 @@ export default async function ArticlePage({
   const { previous, next } = selectAdjacentArticles(siblingArticles, article.slug);
 
   return (
-    <article>
-      {isFallback ? (
-        <p className={styles.fallbackNotice} role="status">
-          {t("fallbackNotice")}
-        </p>
-      ) : null}
+    <>
+      <ScrollProgress />
+      <article>
+        {isFallback ? (
+          <p className={styles.fallbackNotice} role="status">
+            {t("fallbackNotice")}
+          </p>
+        ) : null}
 
-      <ArticleHeader article={article} />
-      <ArticleBody content={article.content} />
-      <RelatedArticles articles={related} />
-      <ArticlePrevNext previous={previous} next={next} />
-    </article>
+        <ArticleHeader article={article} />
+        <ArticleBody content={article.content} tags={article.tags} />
+        <RelatedArticles articles={related} />
+        <ArticlePrevNext previous={previous} next={next} />
+      </article>
+    </>
   );
 }

@@ -57,11 +57,15 @@
       "heading": "THIS WEEK'S SCHEDULE"
     }
   },
+  "byline": {
+    "readingTime": "{minutes} min read"
+  },
   "article": {
     "fallbackNotice": "This article is only available in Romanian."
   },
   "articleBody": {
-    "tableScrollLabel": "Horizontally scrollable table"
+    "tableScrollLabel": "Horizontally scrollable table",
+    "tagsLabel": "Tags"
   },
   "relatedArticles": {
     "heading": "Read also"

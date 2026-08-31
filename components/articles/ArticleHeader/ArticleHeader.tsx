@@ -15,7 +15,11 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
       <h1 className={styles.title}>{article.title}</h1>
       <p className={styles.excerpt}>{article.excerpt}</p>
       <div className={styles.byline}>
-        <Byline author={article.author} publishedAt={article.publishedAt} />
+        <Byline
+          author={article.author}
+          publishedAt={article.publishedAt}
+          readingTimeMinutes={article.readingTimeMinutes}
+        />
       </div>
 
       <figure className={styles.figure}>

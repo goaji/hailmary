@@ -44,6 +44,8 @@ export type Article = ArticleFrontmatter & {
   content: string;
   /** Which locale actually served this article — the i18n fallback contract. */
   servedLocale: Locale;
+  /** Estimated minutes to read the body, computed at parse time. */
+  readingTimeMinutes: number;
 };
 
 export type GameStatus = "scheduled" | "live" | "final";
