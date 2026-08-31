@@ -59,6 +59,7 @@ export default async function LocaleLayout({
   const explainerEntries = getAllTerms(locale).map((entry) => ({
     slug: entry.slug,
     term: entry.term,
+    short: entry.short,
     relatedTerms: entry.relatedTerms,
     seeAlso: entry.seeAlso,
     content: <ExplainerContent content={entry.extended} />,

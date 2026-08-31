@@ -89,6 +89,7 @@
     "seeAlso": "See also"
   },
   "explainerPanel": {
-    "close": "Close"
+    "close": "Close",
+    "seeAlso": "See also"
   }
 }

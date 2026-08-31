@@ -2,20 +2,83 @@
 @use "mixins" as mix;
 
 // Deliberately not styled like a regular link (ArticleBody's .link is
-// solid-underlined and accent-colored) — the dotted underline reads as
-// "there's more here" rather than "this navigates away", per spec section 9.
+// solid-underlined too, but a different color job) — the dotted underline
+// reads as "there's more here" rather than "this navigates away", per spec
+// section 9. Accent-colored at rest (not just on hover) so a reader can
+// spot every explainable term in a paragraph at a glance, not only the one
+// they happen to be pointing at.
+//
+// Shared by both the no-JS <a> and the hydrated <button> — a <button>
+// brings its own background/border/font UA styles, reset here so the
+// swap between the two elements (TermLink.tsx) is visually seamless.
 .termLink {
-  color: inherit;
+  position: relative; // anchors .tooltip
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--accent-1);
+  cursor: pointer;
   text-decoration: underline dotted var(--accent-1);
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 
   &:hover {
-    color: var(--accent-1);
     text-decoration-style: solid;
   }
 
   &:focus-visible {
     @include mix.focus-ring;
+  }
+}
+
+// The active term is marked while its panel is open — a solid, thicker
+// underline rather than a background color, so this doesn't need its own
+// contrast check against every team accent (AGENTS.md).
+.active {
+  text-decoration-style: solid;
+  text-decoration-thickness: 2px;
+}
+
+// Hover tooltip (spec section 9): shows `short`, ~300ms delay to appear,
+// dismisses immediately on mouse-out. Pure CSS, no JS, no state — the
+// transition only has a delay on the :hover rule below, not on this
+// resting one, which is what makes hide instant while show is delayed.
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, -6px);
+  width: max-content;
+  max-width: 240px;
+  padding: v.space(8) v.space(10);
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border-soft;
+  color: v.$c-text;
+  font-size: v.$fs-meta;
+  line-height: 1.4;
+  text-decoration: none; // don't inherit the trigger's underline
+  z-index: 20;
+  opacity: 0;
+  visibility: hidden;
+  // Never intercepts a click aimed at the word, even while visible.
+  pointer-events: none;
+  transition: opacity 0s linear, visibility 0s linear;
+}
+
+// (hover: hover) + (pointer: fine) rules out touch — mobile has no hover
+// tier at all (a tap goes straight to the sheet), and this keeps a
+// touch-capable desktop/hybrid device from getting a stuck tooltip on tap.
+// mq(panel) matches the same desktop threshold the panel itself uses.
+@media (hover: hover) and (pointer: fine) {
+  @include mix.mq(panel) {
+    .termLink:hover .tooltip {
+      opacity: 1;
+      visibility: visible;
+      transition:
+        opacity 120ms ease 300ms,
+        visibility 0s linear 300ms;
+    }
   }
 }

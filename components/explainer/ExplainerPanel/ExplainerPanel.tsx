@@ -2,12 +2,15 @@
 
 import { useEffect, useId, useRef, type RefObject } from "react";
 import { useTranslations } from "next-intl";
-import type { ExplainerPanelEntry } from "@/components/explainer/ExplainerProvider/ExplainerProvider";
+import { Link } from "@/i18n";
+import {
+  useExplainer,
+  type ExplainerPanelEntry,
+} from "@/components/explainer/ExplainerProvider/ExplainerProvider";
 import styles from "./ExplainerPanel.module.scss";
 
 type ExplainerPanelProps = {
-  entry: ExplainerPanelEntry | undefined;
-  onClose: () => void;
+  entries: ExplainerPanelEntry[];
   triggerRef: RefObject<HTMLElement | null>;
 };
 
@@ -21,19 +24,22 @@ type ExplainerPanelProps = {
 // ::backdrop goes transparent at the panel breakpoint (still closes on
 // click, just doesn't dim the now-visible article), and the corresponding
 // <main> shift lives in ExplainerProvider.
-export function ExplainerPanel({ entry, onClose, triggerRef }: ExplainerPanelProps) {
+export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
   const t = useTranslations("explainerPanel");
+  const { activeTerm, open, close } = useExplainer();
+  const entry = entries.find((candidate) => candidate.slug === activeTerm);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const headingId = useId();
 
   // React state -> imperative show/close, and focus follows: on a fresh
   // open the dialog wasn't open yet, so this opens it; on a swap (entry
-  // changes while already open) it's a no-op past the `!dialog.open`
-  // check, so content just re-renders in place. Either way the heading
-  // gets focus, which is what makes the "no focus jump back to the old
-  // trigger" swap case work — focus moves to the *new* heading, not back
-  // to triggerRef, which only close() below ever reads.
+  // changes while already open, e.g. a relatedTerms chip below) it's a
+  // no-op past the `!dialog.open` check, so content just re-renders in
+  // place. Either way the heading gets focus, which is what makes the "no
+  // focus jump back to the old trigger" swap case work — focus moves to
+  // the *new* heading, not back to triggerRef, which only close() below
+  // ever reads.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) {
@@ -52,11 +58,12 @@ export function ExplainerPanel({ entry, onClose, triggerRef }: ExplainerPanelPro
 
   // The single place every close path funnels through: Escape (browser-
   // native), the close button and the backdrop click below both call
-  // dialog.close() directly, and closing via context (a future caller)
-  // hits the effect above, which also calls dialog.close(). close()
-  // firing 'close' is itself part of the dialog spec, not something wired
-  // up per call site, so this is the one spot that needs to sync state
-  // back and restore focus, however the close happened.
+  // dialog.close() directly, and closing via context (e.g. TermLink
+  // toggling itself off, later) hits the effect above, which also calls
+  // dialog.close(). close() firing 'close' is itself part of the dialog
+  // spec, not something wired up per call site, so this is the one spot
+  // that needs to sync context state back and restore focus, however the
+  // close happened.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) {
@@ -64,13 +71,17 @@ export function ExplainerPanel({ entry, onClose, triggerRef }: ExplainerPanelPro
     }
 
     function handleClose() {
-      onClose();
+      close();
       triggerRef.current?.focus();
     }
 
     dialog.addEventListener("close", handleClose);
     return () => dialog.removeEventListener("close", handleClose);
-  }, [onClose, triggerRef]);
+  }, [close, triggerRef]);
+
+  const relatedEntries = (entry?.relatedTerms ?? [])
+    .map((slug) => entries.find((candidate) => candidate.slug === slug))
+    .filter((candidate) => candidate !== undefined);
 
   return (
     <dialog
@@ -120,7 +131,36 @@ export function ExplainerPanel({ entry, onClose, triggerRef }: ExplainerPanelPro
               </svg>
             </button>
           </div>
-          <div className={styles.content}>{entry.content}</div>
+          <div className={styles.content}>
+            {entry.content}
+
+            {relatedEntries.length > 0 || entry.seeAlso ? (
+              <div className={styles.footer}>
+                {relatedEntries.length > 0 ? (
+                  // Buttons: swap the panel's own content in place — a
+                  // second, different affordance from seeAlso below, which
+                  // navigates away entirely.
+                  <div className={styles.chips}>
+                    {relatedEntries.map((related) => (
+                      <button
+                        key={related.slug}
+                        type="button"
+                        className={styles.chip}
+                        onClick={() => open(related.slug)}
+                      >
+                        {related.term}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+                {entry.seeAlso ? (
+                  <Link href={entry.seeAlso} className={styles.seeAlso}>
+                    {t("seeAlso")}
+                  </Link>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         </>
       ) : null}
     </dialog>

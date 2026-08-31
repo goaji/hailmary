@@ -119,3 +119,42 @@
   overflow-y: auto;
   padding: v.space(16) v.space(20) v.space(20);
 }
+
+.footer {
+  margin-top: v.space(20);
+  padding-top: v.space(16);
+  border-top: 1px solid v.$c-border;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin-bottom: v.space(12);
+}
+
+// Pill buttons that swap the panel's content — deliberately not styled
+// like .seeAlso below, which navigates away instead (AGENTS.md: two
+// different affordances, don't render them alike).
+.chip {
+  padding: v.space(4) v.space(10);
+  border: 1px solid v.$c-border;
+  border-radius: 999px;
+  font-size: v.$fs-ui;
+  color: v.$c-text;
+
+  &:hover {
+    border-color: var(--accent-1);
+    color: var(--accent-1);
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.seeAlso {
+  display: inline-block;
+  font-size: v.$fs-ui;
+  font-weight: 600;
+}

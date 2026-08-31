@@ -7,6 +7,7 @@ import styles from "./ExplainerProvider.module.scss";
 export type ExplainerPanelEntry = {
   slug: string;
   term: string;
+  short: string;
   relatedTerms?: string[];
   seeAlso?: string;
   content: ReactNode;
@@ -26,6 +27,18 @@ export function useExplainer(): ExplainerContextValue {
     throw new Error("useExplainer must be used within an ExplainerProvider");
   }
   return context;
+}
+
+// Deliberately a *separate* context from ExplainerContext above: the spec
+// pins {activeTerm, open, close} down as the panel's interaction state,
+// but the bundled entries (needed by TermLink's hover tooltip, for its
+// `short`) are static content, not state — keeping them apart means
+// useExplainer() stays exactly the three-key shape the spec describes.
+const ExplainerEntriesContext = createContext<ExplainerPanelEntry[]>([]);
+
+export function useExplainerEntry(slug: string): ExplainerPanelEntry | undefined {
+  const entries = useContext(ExplainerEntriesContext);
+  return entries.find((entry) => entry.slug === slug);
 }
 
 type ExplainerProviderProps = {
@@ -52,18 +65,18 @@ export function ExplainerProvider({ entries, children }: ExplainerProviderProps)
     setActiveTerm(undefined);
   }
 
-  const activeEntry = entries.find((entry) => entry.slug === activeTerm);
-
   return (
-    <ExplainerContext.Provider value={{ activeTerm, open, close }}>
-      {/* data-panel-open drives the <main> margin-shift on desktop — see
-          ExplainerProvider.module.scss. main lives inside {children}
-          (rendered by the locale layout), not here, so this is a plain
-          descendant selector rather than a component this file owns. */}
-      <div className={styles.pageShift} data-panel-open={activeEntry ? "" : undefined}>
-        {children}
-      </div>
-      <ExplainerPanel entry={activeEntry} onClose={close} triggerRef={triggerRef} />
-    </ExplainerContext.Provider>
+    <ExplainerEntriesContext.Provider value={entries}>
+      <ExplainerContext.Provider value={{ activeTerm, open, close }}>
+        {/* data-panel-open drives the <main> margin-shift on desktop — see
+            ExplainerProvider.module.scss. main lives inside {children}
+            (rendered by the locale layout), not here, so this is a plain
+            descendant selector rather than a component this file owns. */}
+        <div className={styles.pageShift} data-panel-open={activeTerm ? "" : undefined}>
+          {children}
+        </div>
+        <ExplainerPanel entries={entries} triggerRef={triggerRef} />
+      </ExplainerContext.Provider>
+    </ExplainerEntriesContext.Provider>
   );
 }
