@@ -5,6 +5,7 @@ import { Link } from "@/i18n";
 import {
   useExplainer,
   useExplainerEntry,
+  useRegisterArticleTerm,
 } from "@/components/explainer/ExplainerProvider/ExplainerProvider";
 import styles from "./TermLink.module.scss";
 
@@ -17,6 +18,10 @@ export function TermLink({ term, children }: TermLinkProps) {
   const { activeTerm, open } = useExplainer();
   const entry = useExplainerEntry(term);
   const isActive = activeTerm === term;
+  // Lets the panel offer "other terms in this article" — this is what
+  // makes that list correct without parsing article content anywhere: it
+  // just reflects whichever TermLink instances are actually mounted.
+  useRegisterArticleTerm(term);
   // The server (and so the first client render, to avoid a hydration
   // mismatch) has no way to know JS will run, so it always renders the
   // no-JS anchor — this flips to true right after mount, swapping to the
@@ -37,11 +42,13 @@ export function TermLink({ term, children }: TermLinkProps) {
 
   // Presentational only, decorative and duplicative of the trigger's own
   // accessible name plus the panel's full explanation — aria-hidden
-  // unconditionally, not toggled with visibility. Pure CSS :hover (see
-  // TermLink.module.scss) drives show/hide, so this needs no JS at all
-  // and renders identically before and after hydration — including with
-  // JS disabled entirely, where it's a harmless bonus, not a requirement.
-  const tooltip = entry ? (
+  // unconditionally, not toggled with visibility. Show/hide on hover is
+  // pure CSS :hover (see TermLink.module.scss); the one thing CSS alone
+  // can't know is whether a panel is already open, so this element is
+  // omitted entirely while any panel is open — once you're looking at the
+  // full explanation, a hover preview of it (for this term or any other)
+  // is redundant, not an enhancement.
+  const tooltip = entry && activeTerm === undefined ? (
     <span className={styles.tooltip} aria-hidden="true">
       {entry.short}
     </span>

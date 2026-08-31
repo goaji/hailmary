@@ -101,6 +101,9 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  background: none;
+  font: inherit;
+  cursor: pointer;
   color: v.$c-text-muted;
   border: 1px solid v.$c-border;
 
@@ -126,11 +129,20 @@
   border-top: 1px solid v.$c-border;
 }
 
+.chipGroup {
+  margin-bottom: v.space(12);
+}
+
+.chipGroupLabel {
+  margin: 0 0 v.space(8) 0;
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: v.space(8);
-  margin-bottom: v.space(12);
 }
 
 // Pill buttons that swap the panel's content — deliberately not styled
@@ -138,6 +150,9 @@
 // different affordances, don't render them alike).
 .chip {
   padding: v.space(4) v.space(10);
+  background: none;
+  font: inherit;
+  cursor: pointer;
   border: 1px solid v.$c-border;
   border-radius: 999px;
   font-size: v.$fs-ui;

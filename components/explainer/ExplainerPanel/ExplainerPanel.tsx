@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, type RefObject } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n";
 import {
+  useArticleTerms,
   useExplainer,
   type ExplainerPanelEntry,
 } from "@/components/explainer/ExplainerProvider/ExplainerProvider";
@@ -14,32 +15,17 @@ type ExplainerPanelProps = {
   triggerRef: RefObject<HTMLElement | null>;
 };
 
-// <dialog> + showModal() over a hand-rolled role="dialog" div: the focus
-// trap and Escape-to-close come from the platform, tested across browsers
-// and screen readers, rather than a hand-rolled version of the exact thing
-// TASK-6 calls out as the real a11y risk here. It also puts the panel in
-// the top layer for free, so it's never clipped by an ancestor's overflow.
-// The one thing the platform doesn't hand us is the desktop non-covering
-// layout (a modal's default is to cover), so that's done explicitly below:
-// ::backdrop goes transparent at the panel breakpoint (still closes on
-// click, just doesn't dim the now-visible article), and the corresponding
-// <main> shift lives in ExplainerProvider.
+// <dialog> + showModal(): native focus trap and Escape-to-close, safer than hand-rolling the a11y risk TASK-6 flags.
 export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
   const t = useTranslations("explainerPanel");
   const { activeTerm, open, close } = useExplainer();
   const entry = entries.find((candidate) => candidate.slug === activeTerm);
+  const articleTerms = useArticleTerms();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const headingId = useId();
 
-  // React state -> imperative show/close, and focus follows: on a fresh
-  // open the dialog wasn't open yet, so this opens it; on a swap (entry
-  // changes while already open, e.g. a relatedTerms chip below) it's a
-  // no-op past the `!dialog.open` check, so content just re-renders in
-  // place. Either way the heading gets focus, which is what makes the "no
-  // focus jump back to the old trigger" swap case work — focus moves to
-  // the *new* heading, not back to triggerRef, which only close() below
-  // ever reads.
+  // Same effect handles a fresh open and a swap — dialog.open guards against re-opening; focus always goes to the new heading, never triggerRef.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) {
@@ -56,14 +42,7 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
     }
   }, [entry]);
 
-  // The single place every close path funnels through: Escape (browser-
-  // native), the close button and the backdrop click below both call
-  // dialog.close() directly, and closing via context (e.g. TermLink
-  // toggling itself off, later) hits the effect above, which also calls
-  // dialog.close(). close() firing 'close' is itself part of the dialog
-  // spec, not something wired up per call site, so this is the one spot
-  // that needs to sync context state back and restore focus, however the
-  // close happened.
+  // Every close path ends in dialog.close(), which fires 'close' — the one place state syncs back and focus returns to the trigger.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) {
@@ -83,15 +62,20 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
     .map((slug) => entries.find((candidate) => candidate.slug === slug))
     .filter((candidate) => candidate !== undefined);
 
+  // Contextual (tagged on this page) vs relatedTerms' editorial curation — excludes duplicates between the two groups.
+  const relatedSlugs = new Set(relatedEntries.map((related) => related.slug));
+  const articleEntries = articleTerms
+    .filter((slug) => slug !== activeTerm && !relatedSlugs.has(slug))
+    .map((slug) => entries.find((candidate) => candidate.slug === slug))
+    .filter((candidate) => candidate !== undefined);
+
   return (
     <dialog
       ref={dialogRef}
       className={styles.panel}
       aria-labelledby={headingId}
       onClick={(event) => {
-        // A click on ::backdrop is indistinguishable from a click on the
-        // dialog element itself — content clicks stop here before they
-        // reach this handler.
+        // A click on ::backdrop is indistinguishable from a click on the dialog element itself.
         if (event.target === dialogRef.current) {
           dialogRef.current?.close();
         }
@@ -134,23 +118,41 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
           <div className={styles.content}>
             {entry.content}
 
-            {relatedEntries.length > 0 || entry.seeAlso ? (
+            {relatedEntries.length > 0 || articleEntries.length > 0 || entry.seeAlso ? (
               <div className={styles.footer}>
+                {/* Chips swap content in place; seeAlso below navigates away — two different affordances. */}
                 {relatedEntries.length > 0 ? (
-                  // Buttons: swap the panel's own content in place — a
-                  // second, different affordance from seeAlso below, which
-                  // navigates away entirely.
-                  <div className={styles.chips}>
-                    {relatedEntries.map((related) => (
-                      <button
-                        key={related.slug}
-                        type="button"
-                        className={styles.chip}
-                        onClick={() => open(related.slug)}
-                      >
-                        {related.term}
-                      </button>
-                    ))}
+                  <div className={styles.chipGroup}>
+                    <p className={styles.chipGroupLabel}>{t("relatedTerms")}</p>
+                    <div className={styles.chips}>
+                      {relatedEntries.map((related) => (
+                        <button
+                          key={related.slug}
+                          type="button"
+                          className={styles.chip}
+                          onClick={() => open(related.slug)}
+                        >
+                          {related.term}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+                {articleEntries.length > 0 ? (
+                  <div className={styles.chipGroup}>
+                    <p className={styles.chipGroupLabel}>{t("otherTermsInArticle")}</p>
+                    <div className={styles.chips}>
+                      {articleEntries.map((related) => (
+                        <button
+                          key={related.slug}
+                          type="button"
+                          className={styles.chip}
+                          onClick={() => open(related.slug)}
+                        >
+                          {related.term}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 ) : null}
                 {entry.seeAlso ? (
