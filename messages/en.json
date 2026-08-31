@@ -33,5 +33,14 @@
     "draft": "Draft",
     "program": "Schedule",
     "regulament": "Rules"
+  },
+  "originStrip": {
+    "kicker": "WHERE \"HAIL MARY\" COMES FROM",
+    "phrase1": "December 28, 1975, playoffs.",
+    "phrase2": " Dallas was losing, 24 seconds left and 50 yards to cover — practically no chance.",
+    "phrase3": " Staubach closed his eyes, said a Hail Mary, and threw the ball as far as he could.",
+    "phrase4": " Pearson caught it in the end zone. The first Hail Mary in NFL history.",
+    "readMore": "Read",
+    "dismiss": "Hide"
   }
 }

@@ -1,0 +1,116 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Kept local, not in globals.scss: CSS Modules scopes @keyframes names,
+// so a global keyframes rule referenced from a module never matches.
+@keyframes hm-phrase {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.strip {
+  display: flex;
+  align-items: center;
+  gap: v.space(22);
+  height: 76px; // fixed band height, not a spacing-scale value
+  padding: 0 v.space(32);
+  background: v.$c-surface;
+  border-bottom: 1px solid v.$c-border;
+}
+
+.copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.kicker {
+  font-size: 10px; // bespoke, not part of the shared type scale
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-1);
+  margin-bottom: 3px;
+}
+
+.story {
+  font-size: 13.5px; // bespoke, not part of the shared type scale
+  line-height: 1.4;
+  text-wrap: pretty;
+  color: v.$c-text-dim;
+}
+
+.phrase {
+  opacity: 0;
+  animation: hm-phrase 0.5s ease-out both;
+
+  @media (prefers-reduced-motion: reduce) {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+.phrase1 {
+  animation-delay: 0.2s;
+}
+
+.phrase2 {
+  animation-delay: 1s;
+}
+
+.phrase3 {
+  animation-delay: 2.4s;
+}
+
+.phrase4 {
+  animation-delay: 4s;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: v.space(16);
+  flex-shrink: 0;
+}
+
+.readLink {
+  font-size: v.$fs-ui;
+  font-weight: 600;
+  color: v.$c-text-muted;
+  white-space: nowrap;
+
+  &:hover {
+    color: v.$c-text-dim;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.dismissButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid v.$c-border-soft;
+  border-radius: 3px;
+  background: transparent;
+  color: v.$c-text-muted;
+  cursor: pointer;
+
+  &:hover {
+    color: v.$c-text;
+    border-color: v.$c-text-muted;
+    background: v.$c-surface-raised;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
