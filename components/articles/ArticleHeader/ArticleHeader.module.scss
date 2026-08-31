@@ -1,0 +1,48 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// The reading measure for the whole article — ArticleBody (step 3) reuses
+// this same max-width/padding, not a separate value.
+.header {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 32px; // bespoke to the reading column, not the spacing scale
+}
+
+.title {
+  margin: v.space(12) 0;
+  font-family: v.$font-display;
+  font-size: 32px; // mobile, bespoke to this component
+  line-height: 1.05;
+
+  @include mix.mq(md) {
+    font-size: 46px;
+  }
+}
+
+.excerpt {
+  margin: 0 0 v.space(16) 0;
+  font-size: v.$fs-article-body;
+  color: v.$c-text-dim;
+}
+
+.byline {
+  margin-bottom: v.space(32);
+}
+
+.figure {
+  margin: 0;
+}
+
+.imageWrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.caption {
+  margin-top: v.space(8);
+  font-size: 12px; // bespoke to this component, per the caption spec
+  color: v.$c-text-muted;
+}

@@ -21,6 +21,7 @@ const articleFrontmatterSchema = z.object({
   image: z.object({
     src: z.string(),
     alt: z.string(),
+    caption: z.string().optional(),
   }),
   featured: z.boolean().optional(),
   tags: z.array(z.string()).optional(),

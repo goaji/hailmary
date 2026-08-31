@@ -3,8 +3,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
-import { Tag } from "@/components/ui/Tag/Tag";
-import { Byline } from "@/components/ui/Byline/Byline";
+import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
 import { getAllArticles, getArticleBySlug, getAvailableLocales } from "@/utils/articles";
 import styles from "./page.module.scss";
 
@@ -70,20 +69,17 @@ export default async function ArticlePage({
   const isFallback = article.servedLocale !== locale;
 
   return (
-    <article className={styles.article}>
+    <article>
       {isFallback ? (
         <p className={styles.fallbackNotice} role="status">
           {t("fallbackNotice")}
         </p>
       ) : null}
 
-      <Tag category={article.category} />
-      <h1 className={styles.title}>{article.title}</h1>
-      <p className={styles.excerpt}>{article.excerpt}</p>
-      <Byline author={article.author} publishedAt={article.publishedAt} />
+      <ArticleHeader article={article} />
 
-      {/* Placeholder body — replaced by ArticleHeader (step 2) and the MDX
-          component map (step 3). Raw content shown as-is in the meantime. */}
+      {/* Placeholder body — replaced by the MDX component map (step 3).
+          Raw content shown as-is in the meantime. */}
       <pre className={styles.rawContent}>{article.content}</pre>
     </article>
   );

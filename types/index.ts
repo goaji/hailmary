@@ -21,6 +21,8 @@ export type Category = (typeof CATEGORY_IDS)[number];
 export type ArticleImage = {
   src: string;
   alt: string;
+  /** Hero figure caption. Omit rather than passing an empty string. */
+  caption?: string;
 };
 
 export type ArticleFrontmatter = {
