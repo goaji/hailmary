@@ -22,9 +22,6 @@
   "siteFooter": {
     "copyright": "© {year} Hail Mary.ro"
   },
-  "home": {
-    "placeholder": "Homepage lands later."
-  },
   "categories": {
     "transferuri": "Transfers",
     "accidentari": "Injuries",
@@ -44,7 +41,8 @@
     "dismiss": "Hide"
   },
   "newsGrid": {
-    "heading": "LATEST NEWS"
+    "heading": "LATEST NEWS",
+    "empty": "No articles available yet."
   },
   "sidebar": {
     "beginnerGuide": {

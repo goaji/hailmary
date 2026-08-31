@@ -22,9 +22,6 @@
   "siteFooter": {
     "copyright": "© {year} Hail Mary.ro"
   },
-  "home": {
-    "placeholder": "Pagina principală vine mai tarziu."
-  },
   "categories": {
     "transferuri": "Transferuri",
     "accidentari": "Accidentări",
@@ -44,7 +41,8 @@
     "dismiss": "Ascunde"
   },
   "newsGrid": {
-    "heading": "ULTIMELE ȘTIRI"
+    "heading": "ULTIMELE ȘTIRI",
+    "empty": "Nu sunt încă articole disponibile."
   },
   "sidebar": {
     "beginnerGuide": {

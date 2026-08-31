@@ -16,8 +16,13 @@
   display: flex;
   align-items: center;
   gap: v.space(22);
-  height: 76px; // fixed band height, not a spacing-scale value
-  padding: 0 v.space(32);
+  // min-height, not height: at narrow widths the story paragraph wraps
+  // past 76px. A hard height with align-items: center let the oversized
+  // .copy child overflow both above and below the band, bleeding into
+  // the header above it. min-height keeps the 76px band at rest while
+  // letting it grow with wrapped content instead of overflowing.
+  min-height: 76px;
+  padding: v.space(12) v.space(32);
   background: v.$c-surface;
   border-bottom: 1px solid v.$c-border;
 }
@@ -31,7 +36,12 @@
   font-size: 10px; // bespoke, not part of the shared type scale
   font-weight: 700;
   letter-spacing: 2px;
-  color: var(--accent-1);
+  // var(--accent-2), not accent-1: accent1 is only calibrated for large
+  // text/UI (>=3.0), and 10px bold doesn't qualify as large — 11 of 32
+  // teams' accent1 fail 4.5:1 here. accent2 is the one calibrated for
+  // exactly this ("small 10-11px bold chips" per AGENTS.md); verified it
+  // clears 4.5:1 for all 32 teams against this surface (worst case 4.79).
+  color: var(--accent-2);
   margin-bottom: 3px;
 }
 

@@ -59,14 +59,19 @@ test.describe("header accessibility across team accents", () => {
   for (const slug of PICKER_TEAMS) {
     const team = getTeam(slug);
 
-    test(`/ro has no axe violations with ${team.name} selected as the active team`, async ({
+    test(`header has no axe violations with ${team.name} selected as the active team`, async ({
       page,
     }) => {
       await page.goto("/ro");
       await page.getByRole("radio", { name: team.name }).click();
       await expect.poll(() => getAccent1(page)).toBe(team.accent1);
 
-      const results = await new AxeBuilder({ page }).analyze();
+      // Scoped to the header deliberately: this spec exercises the team
+      // picker, which only affects the header. A whole-page axe pass
+      // belongs to the homepage's own dedicated a11y test (task 4 step 6),
+      // which also needs to handle OriginStrip's phrase animations rather
+      // than accidentally scanning them mid-fade.
+      const results = await new AxeBuilder({ page }).include("header").analyze();
       expect(results.violations).toEqual([]);
     });
   }

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  excludeArticleBySlug,
   parseArticleFrontmatter,
   resolveServedLocale,
   selectFeatured,
@@ -80,6 +81,25 @@ describe("selectFeatured", () => {
 
   it("returns undefined when there are no articles at all", () => {
     expect(selectFeatured([])).toBeUndefined();
+  });
+});
+
+describe("excludeArticleBySlug", () => {
+  const articles = [{ slug: "a" }, { slug: "b" }, { slug: "c" }];
+
+  it("removes the article matching the given slug", () => {
+    expect(excludeArticleBySlug(articles, "b").map((a) => a.slug)).toEqual([
+      "a",
+      "c",
+    ]);
+  });
+
+  it("returns the list unchanged when slug is undefined", () => {
+    expect(excludeArticleBySlug(articles, undefined)).toEqual(articles);
+  });
+
+  it("returns the list unchanged when the slug isn't present", () => {
+    expect(excludeArticleBySlug(articles, "not-there")).toEqual(articles);
   });
 });
 

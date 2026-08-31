@@ -16,3 +16,9 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.empty {
+  margin: 0;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

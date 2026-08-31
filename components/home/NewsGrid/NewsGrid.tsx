@@ -8,17 +8,23 @@ type NewsGridProps = {
   articles: Article[];
 };
 
+const HEADING_ID = "news-grid-heading";
+
 export async function NewsGrid({ articles }: NewsGridProps) {
   const t = await getTranslations("newsGrid");
 
   return (
-    <div className={styles.newsGrid}>
-      <SectionHeading>{t("heading")}</SectionHeading>
-      <div className={styles.grid}>
-        {articles.map((article) => (
-          <ArticleCard key={article.slug} article={article} />
-        ))}
-      </div>
-    </div>
+    <section className={styles.newsGrid} aria-labelledby={HEADING_ID}>
+      <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
+      {articles.length > 0 ? (
+        <div className={styles.grid}>
+          {articles.map((article) => (
+            <ArticleCard key={article.slug} article={article} />
+          ))}
+        </div>
+      ) : (
+        <p className={styles.empty}>{t("empty")}</p>
+      )}
+    </section>
   );
 }

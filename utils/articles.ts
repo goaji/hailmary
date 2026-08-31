@@ -69,6 +69,22 @@ export function selectFeatured<T extends { featured?: boolean }>(
 }
 
 /**
+ * Removes an article by slug (e.g. the featured one) from a list, so the
+ * homepage grid doesn't repeat the article already shown in the hero.
+ * A no-op when `slug` is undefined, so callers don't need to branch on
+ * whether a featured article exists.
+ */
+export function excludeArticleBySlug<T extends { slug: string }>(
+  articles: T[],
+  slug: string | undefined,
+): T[] {
+  if (!slug) {
+    return articles;
+  }
+  return articles.filter((article) => article.slug !== slug);
+}
+
+/**
  * Which locale to actually serve for a request, given which locales have
  * a translation on disk. Falls back to `ro`, per the i18n scope in
  * AGENTS.md — the caller decides whether to show a fallback notice, this

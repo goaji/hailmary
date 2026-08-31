@@ -1,0 +1,25 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.newsSection {
+  display: flex;
+  flex-direction: column; // mobile-first: sidebar goes below the main content
+  gap: 32px; // bespoke to this page
+  padding: 36px 40px; // bespoke to this page
+
+  @include mix.mq(md) {
+    flex-direction: row;
+  }
+}
+
+.newsGridColumn {
+  @include mix.mq(md) {
+    flex: 2;
+  }
+}
+
+.sidebarColumn {
+  @include mix.mq(md) {
+    flex: 1;
+  }
+}
