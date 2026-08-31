@@ -1,0 +1,83 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 260px; // mobile, bespoke to this component
+  overflow: hidden;
+
+  @include mix.mq(md) {
+    height: 380px;
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(13, 14, 18, 0.92) 10%, rgba(13, 14, 18, 0.15) 60%);
+}
+
+.content {
+  position: relative;
+  padding: 24px 20px; // mobile, bespoke to this component
+  max-width: 760px;
+
+  @include mix.mq(md) {
+    padding: 36px 40px;
+  }
+}
+
+.kicker {
+  display: inline-block;
+  padding: 5px v.space(12);
+  margin-bottom: 14px; // bespoke to this component
+  background: var(--accent-2);
+  // Not var(--accent-1)/white text: accent2 is only calibrated for text
+  // *on* the dark panel, not as a background with text on top of it — for
+  // that direction, white fails contrast against every team's accent2
+  // (best case 3.6:1, several teams under 2:1). Dark text against accent2
+  // clears 4.5:1 for all 32 teams.
+  color: v.$c-header;
+  font-size: v.$fs-ui;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0 0 v.space(12) 0;
+  font-family: v.$font-display;
+  font-size: 34px; // mobile, bespoke to this component
+  line-height: 1.05;
+  letter-spacing: 0.5px;
+  // The overlay alone can't guarantee legibility for an arbitrary future
+  // photo (verified: a bright test photo left the title borderline even
+  // bottom-anchored in the gradient's darkest zone). A shadow guarantees
+  // it regardless of what's underneath.
+  text-shadow: 0 2px 8px rgba(13, 14, 18, 0.8);
+
+  @include mix.mq(md) {
+    font-size: 52px;
+  }
+}
+
+.titleLink {
+  color: v.$c-text;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.excerpt {
+  margin: 0 0 14px 0; // bespoke to this component
+  max-width: 600px;
+  font-size: v.$fs-body-lg;
+  color: v.$c-text-dim;
+  text-shadow: 0 1px 6px rgba(13, 14, 18, 0.8);
+}

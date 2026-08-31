@@ -34,6 +34,8 @@ export type ArticleFrontmatter = {
   image: ArticleImage;
   featured?: boolean;
   tags?: string[];
+  /** Editorial superlative badge (e.g. "SUPER BOWL LX") — not the category. */
+  kicker?: string;
 };
 
 export type Article = ArticleFrontmatter & {

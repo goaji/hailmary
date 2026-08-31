@@ -24,6 +24,7 @@ const articleFrontmatterSchema = z.object({
   }),
   featured: z.boolean().optional(),
   tags: z.array(z.string()).optional(),
+  kicker: z.string().optional(),
 });
 
 /**
