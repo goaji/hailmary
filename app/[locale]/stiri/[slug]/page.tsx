@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
+import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
 import { getAllArticles, getArticleBySlug, getAvailableLocales } from "@/utils/articles";
 import styles from "./page.module.scss";
 
@@ -77,10 +78,7 @@ export default async function ArticlePage({
       ) : null}
 
       <ArticleHeader article={article} />
-
-      {/* Placeholder body — replaced by the MDX component map (step 3).
-          Raw content shown as-is in the meantime. */}
-      <pre className={styles.rawContent}>{article.content}</pre>
+      <ArticleBody content={article.content} />
     </article>
   );
 }

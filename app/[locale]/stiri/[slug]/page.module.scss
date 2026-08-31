@@ -1,8 +1,8 @@
 @use "variables" as v;
 
-// .article itself is unconstrained — ArticleHeader (and ArticleBody, step 3)
-// each own the 720px reading measure, so future full-width sections
-// (related articles, step 4) aren't boxed in by an outer wrapper here.
+// .article itself is unconstrained — ArticleHeader and ArticleBody each own
+// the 720px reading measure, so a future full-width section (related
+// articles, step 4) isn't boxed in by an outer wrapper here.
 .fallbackNotice {
   max-width: 720px;
   margin: v.space(32) auto 0 auto;
@@ -12,16 +12,4 @@
   padding: v.space(12) v.space(16);
   color: v.$c-text-dim;
   font-size: v.$fs-meta;
-}
-
-// Temporary placeholder body — replaced by the MDX component map (step 3).
-.rawContent {
-  max-width: 720px;
-  margin: v.space(32) auto 0 auto;
-  padding: v.space(20) 32px v.space(32) 32px; // horizontal matches ArticleHeader's measure
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  color: v.$c-text-muted;
-  font-size: v.$fs-meta;
-  border-top: 1px solid v.$c-border;
 }

@@ -1,0 +1,124 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Same reading measure as ArticleHeader — each section owns it independently.
+.body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 32px 40px 32px; // bespoke to the reading column, not the spacing scale
+}
+
+.p {
+  margin: 0 0 v.space(20) 0; // bottom only — a top margin here would collapse into the previous block
+  font-size: v.$fs-article-body;
+  line-height: 1.7;
+  color: v.$c-text-dim;
+  text-wrap: pretty;
+}
+
+.h2 {
+  margin: 28px 0 v.space(12) 0; // bespoke top value — not in the spacing scale
+  font-family: v.$font-display;
+  font-size: v.$fs-h2;
+  line-height: 1.15;
+}
+
+.h3 {
+  margin: v.space(20) 0 v.space(8) 0;
+  font-family: v.$font-display;
+  font-size: v.$fs-h3;
+  line-height: 1.2;
+}
+
+.list {
+  margin: 0 0 v.space(20) 0;
+  padding-left: v.space(22);
+  font-size: v.$fs-article-body;
+  line-height: 1.7;
+  color: v.$c-text-dim;
+}
+
+.listItem {
+  margin-bottom: v.space(8);
+}
+
+.blockquote {
+  margin: 0 0 v.space(20) 0;
+  padding-left: v.space(20);
+  // The one left-accent-border pattern the design allows — see AGENTS.md.
+  border-left: 3px solid var(--accent-1);
+  font-style: italic;
+  color: v.$c-text-dim;
+
+  // The nested <p> the markdown parser wraps blockquote content in
+  // shouldn't add its own bottom margin inside an already-spaced block.
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.link {
+  color: var(--accent-1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.strong {
+  font-weight: 700;
+  color: v.$c-text;
+}
+
+.em {
+  font-style: italic;
+}
+
+.hr {
+  margin: v.space(32) 0;
+  border: 0;
+  border-top: 1px solid v.$c-border;
+}
+
+.imageWrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin: v.space(20) 0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tableWrapper {
+  max-width: 100%;
+  margin: 0 0 v.space(20) 0;
+  overflow-x: auto;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.table {
+  border-collapse: collapse;
+  font-size: v.$fs-article-body;
+  color: v.$c-text-dim;
+
+  th,
+  td {
+    padding: v.space(8) v.space(12);
+    border-bottom: 1px solid v.$c-border;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    color: v.$c-text;
+    font-weight: 700;
+  }
+}

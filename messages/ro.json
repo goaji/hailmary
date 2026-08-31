@@ -60,6 +60,9 @@
   "article": {
     "fallbackNotice": "Acest articol este disponibil doar în română."
   },
+  "articleBody": {
+    "tableScrollLabel": "Tabel derulabil orizontal"
+  },
   "articleNotFound": {
     "title": "Articolul nu a fost găsit",
     "description": "Articolul pe care îl cauți nu există sau a fost mutat.",

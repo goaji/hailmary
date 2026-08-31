@@ -60,6 +60,9 @@
   "article": {
     "fallbackNotice": "This article is only available in Romanian."
   },
+  "articleBody": {
+    "tableScrollLabel": "Horizontally scrollable table"
+  },
   "articleNotFound": {
     "title": "Article not found",
     "description": "The article you're looking for doesn't exist or has been moved.",
