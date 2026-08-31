@@ -97,6 +97,14 @@ export function getTeam(slug: string): Team {
   return TEAMS_BY_SLUG[slug] ?? TEAMS_BY_SLUG[DEFAULT_TEAM];
 }
 
+/** Display order for the /echipe index — AFC then NFC, East/North/South/West within. */
+export const CONFERENCES: Conference[] = ['AFC', 'NFC'];
+export const DIVISIONS: Division[] = ['East', 'North', 'South', 'West'];
+
+export function getTeamsByDivision(conference: Conference, division: Division): Team[] {
+  return TEAMS.filter((team) => team.conference === conference && team.division === division);
+}
+
 /** Six teams shown in the header picker. */
 /** TODO: think about how to make accessible the rest */
 /** TODO: think about how to make this dynamic */

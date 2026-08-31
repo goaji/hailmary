@@ -1,0 +1,47 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// position: relative lives here, not on Card itself (shared primitive, left
+// untouched) — .titleLink's ::after overlay anchors to this box instead.
+.wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.edge {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 4px;
+  background: var(--team-brand);
+  border-radius: 6px 0 0 6px;
+}
+
+.titleLink {
+  display: inline-block;
+  text-decoration: none;
+
+  // Stretches the click target to the whole card, same pattern as
+  // ArticleCard — anchors against .wrapper (the nearest positioned
+  // ancestor), not against this link's own (static) box.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.divisionLabel {
+  margin: v.space(8) 0 0;
+  padding-left: v.space(12);
+  font-size: v.$fs-meta;
+  color: v.$c-text-muted;
+}

@@ -1,7 +1,7 @@
 import type { Locale } from "@/i18n";
-import type { Team } from "@/utils/teams";
+import type { Conference, Division, Team } from "@/utils/teams";
 
-export type { Locale, Team };
+export type { Locale, Team, Conference, Division };
 
 // Categories for ARTICLES — six to eight ids covering the mockup's four card
 // chips (transferuri, accidentari, analiza, antrenori) plus Draft, Program and Regulament. 

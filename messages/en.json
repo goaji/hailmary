@@ -22,6 +22,20 @@
   "siteFooter": {
     "copyright": "© {year} Hail Mary.ro"
   },
+  "teams": {
+    "title": "Teams",
+    "metaDescription": "All 32 NFL teams, grouped by conference and division."
+  },
+  "conferences": {
+    "AFC": "AFC",
+    "NFC": "NFC"
+  },
+  "divisions": {
+    "East": "East",
+    "North": "North",
+    "South": "South",
+    "West": "West"
+  },
   "categories": {
     "transferuri": "Transfers",
     "accidentari": "Injuries",

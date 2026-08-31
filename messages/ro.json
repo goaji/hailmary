@@ -22,6 +22,20 @@
   "siteFooter": {
     "copyright": "© {year} Hail Mary.ro"
   },
+  "teams": {
+    "title": "Echipe",
+    "metaDescription": "Toate cele 32 de echipe din NFL, grupate pe conferință și divizie."
+  },
+  "conferences": {
+    "AFC": "AFC",
+    "NFC": "NFC"
+  },
+  "divisions": {
+    "East": "Est",
+    "North": "Nord",
+    "South": "Sud",
+    "West": "Vest"
+  },
   "categories": {
     "transferuri": "Transferuri",
     "accidentari": "Accidentări",

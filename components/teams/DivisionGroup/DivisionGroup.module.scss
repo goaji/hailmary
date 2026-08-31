@@ -1,0 +1,30 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.group {
+  margin-top: v.space(20);
+}
+
+.heading {
+  margin: 0 0 v.space(12);
+  font-size: v.$fs-h3;
+  font-weight: 700;
+  color: v.$c-text-dim;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include mix.mq(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mix.mq(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

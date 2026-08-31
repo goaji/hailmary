@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_TEAM, getTeam, TEAMS } from "./teams";
+import { CONFERENCES, DEFAULT_TEAM, DIVISIONS, getTeam, getTeamsByDivision, TEAMS } from "./teams";
 import { contrastRatio } from "./contrast";
 
 // The two dark surfaces accent1/accent2 are calibrated against — see the
@@ -24,6 +24,33 @@ describe("getTeam", () => {
   it("falls back to the default team for an empty slug", () => {
     const team = getTeam("");
     expect(team.slug).toBe(DEFAULT_TEAM);
+  });
+});
+
+describe("getTeamsByDivision", () => {
+  it("returns exactly four teams for every conference/division pair", () => {
+    for (const conference of CONFERENCES) {
+      for (const division of DIVISIONS) {
+        expect(getTeamsByDivision(conference, division)).toHaveLength(4);
+      }
+    }
+  });
+
+  it("returns only teams matching both the conference and division", () => {
+    const afcEast = getTeamsByDivision("AFC", "East");
+    expect(afcEast.map((team) => team.slug).sort()).toEqual(["buf", "mia", "ne", "nyj"]);
+    for (const team of afcEast) {
+      expect(team.conference).toBe("AFC");
+      expect(team.division).toBe("East");
+    }
+  });
+
+  it("covers all 32 teams with no overlap across the 8 groups", () => {
+    const grouped = CONFERENCES.flatMap((conference) =>
+      DIVISIONS.flatMap((division) => getTeamsByDivision(conference, division)),
+    );
+    expect(grouped).toHaveLength(TEAMS.length);
+    expect(new Set(grouped.map((team) => team.slug)).size).toBe(TEAMS.length);
   });
 });
 
