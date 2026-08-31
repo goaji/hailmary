@@ -87,5 +87,8 @@
     "filterPlaceholder": "ex. blitz, safety, spread",
     "noResults": "Niciun termen nu corespunde căutării tale.",
     "seeAlso": "Vezi și"
+  },
+  "explainerPanel": {
+    "close": "Închide"
   }
 }

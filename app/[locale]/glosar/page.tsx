@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { GlossaryList } from "@/components/reference/GlossaryList/GlossaryList";
-import { GlossaryEntryBody } from "@/components/reference/GlossaryEntryBody/GlossaryEntryBody";
+import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
 import { getAllTerms } from "@/utils/glossary";
 import styles from "./page.module.scss";
 
@@ -48,7 +48,7 @@ export default async function GlossaryPage({
     term: entry.term,
     short: entry.short,
     seeAlso: entry.seeAlso,
-    extended: <GlossaryEntryBody key={entry.slug} content={entry.extended} />,
+    extended: <ExplainerContent key={entry.slug} content={entry.extended} />,
   }));
 
   return (

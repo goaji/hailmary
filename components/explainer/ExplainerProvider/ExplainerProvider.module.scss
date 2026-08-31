@@ -1,0 +1,18 @@
+@use "mixins" as mix;
+
+.pageShift {
+  main {
+    @media (prefers-reduced-motion: no-preference) {
+      transition: margin-right 250ms ease;
+    }
+  }
+
+  // Desktop only (spec section 9) — mobile uses a full-width bottom sheet,
+  // so there's no column to shift. margin-right (not a transform) is what
+  // makes the reading column actually re-center left, not just get clipped.
+  @include mix.mq(panel) {
+    &[data-panel-open] main {
+      margin-right: 380px;
+    }
+  }
+}

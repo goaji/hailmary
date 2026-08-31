@@ -1,0 +1,121 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.panel {
+  // Full UA reset — <dialog> ships with its own border/padding/background
+  // and an auto-centering position that this replaces entirely below.
+  margin: 0;
+  padding: 0;
+  border: none;
+  max-width: none;
+  max-height: none;
+  background: v.$c-surface;
+  color: v.$c-text;
+  display: flex;
+  flex-direction: column;
+
+  // Mobile: bottom sheet, ~70vh, closed state slid fully off-screen.
+  position: fixed;
+  inset: auto 0 0 0;
+  width: 100%;
+  height: 70vh;
+  transform: translateY(100%);
+
+  &[open] {
+    transform: translateY(0);
+  }
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    // `display`/`overlay` are discrete properties — allow-discrete plus
+    // @starting-style is what lets the transform actually animate from
+    // the closed (display: none) state instead of just snapping open.
+    transition:
+      transform 250ms ease,
+      overlay 250ms allow-discrete,
+      display 250ms allow-discrete;
+
+    @starting-style {
+      &[open] {
+        transform: translateY(100%);
+      }
+    }
+  }
+
+  // Desktop (≥1024px, spec section 9): side panel. The article doesn't
+  // get dimmed — it's still fully visible beside the panel (see
+  // ExplainerProvider's margin-right on <main>) — so the backdrop goes
+  // transparent, though it still closes the panel on click.
+  @include mix.mq(panel) {
+    inset: 0 0 0 auto;
+    width: 380px;
+    height: 100vh;
+    border-left: 1px solid v.$c-border; // the only separation from the article now that ::backdrop is transparent
+    transform: translateX(100%);
+
+    &[open] {
+      transform: translateX(0);
+    }
+
+    &::backdrop {
+      background: transparent;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      @starting-style {
+        &[open] {
+          transform: translateX(100%);
+        }
+      }
+    }
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: v.space(16);
+  padding: v.space(20);
+  border-bottom: 1px solid v.$c-border;
+}
+
+.heading {
+  margin: 0;
+  font-family: v.$font-display;
+  font-size: v.$fs-h3;
+  letter-spacing: 0.4px;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.closeButton {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: v.$c-text-muted;
+  border: 1px solid v.$c-border;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.content {
+  flex: 1;
+  min-height: 0; // lets this flex child actually scroll instead of overflowing the panel
+  overflow-y: auto;
+  padding: v.space(16) v.space(20) v.space(20);
+}

@@ -1,8 +1,8 @@
 import type { ComponentPropsWithoutRef } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import styles from "./GlossaryEntryBody.module.scss";
+import styles from "./ExplainerContent.module.scss";
 
-type GlossaryEntryBodyProps = {
+type ExplainerContentProps = {
   content: string;
 };
 
@@ -20,11 +20,11 @@ const glossaryComponents = {
   li: (props: ComponentPropsWithoutRef<"li">) => <li {...props} />,
 };
 
-// Renders a glossary entry's `extended` MDX body. Shared by /glosar (the
-// full list) and, from step 3 on, the explainer panel — the one place this
-// content is compiled, per AGENTS.md's "never a second copy of a
-// definition".
-export async function GlossaryEntryBody({ content }: GlossaryEntryBodyProps) {
+// Renders a glossary entry's `extended` MDX body — one term's extended
+// explanation, per the spec's component inventory. Shared by /glosar (the
+// full list) and the explainer panel, the one place this content is
+// compiled, per AGENTS.md's "never a second copy of a definition".
+export async function ExplainerContent({ content }: ExplainerContentProps) {
   return (
     <div className={styles.body}>
       <MDXRemote source={content} components={glossaryComponents} />

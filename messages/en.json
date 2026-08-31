@@ -87,5 +87,8 @@
     "filterPlaceholder": "e.g. blitz, safety, spread",
     "noResults": "No terms match your search.",
     "seeAlso": "See also"
+  },
+  "explainerPanel": {
+    "close": "Close"
   }
 }

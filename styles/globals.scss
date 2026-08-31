@@ -51,3 +51,15 @@ a {
 :focus-visible {
   @include mix.focus-ring;
 }
+
+// Explainer panel: body scroll lock on mobile only — desktop keeps
+// scrolling since the article stays visible beside the panel rather than
+// being covered (AGENTS.md, explainer panel spec section 9). :has()
+// avoids needing JS to toggle a class in sync with the dialog's own state.
+body:has(dialog[open]) {
+  overflow: hidden;
+
+  @include mix.mq(panel) {
+    overflow: visible;
+  }
+}

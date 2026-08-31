@@ -5,6 +5,7 @@
 $breakpoints: (
   sm: 375px,
   md: 768px,
+  panel: 1024px, // the explainer panel's own desktop threshold (spec section 9) — distinct from lg, which tracks the 1440 visual-regression width
   lg: 1440px,
 );
 

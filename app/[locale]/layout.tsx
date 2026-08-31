@@ -7,6 +7,9 @@ import { routing } from "@/i18n";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader/SiteHeader";
 import { TeamColorProvider } from "@/components/layout/TeamColorProvider/TeamColorProvider";
+import { ExplainerProvider } from "@/components/explainer/ExplainerProvider/ExplainerProvider";
+import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
+import { getAllTerms } from "@/utils/glossary";
 import "../../styles/globals.scss";
 
 const bebasNeue = Bebas_Neue({
@@ -50,14 +53,27 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  // Entries are bundled at build/request time and handed to the client
+  // provider as inert, pre-rendered content (extended MDX compiled once,
+  // here) — the panel never fetches on open.
+  const explainerEntries = getAllTerms(locale).map((entry) => ({
+    slug: entry.slug,
+    term: entry.term,
+    relatedTerms: entry.relatedTerms,
+    seeAlso: entry.seeAlso,
+    content: <ExplainerContent content={entry.extended} />,
+  }));
+
   return (
     <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
       <body>
         <NextIntlClientProvider messages={messages}>
           <TeamColorProvider>
-            <SiteHeader />
-            <main>{children}</main>
-            <SiteFooter />
+            <ExplainerProvider entries={explainerEntries}>
+              <SiteHeader />
+              <main>{children}</main>
+              <SiteFooter />
+            </ExplainerProvider>
           </TeamColorProvider>
         </NextIntlClientProvider>
       </body>
