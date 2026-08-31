@@ -1,0 +1,42 @@
+@use "variables" as v;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: v.space(8);
+  min-width: 0;
+}
+
+.logo {
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.name {
+  color: v.$c-text;
+  font-weight: 600;
+}
+
+.sm {
+  gap: v.space(4);
+}
+
+.sm .name {
+  font-size: v.$fs-ui;
+}
+
+.md .name {
+  font-size: v.$fs-body;
+}
+
+.lg {
+  gap: v.space(16);
+}
+
+.lg .name {
+  font-family: v.$font-display;
+  font-size: v.$fs-h2;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}

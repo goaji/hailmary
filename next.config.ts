@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  images: {
+    // next/image's optimizer 400s on any .svg src unless this is set. All
+    // SVGs served here are our own (logos, placeholders) — none are
+    // user-uploaded — so the usual XSS-via-SVG risk doesn't apply, but we
+    // still keep the CSP/sandbox belt-and-suspenders Next recommends.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
   sassOptions: {
     // Webpack's Sass loader honors this load path.
     includePaths: [path.join(__dirname, "styles")],
