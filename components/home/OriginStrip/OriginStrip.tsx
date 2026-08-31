@@ -44,7 +44,7 @@ export function OriginStrip() {
       </div>
 
       <div className={styles.actions}>
-        <Link href="/istorie" className={styles.readLink}>
+        <Link href="/istorie/hail-mary" className={styles.readLink}>
           {t("readMore")}
           <span aria-hidden="true"> ›</span>
         </Link>

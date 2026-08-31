@@ -45,5 +45,18 @@
   },
   "newsGrid": {
     "heading": "LATEST NEWS"
+  },
+  "sidebar": {
+    "beginnerGuide": {
+      "heading": "BEGINNER'S GUIDE",
+      "rules": "The basic rules",
+      "positions": "Positions and roles on the field",
+      "glossary": "Term glossary",
+      "hailMaryOrigin": "Where \"Hail Mary\" comes from",
+      "history": "History of American football"
+    },
+    "schedule": {
+      "heading": "THIS WEEK'S SCHEDULE"
+    }
   }
 }

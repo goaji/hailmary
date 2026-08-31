@@ -45,5 +45,18 @@
   },
   "newsGrid": {
     "heading": "ULTIMELE ȘTIRI"
+  },
+  "sidebar": {
+    "beginnerGuide": {
+      "heading": "GHID PENTRU ÎNCEPĂTORI",
+      "rules": "Regulamentul de bază",
+      "positions": "Poziții și roluri pe teren",
+      "glossary": "Glosar de termeni",
+      "hailMaryOrigin": "De unde vine „Hail Mary”?",
+      "history": "Istoria fotbalului american"
+    },
+    "schedule": {
+      "heading": "PROGRAMUL SĂPTĂMÂNII"
+    }
   }
 }

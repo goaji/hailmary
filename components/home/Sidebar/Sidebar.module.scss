@@ -1,0 +1,15 @@
+@use "variables" as v;
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; // bespoke to this component (matches NewsGrid's own gap)
+}
+
+.panelHeading {
+  margin: 0 0 14px 0; // bespoke to this component
+  font-family: v.$font-display;
+  font-size: 18px; // bespoke to this component
+  letter-spacing: 0.6px;
+  color: var(--accent-1);
+}
