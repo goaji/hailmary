@@ -1,10 +1,12 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-// The reading measure for the whole article — ArticleBody (step 3) reuses
-// this same max-width/padding, not a separate value.
+// Shared column width for the whole article — ArticleBody and
+// ArticlePrevNext reuse this same max-width/padding, and it matches
+// RelatedArticles' width so the "Citește și" row lines up with the
+// column above it instead of reading as a wider, separate block.
 .header {
-  max-width: 720px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 40px 32px; // bespoke to the reading column, not the spacing scale
 }

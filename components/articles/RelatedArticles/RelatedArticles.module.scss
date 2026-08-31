@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 .related {
-  max-width: 960px; // wider than the 720px reading column — three cards need the room
+  max-width: 960px; // matches ArticleHeader/ArticleBody/ArticlePrevNext's column width
   margin: v.space(48) auto 0 auto;
   padding: 0 32px v.space(48) 32px;
 }

@@ -5,7 +5,7 @@
   display: grid;
   grid-template-columns: 1fr; // mobile-first: stacked
   gap: v.space(16);
-  max-width: 720px; // matches the reading column
+  max-width: 960px; // matches the article column, so it lines up with RelatedArticles' edges
   margin: v.space(48) auto 0 auto;
   padding: v.space(32) 32px v.space(48) 32px;
   border-top: 1px solid v.$c-border;
