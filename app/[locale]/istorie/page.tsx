@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
@@ -7,6 +8,7 @@ import rehypeUnwrapImages from "rehype-unwrap-images";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { TimelineEntry } from "@/components/reference/TimelineEntry/TimelineEntry";
+import { ReferenceLinks } from "@/components/reference/ReferenceLinks/ReferenceLinks";
 import { articleComponents } from "@/components/articles/ArticleBody/articleComponents";
 import { getReferenceLocales, getReferencePage, groupEntriesByEra } from "@/utils/reference";
 import styles from "./page.module.scss";
@@ -55,6 +57,13 @@ export default async function HistoryPage({
 
   const eras = groupEntriesByEra(page.frontmatter.entries, page.sections);
   const EraHeading = articleComponents.h2;
+  const tNav = await getTranslations("nav");
+  const rulesPage = getReferencePage("regulament", locale);
+
+  const crossLinks = [
+    rulesPage ? { label: rulesPage.frontmatter.title, href: "/regulament" } : null,
+    { label: tNav("glossary"), href: "/glosar" },
+  ].filter((item) => item !== null);
 
   return (
     <div className={styles.page}>
@@ -85,6 +94,8 @@ export default async function HistoryPage({
           </section>
         ) : null,
       )}
+
+      <ReferenceLinks items={crossLinks} />
     </div>
   );
 }

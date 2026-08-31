@@ -6,6 +6,8 @@ import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { RuleToc } from "@/components/reference/RuleToc/RuleToc";
 import { RuleSection } from "@/components/reference/RuleSection/RuleSection";
+import { ReferenceLinks } from "@/components/reference/ReferenceLinks/ReferenceLinks";
+import { TargetRefresh } from "@/components/reference/TargetRefresh/TargetRefresh";
 import { getReferenceLocales, getReferencePage, splitSectionContent } from "@/utils/reference";
 import styles from "./page.module.scss";
 
@@ -52,10 +54,18 @@ export default async function RulesPage({
   }
 
   const t = await getTranslations("rulesPage");
+  const tNav = await getTranslations("nav");
   const sections = splitSectionContent(page.content, page.sections);
+  const historyPage = getReferencePage("istorie", locale);
+
+  const crossLinks = [
+    historyPage ? { label: historyPage.frontmatter.title, href: "/istorie" } : null,
+    { label: tNav("glossary"), href: "/glosar" },
+  ].filter((item) => item !== null);
 
   return (
     <div className={styles.page}>
+      <TargetRefresh />
       <SectionHeading as="h1">{page.frontmatter.title}</SectionHeading>
 
       <div className={styles.layout}>
@@ -65,6 +75,8 @@ export default async function RulesPage({
           {sections.map((section) => (
             <RuleSection key={section.id} section={section} body={section.body} />
           ))}
+
+          <ReferenceLinks items={crossLinks} />
         </div>
       </div>
     </div>

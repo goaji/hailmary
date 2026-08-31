@@ -91,6 +91,9 @@
   "rulesPage": {
     "tocLabel": "Contents"
   },
+  "referenceLinks": {
+    "heading": "Read also"
+  },
   "explainerPanel": {
     "close": "Close",
     "seeAlso": "See also",

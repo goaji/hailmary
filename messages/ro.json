@@ -91,6 +91,9 @@
   "rulesPage": {
     "tocLabel": "Cuprins"
   },
+  "referenceLinks": {
+    "heading": "Citește și"
+  },
   "explainerPanel": {
     "close": "Închide",
     "seeAlso": "Vezi și",

@@ -1,0 +1,31 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.section {
+  margin-top: v.space(48);
+  padding-top: v.space(32);
+  border-top: 1px solid v.$c-border;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(8);
+  margin: v.space(16) 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  font-size: v.$fs-body-lg;
+  font-weight: 600;
+  color: var(--accent-1);
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}

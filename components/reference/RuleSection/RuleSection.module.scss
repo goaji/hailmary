@@ -1,7 +1,15 @@
 @use "variables" as v;
 
+// Same seeAlso-arrival treatment as GlossaryList's .details:has(.detailsContent:target) — reserved transparent border so landing doesn't shift layout.
 .section {
   margin-bottom: v.space(48);
+  padding-left: v.space(16);
+  border-left: 3px solid transparent;
+
+  &:has(:target) {
+    border-left-color: var(--accent-1);
+    background: v.$c-surface-raised;
+  }
 
   &:last-child {
     margin-bottom: 0;
