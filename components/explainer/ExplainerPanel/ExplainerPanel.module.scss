@@ -9,10 +9,8 @@
   border: none;
   max-width: none;
   max-height: none;
-  background: v.$c-surface;
+  background: v.$c-surface-raised; // the exact surface accent2 is calibrated against (utils/teams.ts)
   color: v.$c-text;
-  display: flex;
-  flex-direction: column;
 
   // Mobile: bottom sheet, ~70vh, closed state slid fully off-screen.
   position: fixed;
@@ -21,7 +19,12 @@
   height: 70vh;
   transform: translateY(100%);
 
+  // display must stay scoped to [open], not set unconditionally — dialog's
+  // own display:none when closed is what keeps it out of the a11y tree
+  // (and out of getByRole('dialog')) while merely transformed off-screen.
   &[open] {
+    display: flex;
+    flex-direction: column;
     transform: translateY(0);
   }
 
@@ -135,8 +138,11 @@
 
 .chipGroupLabel {
   margin: 0 0 v.space(8) 0;
-  font-size: v.$fs-ui;
-  color: v.$c-text-muted;
+  font-size: v.$fs-chip;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--accent-2); // panel surface — accent1 isn't guaranteed 4.5:1 here for every team, accent2 is
 }
 
 .chips {
@@ -159,8 +165,8 @@
   color: v.$c-text;
 
   &:hover {
-    border-color: var(--accent-1);
-    color: var(--accent-1);
+    border-color: var(--accent-2);
+    color: var(--accent-2);
   }
 
   &:focus-visible {
@@ -172,4 +178,5 @@
   display: inline-block;
   font-size: v.$fs-ui;
   font-weight: 600;
+  color: var(--accent-2); // panel surface — see .chipGroupLabel above
 }

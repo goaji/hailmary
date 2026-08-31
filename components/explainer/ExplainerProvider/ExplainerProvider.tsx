@@ -161,7 +161,10 @@ export function ExplainerProvider({ entries, children }: ExplainerProviderProps)
     } else {
       url.searchParams.delete("termen");
     }
-    window.history.replaceState(null, "", url);
+    // Passing the existing history.state (not null) preserves Next.js's own
+    // router bookkeeping for this entry — overwriting it with null broke
+    // the back button's ability to return to a page reached this way.
+    window.history.replaceState(window.history.state, "", url);
   }, [activeTerm]);
 
   return (
