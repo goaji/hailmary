@@ -56,5 +56,13 @@
     "schedule": {
       "heading": "PROGRAMUL SĂPTĂMÂNII"
     }
+  },
+  "article": {
+    "fallbackNotice": "Acest articol este disponibil doar în română."
+  },
+  "articleNotFound": {
+    "title": "Articolul nu a fost găsit",
+    "description": "Articolul pe care îl cauți nu există sau a fost mutat.",
+    "backHome": "Înapoi la pagina principală"
   }
 }

@@ -56,5 +56,13 @@
     "schedule": {
       "heading": "THIS WEEK'S SCHEDULE"
     }
+  },
+  "article": {
+    "fallbackNotice": "This article is only available in Romanian."
+  },
+  "articleNotFound": {
+    "title": "Article not found",
+    "description": "The article you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to the homepage"
   }
 }

@@ -134,12 +134,22 @@ export const getAllArticles = cache((locale: Locale): Article[] => {
   return sortByPublishedAtDesc(articles);
 });
 
+/**
+ * Which locales have a real, dedicated translation file for this slug —
+ * not which locales the article *serves* (every slug with a `ro` file
+ * serves every locale, via fallback). Used for `alternates.languages`:
+ * an hreflang entry should only point at genuinely distinct content, not
+ * duplicate the `ro` fallback under an `en` URL.
+ */
+export const getAvailableLocales = cache((slug: string): Locale[] => {
+  return routing.locales.filter((candidate) =>
+    fs.existsSync(articleFilePath(candidate, slug)),
+  );
+});
+
 export const getArticleBySlug = cache(
   (slug: string, locale: Locale): Article | undefined => {
-    const availableLocales = routing.locales.filter((candidate) =>
-      fs.existsSync(articleFilePath(candidate, slug)),
-    );
-    const servedLocale = resolveServedLocale(locale, availableLocales);
+    const servedLocale = resolveServedLocale(locale, getAvailableLocales(slug));
 
     return servedLocale ? readArticleFile(servedLocale, slug) : undefined;
   },

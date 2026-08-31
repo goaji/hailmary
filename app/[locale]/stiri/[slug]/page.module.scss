@@ -1,0 +1,41 @@
+@use "variables" as v;
+
+// Temporary placeholder layout — replaced by ArticleHeader (step 2) and the
+// MDX component map (step 3). Kept minimal on purpose.
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: v.space(32);
+}
+
+.fallbackNotice {
+  background: v.$c-surface;
+  border: 1px solid v.$c-border;
+  border-radius: 3px;
+  padding: v.space(12) v.space(16);
+  color: v.$c-text-dim;
+  font-size: v.$fs-meta;
+  margin-bottom: v.space(20);
+}
+
+.title {
+  font-family: v.$font-display;
+  font-size: v.$fs-h2;
+  margin: v.space(12) 0;
+}
+
+.excerpt {
+  color: v.$c-text-dim;
+  font-size: v.$fs-body-lg;
+  margin-bottom: v.space(16);
+}
+
+.rawContent {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: v.$c-text-muted;
+  font-size: v.$fs-meta;
+  margin-top: v.space(32);
+  padding-top: v.space(20);
+  border-top: 1px solid v.$c-border;
+}
