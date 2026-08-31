@@ -1,0 +1,34 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(32);
+  margin-top: v.space(32);
+
+  @include mix.mq(lg) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: v.space(48);
+  }
+}
+
+.content {
+  min-width: 0;
+  width: 100%;
+
+  @include mix.mq(lg) {
+    max-width: 720px;
+  }
+}

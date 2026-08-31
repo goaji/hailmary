@@ -3,6 +3,7 @@ import {
   extractH2Headings,
   parseReferenceFrontmatter,
   parseSeeAlso,
+  splitSectionContent,
   validateEntryEras,
   validateSectionHeadings,
 } from "./reference";
@@ -84,6 +85,33 @@ describe("extractH2Headings", () => {
 
   it("returns an empty array for content with no headings", () => {
     expect(extractH2Headings("Doar text simplu.")).toEqual([]);
+  });
+});
+
+describe("splitSectionContent", () => {
+  const sections = [
+    { id: "obiectiv", title: "Obiectivul jocului", level: 2 as const },
+    { id: "teren", title: "Terenul și dimensiunile", level: 2 as const },
+  ];
+
+  it("slices each heading through the next into its own body, in order", () => {
+    const content =
+      "## Obiectivul jocului\n\nPrimul paragraf.\n\n## Terenul și dimensiunile\n\nAl doilea paragraf.";
+
+    const result = splitSectionContent(content, sections);
+
+    expect(result).toHaveLength(2);
+    expect(result[0]).toMatchObject({ id: "obiectiv", title: "Obiectivul jocului" });
+    expect(result[0].body).toBe("## Obiectivul jocului\n\nPrimul paragraf.");
+    expect(result[1].body).toBe("## Terenul și dimensiunile\n\nAl doilea paragraf.");
+  });
+
+  it("runs the last section through to the end of the content", () => {
+    const content = "## Obiectivul jocului\n\nA.\n\n## Terenul și dimensiunile\n\nB.\n\nC.";
+
+    const result = splitSectionContent(content, sections);
+
+    expect(result[1].body).toBe("## Terenul și dimensiunile\n\nB.\n\nC.");
   });
 });
 

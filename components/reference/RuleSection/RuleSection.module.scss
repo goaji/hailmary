@@ -1,0 +1,9 @@
+@use "variables" as v;
+
+.section {
+  margin-bottom: v.space(48);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

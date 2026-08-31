@@ -1,0 +1,92 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.desktopToc {
+  display: none;
+
+  @include mix.mq(lg) {
+    display: block;
+    position: sticky;
+    top: v.space(32);
+    flex: 0 0 220px;
+    width: 220px;
+  }
+}
+
+.mobileToc {
+  margin-bottom: v.space(32);
+  border: 1px solid v.$c-border;
+  border-radius: 3px;
+  padding: v.space(16);
+
+  @include mix.mq(lg) {
+    display: none;
+  }
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: v.$c-text;
+  list-style: none; // Firefox marker
+  margin-bottom: v.space(12); // only ever rendered inside .mobileToc, above its .list
+
+  &::-webkit-details-marker {
+    display: none; // Safari/Chrome marker
+  }
+
+  &::marker {
+    content: "";
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid v.$c-text-muted;
+  border-bottom: 2px solid v.$c-text-muted;
+  transform: rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.mobileToc[open] .chevron {
+  transform: rotate(-135deg);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: v.space(8);
+}
+
+.link {
+  display: block;
+  padding: v.space(4) 0;
+  font-size: v.$fs-meta;
+  color: v.$c-text-muted;
+
+  &:hover {
+    color: v.$c-text;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+
+  &[aria-current="location"] {
+    color: var(--accent-1);
+    font-weight: 700;
+  }
+}

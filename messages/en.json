@@ -88,6 +88,9 @@
     "noResults": "No terms match your search.",
     "seeAlso": "See also"
   },
+  "rulesPage": {
+    "tocLabel": "Contents"
+  },
   "explainerPanel": {
     "close": "Close",
     "seeAlso": "See also",

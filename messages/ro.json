@@ -88,6 +88,9 @@
     "noResults": "Niciun termen nu corespunde căutării tale.",
     "seeAlso": "Vezi și"
   },
+  "rulesPage": {
+    "tocLabel": "Cuprins"
+  },
   "explainerPanel": {
     "close": "Închide",
     "seeAlso": "Vezi și",

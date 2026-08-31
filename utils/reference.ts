@@ -10,6 +10,7 @@ import type {
   Locale,
   ReferencePage,
   ReferencePageFrontmatter,
+  ReferenceSection,
   TimelineEntry,
 } from "@/types";
 
@@ -58,6 +59,20 @@ const H2_PATTERN = /^##\s+(.+?)\s*$/gm;
 /** Every top-level (`##`) heading in raw MDX content, in document order. */
 export function extractH2Headings(content: string): string[] {
   return [...content.matchAll(H2_PATTERN)].map((match) => match[1].trim());
+}
+
+/** Slices raw MDX (each `##` heading through the next) into one per-section chunk, aligned by position to `sections`. */
+export function splitSectionContent(
+  content: string,
+  sections: ReferenceSection[],
+): Array<ReferenceSection & { body: string }> {
+  const starts = [...content.matchAll(H2_PATTERN)].map((match) => match.index);
+
+  return sections.map((section, index) => {
+    const start = starts[index];
+    const end = index + 1 < starts.length ? starts[index + 1] : content.length;
+    return { ...section, body: content.slice(start, end).trim() };
+  });
 }
 
 /** Section ids are never derived from heading text — this is what catches a heading drifting out of sync with frontmatter. */

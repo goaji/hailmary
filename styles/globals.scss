@@ -6,6 +6,13 @@ html {
   box-sizing: border-box;
 }
 
+// Anchor scrolling (TOC links, seeAlso deep links) — smooth unless the reader prefers reduced motion.
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 *,
 *::before,
 *::after {
