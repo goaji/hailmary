@@ -79,5 +79,13 @@
     "title": "Articolul nu a fost găsit",
     "description": "Articolul pe care îl cauți nu există sau a fost mutat.",
     "backHome": "Înapoi la pagina principală"
+  },
+  "glossary": {
+    "title": "Glosar",
+    "metaDescription": "Termenii de fotbal american explicați pe scurt, în română.",
+    "filterLabel": "Caută un termen",
+    "filterPlaceholder": "ex. blitz, safety, spread",
+    "noResults": "Niciun termen nu corespunde căutării tale.",
+    "seeAlso": "Vezi și"
   }
 }

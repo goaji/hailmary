@@ -79,5 +79,13 @@
     "title": "Article not found",
     "description": "The article you're looking for doesn't exist or has been moved.",
     "backHome": "Back to the homepage"
+  },
+  "glossary": {
+    "title": "Glossary",
+    "metaDescription": "American football terms explained simply, for newcomers and fans alike.",
+    "filterLabel": "Search for a term",
+    "filterPlaceholder": "e.g. blitz, safety, spread",
+    "noResults": "No terms match your search.",
+    "seeAlso": "See also"
   }
 }

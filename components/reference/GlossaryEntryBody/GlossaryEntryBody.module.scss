@@ -1,0 +1,29 @@
+@use "variables" as v;
+
+.body {
+  margin-top: v.space(12);
+}
+
+.p {
+  margin: 0 0 v.space(12) 0;
+  font-size: v.$fs-body;
+  line-height: 1.65;
+  color: v.$c-text-dim;
+}
+
+.p:last-child {
+  margin-bottom: 0;
+}
+
+.strong {
+  color: v.$c-text;
+  font-weight: 700;
+}
+
+.list {
+  margin: 0 0 v.space(12) 0;
+  padding-left: v.space(20);
+  font-size: v.$fs-body;
+  line-height: 1.65;
+  color: v.$c-text-dim;
+}

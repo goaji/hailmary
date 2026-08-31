@@ -1,0 +1,118 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(8);
+  margin-bottom: v.space(32);
+}
+
+.filterLabel {
+  font-size: v.$fs-ui;
+  font-weight: 600;
+  color: v.$c-text-dim;
+}
+
+.filterInput {
+  width: 100%;
+  max-width: 360px;
+  padding: v.space(10) v.space(12);
+  background: v.$c-surface;
+  border: 1px solid v.$c-border;
+  color: v.$c-text;
+  font-size: v.$fs-body;
+
+  &::placeholder {
+    color: v.$c-text-muted;
+  }
+}
+
+.empty {
+  font-size: v.$fs-body;
+  color: v.$c-text-muted;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: v.space(12);
+}
+
+.details {
+  border: 1px solid v.$c-border;
+  border-left: 3px solid transparent;
+
+  &[open] {
+    background: v.$c-surface;
+  }
+
+  // The #slug id lives on .detailsContent (a descendant, see the TSX
+  // comment), so the target for :target/:has() is that inner element —
+  // this bubbles the highlight up to the whole card. Arriving via a no-JS
+  // TermLink (or any #slug deep link) must make it obvious which term you
+  // came for — this is the only visible cue, so it has to survive at
+  // every team accent per AGENTS.md's accent1 bar.
+  &:has(.detailsContent:target) {
+    border-left-color: var(--accent-1);
+    background: v.$c-surface-raised;
+  }
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: v.space(12);
+  padding: v.space(16) v.space(20);
+  cursor: pointer;
+  list-style: none; // Firefox marker
+
+  &::-webkit-details-marker {
+    display: none; // Safari/Chrome marker
+  }
+
+  &::marker {
+    content: "";
+  }
+}
+
+.term {
+  margin: 0;
+  font-family: v.$font-display;
+  font-size: v.$fs-h3;
+  letter-spacing: 0.4px;
+}
+
+.chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid v.$c-text-muted;
+  border-bottom: 2px solid v.$c-text-muted;
+  transform: rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.details[open] .chevron {
+  transform: rotate(-135deg);
+}
+
+.detailsContent {
+  padding: 0 v.space(20) v.space(20);
+  scroll-margin-top: v.space(20); // so a #slug jump doesn't tuck the content under a sticky header
+}
+
+.short {
+  margin: 0 0 v.space(12) 0;
+  font-size: v.$fs-body-lg;
+  color: v.$c-text;
+}
+
+.seeAlso {
+  display: inline-block;
+  margin-top: v.space(12);
+  font-size: v.$fs-ui;
+  font-weight: 600;
+}
