@@ -8,6 +8,7 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { GLOSSARY_CATEGORY_IDS } from "@/types";
 import type { GlossaryEntry, GlossaryEntryFrontmatter, Locale } from "@/types";
+import { validateSeeAlso } from "@/utils/reference";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "glossary");
 
@@ -74,6 +75,10 @@ function readTermFile(locale: Locale, slug: string): GlossaryEntry {
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   const frontmatter = parseGlossaryFrontmatter(data, filePath);
+
+  if (frontmatter.seeAlso) {
+    validateSeeAlso(frontmatter.seeAlso, locale, filePath);
+  }
 
   return { ...frontmatter, extended: content, servedLocale: locale };
 }

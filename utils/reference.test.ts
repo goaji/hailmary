@@ -1,0 +1,153 @@
+import { describe, expect, it } from "vitest";
+import {
+  extractH2Headings,
+  parseReferenceFrontmatter,
+  parseSeeAlso,
+  validateEntryEras,
+  validateSectionHeadings,
+} from "./reference";
+
+const validFrontmatter = {
+  title: "Regulamentul fotbalului american",
+  description: "Bazele jocului, explicate pentru un începător.",
+  sections: [
+    { id: "obiectiv", title: "Obiectivul jocului" },
+    { id: "teren", title: "Terenul și dimensiunile" },
+  ],
+};
+
+describe("parseReferenceFrontmatter", () => {
+  it("accepts a valid file and defaults section level to 2", () => {
+    const result = parseReferenceFrontmatter(validFrontmatter, "test.mdx");
+
+    expect(result.title).toBe(validFrontmatter.title);
+    expect(result.sections).toEqual([
+      { id: "obiectiv", title: "Obiectivul jocului", level: 2 },
+      { id: "teren", title: "Terenul și dimensiunile", level: 2 },
+    ]);
+  });
+
+  it("accepts an explicit section level", () => {
+    const result = parseReferenceFrontmatter(
+      {
+        ...validFrontmatter,
+        sections: [{ id: "sub", title: "Un subtitlu", level: 3 }],
+      },
+      "test.mdx",
+    );
+
+    expect(result.sections[0].level).toBe(3);
+  });
+
+  it("accepts optional timeline entries", () => {
+    const result = parseReferenceFrontmatter(
+      {
+        title: "Istoria fotbalului american",
+        description: "O cronologie.",
+        sections: [{ id: "origini", title: "Origini" }],
+        entries: [{ year: "1920", title: "Se înființează liga", body: "Text.", era: "origini" }],
+      },
+      "test.mdx",
+    );
+
+    expect(result.entries).toHaveLength(1);
+  });
+
+  it("rejects a file missing a required field, naming the file and the field", () => {
+    const { title, ...missingTitle } = validFrontmatter;
+    void title;
+
+    expect(() =>
+      parseReferenceFrontmatter(missingTitle, "content/reference/ro/x.mdx"),
+    ).toThrow('content/reference/ro/x.mdx: field "title"');
+  });
+
+  it("rejects an empty sections array", () => {
+    expect(() =>
+      parseReferenceFrontmatter({ ...validFrontmatter, sections: [] }, "test.mdx"),
+    ).toThrow(/"sections"/);
+  });
+});
+
+describe("extractH2Headings", () => {
+  it("collects every top-level heading in document order", () => {
+    const content = "Intro.\n\n## Primul\n\nText.\n\n## Al doilea\n\nText.";
+
+    expect(extractH2Headings(content)).toEqual(["Primul", "Al doilea"]);
+  });
+
+  it("ignores h3 and deeper headings", () => {
+    const content = "## Secțiune\n\n### Subsecțiune\n\nText.";
+
+    expect(extractH2Headings(content)).toEqual(["Secțiune"]);
+  });
+
+  it("returns an empty array for content with no headings", () => {
+    expect(extractH2Headings("Doar text simplu.")).toEqual([]);
+  });
+});
+
+describe("validateSectionHeadings", () => {
+  const sections = [
+    { id: "obiectiv", title: "Obiectivul jocului" },
+    { id: "teren", title: "Terenul și dimensiunile" },
+  ];
+
+  it("passes silently when headings match sections in count, order and text", () => {
+    const content = "## Obiectivul jocului\n\nText.\n\n## Terenul și dimensiunile\n\nText.";
+
+    expect(() => validateSectionHeadings(content, sections, "test.mdx")).not.toThrow();
+  });
+
+  it("throws naming the file when heading count doesn't match", () => {
+    const content = "## Obiectivul jocului\n\nText.";
+
+    expect(() => validateSectionHeadings(content, sections, "content/reference/ro/x.mdx")).toThrow(
+      "content/reference/ro/x.mdx: frontmatter declares 2 section(s) but content has 1",
+    );
+  });
+
+  it("throws naming the section id when heading text has drifted from the frontmatter title", () => {
+    const content = "## Obiectivul jocului\n\nText.\n\n## Terenul (revizuit)\n\nText.";
+
+    expect(() => validateSectionHeadings(content, sections, "test.mdx")).toThrow(
+      '"teren"',
+    );
+  });
+});
+
+describe("validateEntryEras", () => {
+  const sections = [{ id: "origini" }, { id: "era-moderna" }];
+
+  it("passes silently when every entry references a known era", () => {
+    const entries = [
+      { year: "1920", title: "A", body: "B", era: "origini" },
+      { year: "1970", title: "C", body: "D", era: "era-moderna" },
+    ];
+
+    expect(() => validateEntryEras(entries, sections, "test.mdx")).not.toThrow();
+  });
+
+  it("throws naming the file, entry and unknown era", () => {
+    const entries = [{ year: "1995", title: "Extinderea ligii", body: "B", era: "era-libera" }];
+
+    expect(() => validateEntryEras(entries, sections, "content/reference/ro/istorie.mdx")).toThrow(
+      'content/reference/ro/istorie.mdx: timeline entry "Extinderea ligii" (1995) references unknown era "era-libera"',
+    );
+  });
+});
+
+describe("parseSeeAlso", () => {
+  it("parses a route with a section anchor", () => {
+    expect(parseSeeAlso("/regulament#pase")).toEqual({ slug: "regulament", id: "pase" });
+  });
+
+  it("parses a route with no anchor", () => {
+    expect(parseSeeAlso("/istorie")).toEqual({ slug: "istorie", id: undefined });
+  });
+
+  it("returns undefined for an external or malformed route", () => {
+    expect(parseSeeAlso("https://example.com")).toBeUndefined();
+    expect(parseSeeAlso("regulament#pase")).toBeUndefined();
+  });
+});

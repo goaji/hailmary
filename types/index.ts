@@ -88,3 +88,33 @@ export type GlossaryEntry = GlossaryEntryFrontmatter & {
   /** Which locale actually served this entry — the i18n fallback contract. */
   servedLocale: Locale;
 };
+
+// Each section id is declared in frontmatter, never derived from heading text — it's what glossary `seeAlso` deep-links into.
+export type ReferenceSection = {
+  id: string;
+  title: string;
+  level: 2 | 3;
+};
+
+export type TimelineEntry = {
+  year: string;
+  title: string;
+  body: string;
+  /** id of the ReferenceSection (era) this entry groups under. */
+  era: string;
+};
+
+export type ReferencePageFrontmatter = {
+  title: string;
+  description: string;
+  sections: ReferenceSection[];
+  /** Present only on the timeline shape (istorie); absent on sectioned-MDX pages (regulament). */
+  entries?: TimelineEntry[];
+};
+
+export type ReferencePage = {
+  frontmatter: ReferencePageFrontmatter;
+  content: string;
+  /** Same data as frontmatter.sections, exposed directly for the TOC. */
+  sections: ReferenceSection[];
+};
