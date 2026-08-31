@@ -1,0 +1,19 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.related {
+  max-width: 960px; // wider than the 720px reading column — three cards need the room
+  margin: v.space(48) auto 0 auto;
+  padding: 0 32px v.space(48) 32px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr; // mobile-first: single column
+  gap: v.space(22);
+  margin-top: v.space(20);
+
+  @include mix.mq(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

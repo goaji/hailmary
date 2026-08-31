@@ -86,6 +86,45 @@ export function excludeArticleBySlug<T extends { slug: string }>(
 }
 
 /**
+ * Up to `limit` related articles for `current`: same-category first
+ * (newest first), topped up with the newest articles overall rather than
+ * rendering a short row when fewer than `limit` share the category.
+ * `articles` must already be newest-first (see sortByPublishedAtDesc) and
+ * may include `current` itself — it's excluded either way.
+ */
+export function selectRelatedArticles<
+  T extends { slug: string; category: string },
+>(articles: T[], current: T, limit = 3): T[] {
+  const others = articles.filter((article) => article.slug !== current.slug);
+  const sameCategory = others.filter((article) => article.category === current.category);
+  const rest = others.filter((article) => article.category !== current.category);
+
+  return [...sameCategory, ...rest].slice(0, limit);
+}
+
+/**
+ * The chronological neighbours of `currentSlug` — older (`previous`) and
+ * newer (`next`) — for a prev/next footer nav. `sortedArticles` must
+ * already be newest-first; either side is `undefined` at either end of
+ * the list, which the caller renders as absent, not a disabled stub.
+ */
+export function selectAdjacentArticles<T extends { slug: string }>(
+  sortedArticles: T[],
+  currentSlug: string,
+): { previous?: T; next?: T } {
+  const index = sortedArticles.findIndex((article) => article.slug === currentSlug);
+
+  if (index === -1) {
+    return {};
+  }
+
+  return {
+    next: sortedArticles[index - 1],
+    previous: sortedArticles[index + 1],
+  };
+}
+
+/**
  * Which locale to actually serve for a request, given which locales have
  * a translation on disk. Falls back to `ro`, per the i18n scope in
  * AGENTS.md — the caller decides whether to show a fallback notice, this

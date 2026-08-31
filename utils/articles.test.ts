@@ -3,7 +3,9 @@ import {
   excludeArticleBySlug,
   parseArticleFrontmatter,
   resolveServedLocale,
+  selectAdjacentArticles,
   selectFeatured,
+  selectRelatedArticles,
   sortByPublishedAtDesc,
 } from "./articles";
 
@@ -100,6 +102,88 @@ describe("excludeArticleBySlug", () => {
 
   it("returns the list unchanged when the slug isn't present", () => {
     expect(excludeArticleBySlug(articles, "not-there")).toEqual(articles);
+  });
+});
+
+describe("selectRelatedArticles", () => {
+  const current = { slug: "current", category: "analiza" };
+
+  it("picks same-category articles first, newest first", () => {
+    const articles = [
+      { slug: "a", category: "analiza" },
+      current,
+      { slug: "b", category: "draft" },
+      { slug: "c", category: "analiza" },
+    ];
+
+    expect(selectRelatedArticles(articles, current).map((a) => a.slug)).toEqual([
+      "a",
+      "c",
+      "b",
+    ]);
+  });
+
+  it("tops up with the newest overall when fewer than the limit share the category", () => {
+    const articles = [
+      current,
+      { slug: "a", category: "draft" },
+      { slug: "b", category: "program" },
+      { slug: "c", category: "regulament" },
+      { slug: "d", category: "transferuri" },
+    ];
+
+    expect(selectRelatedArticles(articles, current).map((a) => a.slug)).toEqual([
+      "a",
+      "b",
+      "c",
+    ]);
+  });
+
+  it("excludes the current article even if it's in the input list", () => {
+    const articles = [current, { slug: "a", category: "analiza" }];
+
+    expect(selectRelatedArticles(articles, current).some((a) => a.slug === "current")).toBe(
+      false,
+    );
+  });
+
+  it("respects a custom limit", () => {
+    const articles = [
+      current,
+      { slug: "a", category: "analiza" },
+      { slug: "b", category: "analiza" },
+    ];
+
+    expect(selectRelatedArticles(articles, current, 1).map((a) => a.slug)).toEqual(["a"]);
+  });
+});
+
+describe("selectAdjacentArticles", () => {
+  const sorted = [{ slug: "newest" }, { slug: "middle" }, { slug: "oldest" }];
+
+  it("returns the older article as previous and the newer as next", () => {
+    expect(selectAdjacentArticles(sorted, "middle")).toEqual({
+      previous: { slug: "oldest" },
+      next: { slug: "newest" },
+    });
+  });
+
+  it("omits next for the newest article", () => {
+    expect(selectAdjacentArticles(sorted, "newest")).toEqual({
+      previous: { slug: "middle" },
+      next: undefined,
+    });
+  });
+
+  it("omits previous for the oldest article", () => {
+    expect(selectAdjacentArticles(sorted, "oldest")).toEqual({
+      previous: undefined,
+      next: { slug: "middle" },
+    });
+  });
+
+  it("returns both undefined when the slug isn't found", () => {
+    expect(selectAdjacentArticles(sorted, "missing")).toEqual({});
   });
 });
 

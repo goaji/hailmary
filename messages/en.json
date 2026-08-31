@@ -63,6 +63,14 @@
   "articleBody": {
     "tableScrollLabel": "Horizontally scrollable table"
   },
+  "relatedArticles": {
+    "heading": "Read also"
+  },
+  "articlePrevNext": {
+    "navLabel": "Articles",
+    "previous": "Previous article",
+    "next": "Next article"
+  },
   "articleNotFound": {
     "title": "Article not found",
     "description": "The article you're looking for doesn't exist or has been moved.",

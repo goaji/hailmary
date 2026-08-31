@@ -63,6 +63,14 @@
   "articleBody": {
     "tableScrollLabel": "Tabel derulabil orizontal"
   },
+  "relatedArticles": {
+    "heading": "Citește și"
+  },
+  "articlePrevNext": {
+    "navLabel": "Articole",
+    "previous": "Articolul anterior",
+    "next": "Articolul următor"
+  },
   "articleNotFound": {
     "title": "Articolul nu a fost găsit",
     "description": "Articolul pe care îl cauți nu există sau a fost mutat.",

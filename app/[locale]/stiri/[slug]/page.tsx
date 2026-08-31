@@ -5,7 +5,15 @@ import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
-import { getAllArticles, getArticleBySlug, getAvailableLocales } from "@/utils/articles";
+import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
+import { ArticlePrevNext } from "@/components/articles/ArticlePrevNext/ArticlePrevNext";
+import {
+  getAllArticles,
+  getArticleBySlug,
+  getAvailableLocales,
+  selectAdjacentArticles,
+  selectRelatedArticles,
+} from "@/utils/articles";
 import styles from "./page.module.scss";
 
 // Articles are static MDX baked in at build time — generateStaticParams
@@ -69,6 +77,13 @@ export default async function ArticlePage({
   const t = await getTranslations("article");
   const isFallback = article.servedLocale !== locale;
 
+  // Sourced from the served locale, not the requested one: news is
+  // ro-only, so an /en fallback view still gets ro-fallback siblings
+  // rather than an empty related-articles section.
+  const siblingArticles = getAllArticles(article.servedLocale);
+  const related = selectRelatedArticles(siblingArticles, article);
+  const { previous, next } = selectAdjacentArticles(siblingArticles, article.slug);
+
   return (
     <article>
       {isFallback ? (
@@ -79,6 +94,8 @@ export default async function ArticlePage({
 
       <ArticleHeader article={article} />
       <ArticleBody content={article.content} />
+      <RelatedArticles articles={related} />
+      <ArticlePrevNext previous={previous} next={next} />
     </article>
   );
 }
