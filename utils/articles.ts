@@ -8,6 +8,7 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
 import type { Article, ArticleFrontmatter, Category, Locale } from "@/types";
+import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "articles");
 
@@ -178,6 +179,7 @@ function readArticleFile(locale: Locale, slug: string): Article {
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   const frontmatter = parseArticleFrontmatter(data, filePath);
+  validateTermLinks(content, getTermSlugs(locale), filePath);
 
   return {
     ...frontmatter,

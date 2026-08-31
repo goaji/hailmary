@@ -2,6 +2,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n";
 import { ArticleImage } from "@/components/ui/ArticleImage/ArticleImage";
+import { TermLink } from "@/components/explainer/TermLink/TermLink";
 import styles from "./ArticleBody.module.scss";
 
 function MdxLink({ href = "", children, ...rest }: ComponentPropsWithoutRef<"a">) {
@@ -76,4 +77,5 @@ export const articleComponents = {
   hr: (props: ComponentPropsWithoutRef<"hr">) => <hr className={styles.hr} {...props} />,
   img: MdxImage,
   table: MdxTable,
+  TermLink,
 };

@@ -14,9 +14,10 @@ const CONTENT_DIR = path.join(process.cwd(), "content", "glossary");
 const glossaryFrontmatterSchema = z.object({
   slug: z.string(),
   term: z.string(),
-  shortDef: z.string(),
+  short: z.string(),
   category: z.enum(GLOSSARY_CATEGORY_IDS),
-  related: z.array(z.string()).optional(),
+  relatedTerms: z.array(z.string()).optional(),
+  seeAlso: z.string().optional(),
 });
 
 /**
@@ -74,7 +75,7 @@ function readTermFile(locale: Locale, slug: string): GlossaryEntry {
   const { data, content } = matter(raw);
   const frontmatter = parseGlossaryFrontmatter(data, filePath);
 
-  return { ...frontmatter, body: content, servedLocale: locale };
+  return { ...frontmatter, extended: content, servedLocale: locale };
 }
 
 function listSlugs(locale: Locale): string[] {
@@ -105,3 +106,37 @@ export const getTermBySlug = cache(
     return servedLocale ? readTermFile(servedLocale, slug) : undefined;
   },
 );
+
+export const getTermSlugs = cache((locale: Locale): string[] => {
+  return listSlugs(locale);
+});
+
+const TERM_LINK_PATTERN = /<TermLink\b[^>]*\bterm=(["'])(.*?)\1/g;
+
+/** Every slug referenced via `<TermLink term="...">` in raw MDX content. */
+export function extractTermLinkSlugs(content: string): string[] {
+  return [...content.matchAll(TERM_LINK_PATTERN)].map((match) => match[2]);
+}
+
+/**
+ * Every <TermLink term="..."> in article content must resolve to a slug in
+ * `knownSlugs` — a typo here must fail the build rather than ship as a
+ * silently dead trigger. Called at content-read time (utils/articles.ts),
+ * with that locale's `getTermSlugs()`, so it runs during
+ * generateStaticParams, not on a request.
+ */
+export function validateTermLinks(
+  content: string,
+  knownSlugs: string[],
+  filePath: string,
+): void {
+  const known = new Set(knownSlugs);
+
+  for (const slug of extractTermLinkSlugs(content)) {
+    if (!known.has(slug)) {
+      throw new Error(
+        `Unknown glossary term "${slug}" referenced by <TermLink> in ${filePath} — no matching content/glossary entry`,
+      );
+    }
+  }
+}

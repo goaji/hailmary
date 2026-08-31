@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
+  extractTermLinkSlugs,
   parseGlossaryFrontmatter,
   resolveServedLocale,
   sortByTerm,
+  validateTermLinks,
 } from "./glossary";
 
 const validFrontmatter = {
   slug: "blitz",
   term: "Blitz",
-  shortDef: "Un atac cu mai mulți jucători decât de obicei asupra quarterback-ului.",
+  short: "Un atac cu mai mulți jucători decât de obicei asupra quarterback-ului.",
   category: "reguli",
 };
 
@@ -67,5 +69,35 @@ describe("resolveServedLocale", () => {
 
   it("returns undefined when the term doesn't exist in any locale", () => {
     expect(resolveServedLocale("en", [])).toBeUndefined();
+  });
+});
+
+describe("extractTermLinkSlugs", () => {
+  it("collects every term slug referenced in the content", () => {
+    const content = `Un <TermLink term="play-action">play action</TermLink> urmat de un <TermLink term="blitz">blitz</TermLink>.`;
+
+    expect(extractTermLinkSlugs(content)).toEqual(["play-action", "blitz"]);
+  });
+
+  it("returns an empty array when no TermLink is present", () => {
+    expect(extractTermLinkSlugs("Text simplu, fără termeni.")).toEqual([]);
+  });
+});
+
+describe("validateTermLinks", () => {
+  it("passes silently when every referenced slug is known", () => {
+    const content = `<TermLink term="blitz">blitz</TermLink>`;
+
+    expect(() => validateTermLinks(content, ["blitz"], "test.mdx")).not.toThrow();
+  });
+
+  it("throws naming the file and the unknown slug", () => {
+    const content = `<TermLink term="not-a-real-term">acesta</TermLink>`;
+
+    expect(() =>
+      validateTermLinks(content, ["blitz"], "content/articles/ro/x.mdx"),
+    ).toThrow(
+      'Unknown glossary term "not-a-real-term" referenced by <TermLink> in content/articles/ro/x.mdx',
+    );
   });
 });

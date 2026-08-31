@@ -73,13 +73,18 @@ export type GlossaryCategory = (typeof GLOSSARY_CATEGORY_IDS)[number];
 export type GlossaryEntryFrontmatter = {
   slug: string;
   term: string;
-  shortDef: string;
+  /** One sentence — glossary list + tooltip. */
+  short: string;
   category: GlossaryCategory;
-  related?: string[];
+  /** Other entry slugs. */
+  relatedTerms?: string[];
+  /** A route, e.g. "/regulament#pase". */
+  seeAlso?: string;
 };
 
 export type GlossaryEntry = GlossaryEntryFrontmatter & {
-  body: string;
+  /** MDX string — the panel body. */
+  extended: string;
   /** Which locale actually served this entry — the i18n fallback contract. */
   servedLocale: Locale;
 };

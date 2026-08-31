@@ -1,0 +1,21 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Deliberately not styled like a regular link (ArticleBody's .link is
+// solid-underlined and accent-colored) — the dotted underline reads as
+// "there's more here" rather than "this navigates away", per spec section 9.
+.termLink {
+  color: inherit;
+  text-decoration: underline dotted var(--accent-1);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+
+  &:hover {
+    color: var(--accent-1);
+    text-decoration-style: solid;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
