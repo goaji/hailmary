@@ -21,11 +21,11 @@ export async function ArticleCard({ article }: ArticleCardProps) {
 
       <Tag category={article.category} />
 
-      <p className={styles.title}>
+      <h3 className={styles.title}>
         <Link href={`/stiri/${article.slug}`} className={styles.titleLink}>
           {article.title}
         </Link>
-      </p>
+      </h3>
 
       <p className={styles.time}>{formatPublishedAt(article.publishedAt, locale)}</p>
     </div>

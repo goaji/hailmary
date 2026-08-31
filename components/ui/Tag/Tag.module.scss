@@ -7,10 +7,14 @@
   text-transform: uppercase;
 }
 
-.tagAccent1 {
-  color: var(--accent-1);
-}
-
+// Both slots resolve to --accent-2, not --accent-1: this chip text is
+// 11px bold, the exact "small 10-11px bold chips" case AGENTS.md reserves
+// for accent2 (>=4.5:1). accent1 is only calibrated for large text/UI
+// (>=3.0:1) and fails 4.5:1 for several teams at this size (e.g. Chiefs
+// red on the page background: 3.86:1). The two slots in CATEGORIES still
+// exist to group categories, but neither may render with accent1's text
+// color until there's a second per-team token actually safe at this size.
+.tagAccent1,
 .tagAccent2 {
   color: var(--accent-2);
 }

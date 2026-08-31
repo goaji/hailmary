@@ -11,5 +11,9 @@
   font-family: v.$font-display;
   font-size: 18px; // bespoke to this component
   letter-spacing: 0.6px;
-  color: var(--accent-1);
+  // var(--accent-2), not accent-1: 18px falls short of WCAG's large-text
+  // cutoff (18.66px bold / 24px regular), so it needs the 4.5:1 bar, not
+  // accent1's 3.0:1 — same class of bug as the OriginStrip kicker and the
+  // category Tag chips. Verified 4.5:1 for all 32 teams against this panel.
+  color: var(--accent-2);
 }
