@@ -8,7 +8,7 @@ import { TeamPicker } from "@/components/layout/TeamPicker/TeamPicker";
 import styles from "./SiteHeader.module.scss";
 
 const NAV_ITEMS = [
-  { key: "news", href: "/stiri" },
+  { key: "news", href: "/" },
   { key: "teams", href: "/echipe" },
   { key: "rules", href: "/regulament" },
   { key: "history", href: "/istorie" },
@@ -59,9 +59,14 @@ export function SiteHeader() {
           {NAV_ITEMS.map((item) => {
             // Matches child routes too (e.g. /echipe/kc under /echipe) —
             // only "teams" has any today, but this is harmless for items
-            // that don't.
+            // that don't. "news" is the one exception: there's no /stiri
+            // index route (articles only exist at /stiri/[slug]), so it
+            // links to home but must still read as active on an article
+            // page, which a plain "/" prefix match can't express.
             const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+              item.key === "news"
+                ? pathname === "/" || pathname.startsWith("/stiri/")
+                : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <li key={item.key}>
