@@ -1,0 +1,57 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: v.space(64) v.space(32);
+  text-align: center;
+}
+
+.title {
+  font-family: v.$font-display;
+  font-size: v.$fs-h2;
+  margin-bottom: v.space(12);
+}
+
+.description {
+  color: v.$c-text-dim;
+  font-size: v.$fs-body-lg;
+  margin-bottom: v.space(20);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.space(20);
+}
+
+// Bordered, not filled: accent1 is only contrast-guaranteed as text/UI
+// against the dark page (AGENTS.md), not as a background for other text —
+// same accent1-as-text pairing as .backLink, just styled as a button.
+.retryButton {
+  background: transparent;
+  color: var(--accent-1);
+  border: 1px solid var(--accent-1);
+  font-weight: 600;
+  font-size: v.$fs-body;
+  border-radius: 3px;
+  padding: v.space(10) v.space(20);
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.backLink {
+  color: var(--accent-1);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}

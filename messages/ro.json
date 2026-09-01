@@ -157,5 +157,16 @@
     "seeAlso": "Vezi și",
     "relatedTerms": "Termeni înrudiți",
     "otherTermsInArticle": "Alți termeni din articol"
+  },
+  "notFoundPage": {
+    "title": "Pagina nu a fost găsită",
+    "description": "Ne pare rău, pagina pe care o cauți nu există sau a fost mutată.",
+    "backHome": "Înapoi la pagina principală"
+  },
+  "errorPage": {
+    "title": "Ceva nu a funcționat",
+    "description": "A apărut o eroare neașteptată. Poți încerca din nou sau te poți întoarce la pagina principală.",
+    "retry": "Încearcă din nou",
+    "backHome": "Înapoi la pagina principală"
   }
 }

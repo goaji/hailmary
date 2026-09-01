@@ -157,5 +157,16 @@
     "seeAlso": "See also",
     "relatedTerms": "Related terms",
     "otherTermsInArticle": "Other terms in this article"
+  },
+  "notFoundPage": {
+    "title": "Page not found",
+    "description": "Sorry, the page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to the homepage"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. You can try again or go back to the homepage.",
+    "retry": "Try again",
+    "backHome": "Back to the homepage"
   }
 }

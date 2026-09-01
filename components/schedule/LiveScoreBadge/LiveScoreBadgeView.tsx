@@ -11,7 +11,8 @@ type LiveScoreBadgeViewProps = {
 // share this without crossing the server/client translation-hook boundary.
 export function LiveScoreBadgeView({ quarter, clock, t }: LiveScoreBadgeViewProps) {
   return (
-    <span className={styles.badge}>
+    // role="status" implies aria-live="polite" — announces polled quarter/clock changes.
+    <span className={styles.badge} role="status">
       <span className={styles.dot} aria-hidden="true" />
       <span>{t("live")}</span>
       {quarter !== undefined && clock !== undefined && (

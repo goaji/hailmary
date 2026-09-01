@@ -157,6 +157,4 @@ export function onBrandColor(team: Team): string {
 }
 
 /** Six teams shown in the header picker. */
-/** TODO: think about how to make accessible the rest */
-/** TODO: think about how to make this dynamic */
 export const PICKER_TEAMS = ['kc', 'phi', 'dal', 'gb', 'pit', 'ne'] as const;

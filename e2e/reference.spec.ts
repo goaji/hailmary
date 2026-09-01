@@ -160,6 +160,20 @@ test.describe("reference pages accessibility across team accents", () => {
   }
 });
 
+test.describe("glossary index accessibility across team accents", () => {
+  for (const slug of PICKER_TEAMS) {
+    const team = getTeam(slug);
+
+    test(`/glosar axe clean with ${team.name} selected`, async ({ page }) => {
+      await page.goto("/ro/glosar");
+      await page.getByRole("radio", { name: team.name }).click();
+
+      const results = await new AxeBuilder({ page }).analyze();
+      expect(results.violations).toEqual([]);
+    });
+  }
+});
+
 test.describe("reference pages visual regression", () => {
   const viewports = [
     { label: "375", width: 375, height: 1200 },

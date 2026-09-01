@@ -148,6 +148,19 @@ test.describe("week selector and table structure", () => {
     await expect(page.getByText(ro.liveScoreBadge.live)).toBeVisible();
   });
 
+  // A screen reader only hears a score/clock change if it's inside a live
+  // region — otherwise polling updates the DOM silently for that audience.
+  // role="status" live regions expose no accessible *name* by spec (their
+  // content is the announcement, not a label), so this checks the role's
+  // presence and content separately rather than via getByRole's name filter.
+  test("live score and status badge are announced via role=status", async ({ page }) => {
+    await page.goto("/ro/program");
+
+    const statuses = await page.getByRole("status").allTextContents();
+    expect(statuses.some((text) => text.includes(ro.liveScoreBadge.live))).toBe(true);
+    expect(statuses.some((text) => /\d+–\d+/.test(text))).toBe(true);
+  });
+
   test("no odds anywhere on the page", async ({ page }) => {
     await page.goto("/ro/program");
     const bodyText = await page.locator("body").innerText();

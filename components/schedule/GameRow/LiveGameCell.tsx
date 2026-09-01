@@ -24,7 +24,7 @@ export function LiveGameCell({ gameId, initialGame }: LiveGameCellProps) {
   return (
     <>
       {hasScore && (
-        <span className={styles.score}>
+        <span className={styles.score} role="status">
           {current.awayScore}–{current.homeScore}
         </span>
       )}
