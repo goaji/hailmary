@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import type { Game } from "@/types";
 import { TeamBadge } from "@/components/teams/TeamBadge/TeamBadge";
-import { LiveScoreBadge } from "@/components/schedule/LiveScoreBadge/LiveScoreBadge";
+import { LiveGameCell } from "@/components/schedule/GameRow/LiveGameCell";
 import { getTeam } from "@/utils/teams";
 import { formatKickoff } from "@/utils/formatKickoff";
 import styles from "./GameRow.module.scss";
@@ -27,7 +27,18 @@ export async function GameRow({ game, locale }: GameRowProps) {
       </td>
       <td className={styles.kickoff}>{formatKickoff(game.kickoff, locale)}</td>
       <td className={styles.scoreCell}>
-        {hasScore ? (
+        {isLive ? (
+          <LiveGameCell
+            gameId={game.id}
+            initialGame={{
+              homeScore: game.homeScore,
+              awayScore: game.awayScore,
+              quarter: game.quarter,
+              clock: game.clock,
+              status: game.status,
+            }}
+          />
+        ) : hasScore ? (
           <span className={styles.score}>
             {game.awayScore}–{game.homeScore}
           </span>
@@ -39,7 +50,6 @@ export async function GameRow({ game, locale }: GameRowProps) {
             <span className={styles.visuallyHidden}>{t("notStarted")}</span>
           </span>
         )}
-        {isLive && <LiveScoreBadge quarter={game.quarter} clock={game.clock} />}
       </td>
     </tr>
   );

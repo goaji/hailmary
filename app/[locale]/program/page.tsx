@@ -5,8 +5,10 @@ import { notFound } from "next/navigation";
 import { getLanguageAlternates, Link, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ScheduleTable } from "@/components/schedule/ScheduleTable/ScheduleTable";
+import { LiveScoreStatus } from "@/components/schedule/LiveScoreStatus/LiveScoreStatus";
 import { getAvailableWeeks, getCurrentWeek, getSchedule } from "@/utils/schedule";
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
+import { hasLiveGame } from "@/utils/liveGames";
 import styles from "./page.module.scss";
 
 // searchParams (the week filter) opts this page into per-request dynamic rendering, so no `export const revalidate` — it wouldn't apply, and there's nothing expensive to cache against anyway (just a local file read).
@@ -59,7 +61,7 @@ export default async function SchedulePage({
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
 
-      {!isLive && <p className={styles.notice}>{t("liveUnavailableNotice")}</p>}
+      <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(weekGames)} />
 
       {weeks.length > 1 && (
         <nav aria-label={t("weekNavLabel")} className={styles.weekNav}>
