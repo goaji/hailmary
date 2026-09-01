@@ -23,6 +23,9 @@
 /.next/
 /out/
 
+# score store — per-instance disk cache, refilled by the sync cron
+/.data/
+
 # production
 /build
 

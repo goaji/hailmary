@@ -1,0 +1,46 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+.notice {
+  margin: v.space(16) 0 0;
+  padding: v.space(12) v.space(16);
+  border: 1px solid v.$c-border-soft;
+  color: v.$c-text-muted;
+  font-size: v.$fs-meta;
+}
+
+.list {
+  list-style: none;
+  margin: v.space(22) 0 0;
+  padding: 0;
+  max-width: 480px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: v.space(8);
+  padding: v.space(10) 0;
+  border-bottom: 1px solid v.$c-border-soft;
+  font-size: v.$fs-body;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.kickoff {
+  color: v.$c-text-muted;
+  flex-shrink: 0;
+}

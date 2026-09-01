@@ -123,6 +123,11 @@
   "rulesPage": {
     "tocLabel": "Contents"
   },
+  "schedulePage": {
+    "title": "Schedule",
+    "metaDescription": "The full NFL season schedule, with live scores and kickoff times in Romanian local time.",
+    "liveUnavailableNotice": "Live scores aren't available right now. Below is the base schedule, without scores."
+  },
   "referenceLinks": {
     "heading": "Read also"
   },

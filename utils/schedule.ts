@@ -1,4 +1,7 @@
+import "server-only";
+
 import type { Game } from "@/types";
+import { readScores } from "@/utils/store";
 
 // FIXTURE DATA — not a real feed. No MDX, no API; a placeholder until
 // live score data is wired up (see AGENTS.md's "Consume live score data"
@@ -32,4 +35,20 @@ const SCHEDULE_FIXTURE: Game[] = [
 
 export function getScheduleFixture(): Game[] {
   return SCHEDULE_FIXTURE;
+}
+
+export type ScheduleResult = {
+  games: Game[];
+  /** false when the store was empty and this is the fixture instead. */
+  isLive: boolean;
+  updatedAt: string | null;
+};
+
+/** Reads the live score store, falling back to the fixture when it's empty. */
+export function getSchedule(): ScheduleResult {
+  const store = readScores();
+  if (store.games.length === 0) {
+    return { games: SCHEDULE_FIXTURE, isLive: false, updatedAt: null };
+  }
+  return { games: store.games, isLive: true, updatedAt: store.updatedAt };
 }

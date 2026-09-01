@@ -123,6 +123,11 @@
   "rulesPage": {
     "tocLabel": "Cuprins"
   },
+  "schedulePage": {
+    "title": "Program",
+    "metaDescription": "Programul complet al sezonului NFL, cu scoruri live și ora de start în fusul orar românesc.",
+    "liveUnavailableNotice": "Scorurile live nu sunt disponibile momentan. Mai jos este programul de bază, fără scoruri."
+  },
   "referenceLinks": {
     "heading": "Citește și"
   },
