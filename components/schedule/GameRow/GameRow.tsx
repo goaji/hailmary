@@ -12,7 +12,7 @@ type GameRowProps = {
 };
 
 export async function GameRow({ game, locale }: GameRowProps) {
-  const t = await getTranslations("gameRow");
+  const t = await getTranslations({ locale, namespace: "gameRow" });
   const home = getTeam(game.homeTeamId);
   const away = getTeam(game.awayTeamId);
   const hasScore = typeof game.homeScore === "number" && typeof game.awayScore === "number";

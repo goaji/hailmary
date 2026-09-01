@@ -46,7 +46,8 @@ export default async function SchedulePage({
     notFound();
   }
 
-  const t = await getTranslations("schedulePage");
+  // Explicit locale, not ambient — /program's the one request-time-dynamic page, and ambient resolution 500'd in production here.
+  const t = await getTranslations({ locale, namespace: "schedulePage" });
   const { games, isLive, updatedAt } = getSchedule();
 
   const weeks = getAvailableWeeks(games);
@@ -82,7 +83,7 @@ export default async function SchedulePage({
         </nav>
       )}
 
-      <ScheduleTable games={weekGames} week={selectedWeek} />
+      <ScheduleTable games={weekGames} week={selectedWeek} locale={locale} />
 
       {updatedAt && (
         <p className={styles.updatedAt}>

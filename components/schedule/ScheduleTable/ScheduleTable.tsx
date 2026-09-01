@@ -1,4 +1,4 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import type { Game } from "@/types";
 import { GameRow } from "@/components/schedule/GameRow/GameRow";
 import styles from "./ScheduleTable.module.scss";
@@ -6,11 +6,11 @@ import styles from "./ScheduleTable.module.scss";
 type ScheduleTableProps = {
   games: Game[];
   week: number;
+  locale: string;
 };
 
-export async function ScheduleTable({ games, week }: ScheduleTableProps) {
-  const locale = await getLocale();
-  const t = await getTranslations("scheduleTable");
+export async function ScheduleTable({ games, week, locale }: ScheduleTableProps) {
+  const t = await getTranslations({ locale, namespace: "scheduleTable" });
 
   return (
     // role="region" is what lets aria-label apply to a <div> — same pattern as ArticleBody's MdxTable.
