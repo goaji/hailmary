@@ -1,5 +1,5 @@
 import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n";
+import { routing } from "./routing"; // not ./i18n — that also imports next/root-params, which breaks Edge Middleware bundling
 
 export default createMiddleware(routing);
 

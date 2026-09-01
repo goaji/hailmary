@@ -13,9 +13,7 @@ import { getAllTerms } from "@/utils/glossary";
 import { SITE_URL } from "@/utils/site";
 import "../../styles/globals.scss";
 
-// "latin" alone silently drops ă/â/î/ș/ț: Google's latin-ext unicode-range
-// (U+0100+) doesn't include plain ASCII, so both are needed together —
-// latin for a-z/punctuation, latin-ext for the Romanian diacritics.
+// "latin" alone silently drops ă/â/î/ș/ț — latin-ext is required too, alongside it (its own range excludes plain ASCII).
 const bebasNeue = Bebas_Neue({
   weight: "400",
   variable: "--font-bebas-neue",
