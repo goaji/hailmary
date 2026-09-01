@@ -1,2 +1,2 @@
-/** The single canonical origin for hailmary.ro — metadataBase, sitemap and robots.txt all read from here so a domain change is a one-line edit. */
-export const SITE_URL = "https://hailmary.ro";
+/** Canonical origin for metadataBase/sitemap/robots.txt — Vercel previews must set SITE_URL or these silently point at production. */
+export const SITE_URL = process.env.SITE_URL ?? "https://hailmary.ro";

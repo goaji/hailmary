@@ -152,6 +152,12 @@ The test for whether markup is good enough: if `getByRole(role, { name })` can't
 
 CI runs the full suite on every PR. A failing accessibility assertion blocks the merge, same as a failing behaviour test.
 
+## Commit discipline
+
+**Never run `git commit` without explicit approval for that specific change — this holds for every task in this repo, not only ones with their own written protocol (e.g. `TASK-*.md` files).** Finish a unit of work, report what changed and what to look at, then stop and wait to be told to commit. Batching several steps into one commit without being asked is the same violation as committing early — approval is per commit, not a standing grant once given.
+
+If a commit appears in the log that wasn't produced by an explicit `git commit` from you (this environment has been observed to auto-checkpoint), that is not approval — say so immediately rather than presenting the work as already landed, and fix the message/content only once the user has actually reviewed and approved it.
+
 ## Localization scope (v1)
 
 Bilingual **UI + evergreen reference** (rules, history, glossary); **news stays Romanian-only**. That content is written once and never changes, so it's a bounded translation job — while news in two languages would mean writing everything twice, forever, for a site whose whole point is being a Romanian-language NFL publication.
@@ -171,3 +177,13 @@ Scaffold + tokens + **i18n routing** → layout shell → UI primitives → cont
 The explainer panel comes right after article pages because it's the site's differentiator, not a nice-to-have — it's what lets one article serve both a beginner and a fan. Score/odds/social widgets are explicitly *after* it, and after the reference pages it depends on.
 
 Locale routing goes in at scaffold time. Retrofitting `/[locale]/` later means touching every route, every link, and every `generateStaticParams` — the one decision in this plan that is genuinely expensive to defer.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
