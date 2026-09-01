@@ -6,6 +6,7 @@ import {
   getAdjacentTeams,
   getTeam,
   getTeamsByDivision,
+  onBrandColor,
   TEAMS,
 } from "./teams";
 import { contrastRatio } from "./contrast";
@@ -84,6 +85,26 @@ describe("getAdjacentTeams", () => {
 
   it("returns neither for an unknown slug", () => {
     expect(getAdjacentTeams("not-a-real-team")).toEqual({});
+  });
+});
+
+describe("onBrandColor", () => {
+  // Table-driven over the whole TEAMS list, not a hand-picked sample — this
+  // is exactly what step 1's "hard constraint" (brand1 has no contrast
+  // guarantee against either surface) needs proving for all 32, including
+  // the three that fail both $c-text and $c-page and fall back to true
+  // white/black (Chiefs, Chargers, Lions).
+  for (const team of TEAMS) {
+    it(`${team.name}: clears 4.5:1 against its own brand1`, () => {
+      expect(contrastRatio(team.brand1, onBrandColor(team))).toBeGreaterThanOrEqual(4.5);
+    });
+  }
+
+  it("returns one of the four known foreground colors, never brand1/brand2 themselves", () => {
+    const allowed = new Set(["#f5f4f2", "#14151a", "#ffffff", "#000000"]);
+    for (const team of TEAMS) {
+      expect(allowed.has(onBrandColor(team))).toBe(true);
+    }
   });
 });
 

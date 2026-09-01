@@ -59,6 +59,7 @@ export default async function TeamsPage({
                 conference={conference}
                 division={division}
                 teams={getTeamsByDivision(conference, division)}
+                conferenceHeadingId={headingId}
               />
             ))}
           </section>
