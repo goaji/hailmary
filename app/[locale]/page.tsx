@@ -8,10 +8,11 @@ import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
 import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
 import { Sidebar } from "@/components/home/Sidebar/Sidebar";
 import { excludeArticleBySlug, getAllArticles, getFeaturedArticle } from "@/utils/articles";
-import { getScheduleFixture } from "@/utils/schedule";
+import { getSchedule, selectUpcomingGames } from "@/utils/schedule";
 import styles from "./page.module.scss";
 
 const GRID_SIZE = 4;
+const SIDEBAR_GAME_COUNT = 3;
 
 export async function generateMetadata({
   params,
@@ -42,12 +43,12 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
     notFound();
   }
 
-  // getFeaturedArticle/getAllArticles/getScheduleFixture are synchronous
+  // getFeaturedArticle/getAllArticles/getSchedule are synchronous
   // (fs.readFileSync-backed, React-cache-memoized) — there's no real async
   // work to parallelize here, so no Promise.all.
   const featured = getFeaturedArticle(locale);
   const allArticles = getAllArticles(locale);
-  const games = getScheduleFixture();
+  const games = selectUpcomingGames(getSchedule().games, SIDEBAR_GAME_COUNT);
 
   const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(
     0,

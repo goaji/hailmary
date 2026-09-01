@@ -10,7 +10,7 @@ import { TeamBlurb } from "@/components/teams/TeamBlurb/TeamBlurb";
 import { TeamPrevNext } from "@/components/teams/TeamPrevNext/TeamPrevNext";
 import { TEAMS, TEAMS_BY_SLUG, getAdjacentTeams } from "@/utils/teams";
 import { getArticlesByTeam } from "@/utils/articles";
-import { getScheduleFixture } from "@/utils/schedule";
+import { getSchedule } from "@/utils/schedule";
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
@@ -63,7 +63,7 @@ export default async function TeamDetailPage({
   }
 
   const articles = getArticlesByTeam(team.slug, locale);
-  const games = getScheduleFixture();
+  const games = getSchedule().games;
   const { previous, next } = getAdjacentTeams(team.slug);
 
   return (
