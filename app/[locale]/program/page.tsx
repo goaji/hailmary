@@ -2,16 +2,20 @@ import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { getLanguageAlternates, Link, routing } from "@/i18n";
+import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ScheduleTable } from "@/components/schedule/ScheduleTable/ScheduleTable";
+import { ScheduleWeekSwitcher } from "@/components/schedule/ScheduleWeekSwitcher/ScheduleWeekSwitcher";
 import { LiveScoreStatus } from "@/components/schedule/LiveScoreStatus/LiveScoreStatus";
 import { getAvailableWeeks, getCurrentWeek, getSchedule } from "@/utils/schedule";
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
 import { hasLiveGame } from "@/utils/liveGames";
 import styles from "./page.module.scss";
 
-// searchParams (the week filter) opts this page into per-request dynamic rendering, so no `export const revalidate` — it wouldn't apply, and there's nothing expensive to cache against anyway (just a local file read).
+// No searchParams here — reading them server-side forces per-request dynamic
+// rendering, which crashes under Hostinger's Node runtime (see DEPLOY.md).
+// Every week's table is pre-rendered below; ScheduleWeekSwitcher picks one client-side.
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -37,53 +41,44 @@ export async function generateMetadata({
   };
 }
 
-export default async function SchedulePage({
-  params,
-  searchParams,
-}: PageProps<"/[locale]/program">) {
+export default async function SchedulePage({ params }: PageProps<"/[locale]/program">) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
-  // Explicit locale, not ambient — /program's the one request-time-dynamic page, and ambient resolution 500'd in production here.
   const t = await getTranslations({ locale, namespace: "schedulePage" });
   const { games, isLive, updatedAt } = getSchedule();
 
   const weeks = getAvailableWeeks(games);
-  const { etapa } = await searchParams;
-  const requestedWeek = Array.isArray(etapa) ? etapa[0] : etapa;
-  const parsedWeek = requestedWeek ? Number.parseInt(requestedWeek, 10) : NaN;
-  const selectedWeek =
-    Number.isInteger(parsedWeek) && weeks.includes(parsedWeek) ? parsedWeek : getCurrentWeek(games);
+  const defaultWeek = getCurrentWeek(games);
 
-  const weekGames = games.filter((game) => game.week === selectedWeek);
+  const tables = Object.fromEntries(
+    weeks.map((week) => [
+      week,
+      <ScheduleTable
+        key={week}
+        games={games.filter((game) => game.week === week)}
+        week={week}
+        locale={locale}
+      />,
+    ]),
+  );
+  const weekLabels = Object.fromEntries(weeks.map((week) => [week, t("week", { week })]));
 
   return (
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
 
-      <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(weekGames)} />
+      <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />
 
-      {weeks.length > 1 && (
-        <nav aria-label={t("weekNavLabel")} className={styles.weekNav}>
-          <ul className={styles.weekList}>
-            {weeks.map((week) => (
-              <li key={week}>
-                <Link
-                  href={`/program?etapa=${week}`}
-                  aria-current={week === selectedWeek ? "page" : undefined}
-                  className={week === selectedWeek ? styles.weekLinkActive : styles.weekLink}
-                >
-                  {t("week", { week })}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
-
-      <ScheduleTable games={weekGames} week={selectedWeek} locale={locale} />
+      <ScheduleWeekSwitcher
+        weeks={weeks}
+        defaultWeek={defaultWeek}
+        weekNavLabel={t("weekNavLabel")}
+        weekLabels={weekLabels}
+        tables={tables}
+      />
 
       {updatedAt && (
         <p className={styles.updatedAt}>
