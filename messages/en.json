@@ -126,7 +126,25 @@
   "schedulePage": {
     "title": "Schedule",
     "metaDescription": "The full NFL season schedule, with live scores and kickoff times in Romanian local time.",
-    "liveUnavailableNotice": "Live scores aren't available right now. Below is the base schedule, without scores."
+    "liveUnavailableNotice": "Live scores aren't available right now. Below is the base schedule, without scores.",
+    "weekNavLabel": "Select week",
+    "week": "Week {week}",
+    "updatedAt": "Updated {time}"
+  },
+  "scheduleTable": {
+    "caption": "Week {week} schedule",
+    "scrollLabel": "Schedule table, horizontally scrollable",
+    "matchup": "Matchup",
+    "kickoff": "Kickoff",
+    "score": "Score"
+  },
+  "gameRow": {
+    "postponed": "Postponed",
+    "notStarted": "Not started yet"
+  },
+  "liveScoreBadge": {
+    "live": "Live",
+    "quarterClock": "Q{quarter} · {clock}"
   },
   "referenceLinks": {
     "heading": "Read also"

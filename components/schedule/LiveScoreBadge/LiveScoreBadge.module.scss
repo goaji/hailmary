@@ -1,0 +1,31 @@
+@use "variables" as v;
+
+// Text color is var(--accent-2), not --accent-1: this is 11px bold chip
+// text, the exact case AGENTS.md reserves accent2's 4.5:1-on-panel bar for
+// — accent1 is only calibrated for large text/UI at the 3.0:1 bar.
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: v.space(4);
+  margin-top: v.space(4);
+  color: var(--accent-2);
+  font-size: v.$fs-chip;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  flex-shrink: 0;
+}
+
+.detail {
+  color: v.$c-text-muted;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+}

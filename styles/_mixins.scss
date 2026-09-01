@@ -25,6 +25,20 @@ $breakpoints: (
   outline-offset: 2px;
 }
 
+// Visible to screen readers only — the table caption and similar cases
+// where the accessible name shouldn't also take up visual layout space.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 // Single-line ellipsis at 1 (the common case); -webkit-line-clamp above.
 @mixin truncate($lines: 1) {
   @if $lines == 1 {

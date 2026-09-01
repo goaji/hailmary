@@ -126,7 +126,25 @@
   "schedulePage": {
     "title": "Program",
     "metaDescription": "Programul complet al sezonului NFL, cu scoruri live și ora de start în fusul orar românesc.",
-    "liveUnavailableNotice": "Scorurile live nu sunt disponibile momentan. Mai jos este programul de bază, fără scoruri."
+    "liveUnavailableNotice": "Scorurile live nu sunt disponibile momentan. Mai jos este programul de bază, fără scoruri.",
+    "weekNavLabel": "Selectează etapa",
+    "week": "Etapa {week}",
+    "updatedAt": "Actualizat {time}"
+  },
+  "scheduleTable": {
+    "caption": "Programul etapei {week}",
+    "scrollLabel": "Tabel cu programul, derulabil orizontal",
+    "matchup": "Meci",
+    "kickoff": "Oră",
+    "score": "Scor"
+  },
+  "gameRow": {
+    "postponed": "Amânat",
+    "notStarted": "Nejucat încă"
+  },
+  "liveScoreBadge": {
+    "live": "în direct",
+    "quarterClock": "Sfertul {quarter} · {clock}"
   },
   "referenceLinks": {
     "heading": "Citește și"

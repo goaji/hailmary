@@ -1,0 +1,51 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.tableWrapper {
+  max-width: 100%;
+  margin-top: v.space(22);
+
+  @include mix.mq(md) {
+    overflow-x: auto;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: v.$fs-body;
+
+  @include mix.mq(md) {
+    min-width: 560px;
+  }
+
+  // Column headers only mean something once GameRow renders real table
+  // rows/cells (from md up) — below that, content order alone carries the
+  // meaning, so the header row adds nothing and is dropped rather than
+  // only visually hidden.
+  thead {
+    display: none;
+
+    @include mix.mq(md) {
+      display: table-header-group;
+    }
+  }
+
+  th {
+    padding: v.space(12);
+    border-bottom: 1px solid v.$c-border;
+    color: v.$c-text-muted;
+    font-size: v.$fs-ui;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+}
+
+.caption {
+  @include mix.visually-hidden;
+}

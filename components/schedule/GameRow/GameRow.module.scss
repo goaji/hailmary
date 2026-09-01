@@ -1,0 +1,63 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Mobile-first: a stacked block by default (each cell its own line), a
+// real table row from md up — ScheduleTable's scroll container only
+// matters at that width, since below it there's nothing to scroll.
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(4);
+  padding: v.space(12) 0;
+  border-bottom: 1px solid v.$c-border-soft;
+
+  @include mix.mq(md) {
+    display: table-row;
+    padding: 0;
+  }
+}
+
+.kickoff,
+.scoreCell {
+  display: block;
+  vertical-align: middle;
+
+  @include mix.mq(md) {
+    display: table-cell;
+    padding: v.space(12);
+  }
+}
+
+.matchup {
+  display: flex;
+  align-items: center;
+  gap: v.space(8);
+  color: v.$c-text-muted;
+  vertical-align: middle;
+
+  @include mix.mq(md) {
+    display: table-cell;
+    padding: v.space(12);
+  }
+}
+
+.kickoff {
+  color: v.$c-text-dim;
+  font-size: v.$fs-meta;
+}
+
+.scoreCell {
+  color: v.$c-text;
+  font-weight: 700;
+}
+
+.postponed {
+  color: v.$c-text-muted;
+  font-weight: 600;
+  font-size: v.$fs-meta;
+  text-transform: uppercase;
+}
+
+.visuallyHidden {
+  @include mix.visually-hidden;
+}
