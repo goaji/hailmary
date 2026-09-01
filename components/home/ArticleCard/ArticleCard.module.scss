@@ -20,6 +20,12 @@
   }
 }
 
+.meta {
+  display: flex;
+  align-items: center;
+  gap: v.space(10);
+}
+
 .title {
   margin: 0;
   font-size: 17px; // bespoke to this component

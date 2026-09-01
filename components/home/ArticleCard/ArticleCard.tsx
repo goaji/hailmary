@@ -3,6 +3,8 @@ import type { Article } from "@/types";
 import { Link } from "@/i18n";
 import { ArticleImage } from "@/components/ui/ArticleImage/ArticleImage";
 import { Tag } from "@/components/ui/Tag/Tag";
+import { TeamBadge } from "@/components/teams/TeamBadge/TeamBadge";
+import { getTeam } from "@/utils/teams";
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
 import styles from "./ArticleCard.module.scss";
 
@@ -12,6 +14,9 @@ type ArticleCardProps = {
 
 export async function ArticleCard({ article }: ArticleCardProps) {
   const locale = await getLocale();
+  // First tagged team only, same "first item is the one shown" convention
+  // as the category chip (SKILLS.md) — the payoff for the `teams` field.
+  const team = article.teams?.[0] ? getTeam(article.teams[0]) : undefined;
 
   return (
     <div className={styles.card}>
@@ -19,7 +24,10 @@ export async function ArticleCard({ article }: ArticleCardProps) {
         <ArticleImage image={article.image} fill />
       </div>
 
-      <Tag category={article.category} />
+      <div className={styles.meta}>
+        <Tag category={article.category} />
+        {team ? <TeamBadge team={team} size="sm" /> : null}
+      </div>
 
       <h3 className={styles.title}>
         <Link href={`/stiri/${article.slug}`} className={styles.titleLink}>

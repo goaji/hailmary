@@ -94,6 +94,9 @@
   "relatedArticles": {
     "heading": "Read also"
   },
+  "articleTeams": {
+    "label": "About"
+  },
   "articlePrevNext": {
     "navLabel": "Articles",
     "previous": "Previous article",

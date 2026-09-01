@@ -57,7 +57,11 @@ export function SiteHeader() {
       >
         <ul className={styles.nav}>
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
+            // Matches child routes too (e.g. /echipe/kc under /echipe) —
+            // only "teams" has any today, but this is harmless for items
+            // that don't.
+            const isActive =
+              pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <li key={item.key}>

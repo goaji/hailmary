@@ -1,0 +1,38 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: v.space(12);
+  max-width: 960px; // matches ArticleBody/RelatedArticles/ArticlePrevNext's column width
+  margin: 0 auto;
+  padding: v.space(20) 32px 0 32px;
+}
+
+.label {
+  font-size: v.$fs-ui;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: v.$c-text-muted;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: inline-flex;
+  border-radius: 3px;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}

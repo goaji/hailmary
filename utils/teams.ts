@@ -134,11 +134,26 @@ const C_PAGE = '#14151a';
  * Contrast-safe foreground for text on a `brand1` background (the
  * identity band on /echipe/[team]). brand1 has no contrast guarantee
  * against either surface (AGENTS.md — some primaries are near-black, some
- * near-white), so this picks whichever of $c-text / $c-page wins rather
- * than assuming one always does.
+ * near-white), so this picks whichever of $c-text / $c-page wins.
+ *
+ * A few saturated mid-tone brands (Chiefs red, Chargers blue, Lions blue)
+ * fall short of 4.5:1 against *both* $c-text and $c-page — brand1 itself
+ * is never adjusted to fix that (AGENTS.md: brand colors are the team's
+ * true colors, not tunable for contrast), so for those, and only those,
+ * this reaches past the two site tokens to true white/black, whichever
+ * clears more.
  */
 export function onBrandColor(team: Team): string {
-  return contrastRatio(team.brand1, C_TEXT) >= contrastRatio(team.brand1, C_PAGE) ? C_TEXT : C_PAGE;
+  const textRatio = contrastRatio(team.brand1, C_TEXT);
+  const pageRatio = contrastRatio(team.brand1, C_PAGE);
+
+  if (textRatio >= 4.5 || pageRatio >= 4.5) {
+    return textRatio >= pageRatio ? C_TEXT : C_PAGE;
+  }
+
+  return contrastRatio(team.brand1, '#ffffff') >= contrastRatio(team.brand1, '#000000')
+    ? '#ffffff'
+    : '#000000';
 }
 
 /** Six teams shown in the header picker. */

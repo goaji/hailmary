@@ -94,6 +94,9 @@
   "relatedArticles": {
     "heading": "Citește și"
   },
+  "articleTeams": {
+    "label": "Despre"
+  },
   "articlePrevNext": {
     "navLabel": "Articole",
     "previous": "Articolul anterior",

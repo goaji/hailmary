@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
+import { ArticleTeams } from "@/components/articles/ArticleTeams/ArticleTeams";
 import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
 import { ArticlePrevNext } from "@/components/articles/ArticlePrevNext/ArticlePrevNext";
 import { ScrollProgress } from "@/components/articles/ScrollProgress/ScrollProgress";
@@ -97,6 +98,7 @@ export default async function ArticlePage({
 
         <ArticleHeader article={article} />
         <ArticleBody content={article.content} tags={article.tags} />
+        <ArticleTeams teams={article.teams} />
         <RelatedArticles articles={related} />
         <ArticlePrevNext previous={previous} next={next} />
       </article>
