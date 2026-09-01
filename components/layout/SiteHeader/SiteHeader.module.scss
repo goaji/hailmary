@@ -12,30 +12,8 @@
   border-bottom: 2px solid var(--accent-1);
 }
 
-// Hidden at md+; toggles the collapsed nav below md.
-.navToggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid v.$c-border;
-  border-radius: 3px;
-  background: transparent;
-  color: v.$c-text-dim;
-  cursor: pointer;
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
-
-  @include mix.mq(md) {
-    display: none;
-  }
-}
-
 .logo {
+  order: 0;
   display: flex;
   align-items: baseline;
   gap: v.space(4);
@@ -64,10 +42,13 @@
 }
 
 // Holds the team picker + language switcher together as one right-side
-// cluster. At md+, ordered after .nav (order: 2) so the header reads
-// logo / nav / picker+switcher — without this, both would keep their
-// default order: 0 and sort ahead of nav by source position instead.
+// cluster. `order` is explicit at every breakpoint (not just md+, where it
+// used to live) so this and SiteNav's pieces can be reordered visually via
+// CSS regardless of which component renders them or what DOM position that
+// puts them in — SiteHeader (server) and SiteNav (client) aren't siblings
+// in a fixed relative position the way the old single-component markup was.
 .rightGroup {
+  order: 2;
   display: flex;
   align-items: center;
   gap: v.space(16);
@@ -75,71 +56,4 @@
   @include mix.mq(md) {
     order: 3;
   }
-}
-
-// Collapsed by default below md; shown behind .navToggle instead.
-.navRegion {
-  display: none;
-
-  @include mix.mq(md) {
-    display: block;
-    order: 2;
-  }
-}
-
-// Applied instead of .navRegion when the mobile toggle has opened it.
-// Forces its own row below the logo/toggle/picker row via flex-basis: 100%,
-// since it comes last in source order among the header's flex children.
-.navRegionOpen {
-  display: block;
-  flex-basis: 100%;
-  padding-top: v.space(16);
-  border-top: 1px solid v.$c-border;
-
-  @include mix.mq(md) {
-    flex-basis: auto;
-    padding-top: 0;
-    border-top: none;
-    order: 2;
-  }
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: v.space(12);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-
-  @include mix.mq(md) {
-    flex-direction: row;
-    gap: v.space(16);
-    white-space: nowrap;
-  }
-}
-
-.navLink,
-.navLinkActive {
-  display: inline-block;
-  font-size: v.$fs-ui;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  color: v.$c-text-dim;
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  padding-bottom: v.space(4);
-
-  &:hover {
-    color: v.$c-text;
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
-}
-
-.navLinkActive {
-  color: var(--accent-1);
-  border-bottom-color: var(--accent-1);
 }
