@@ -3,6 +3,9 @@
     "title": "hailmary.ro",
     "description": "Fotbal american NFL, în română."
   },
+  "breadcrumb": {
+    "home": "Acasă"
+  },
   "nav": {
     "mainLabel": "Navigare principală",
     "toggleLabel": "Meniu",

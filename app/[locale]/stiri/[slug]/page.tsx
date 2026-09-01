@@ -16,6 +16,13 @@ import {
   selectAdjacentArticles,
   selectRelatedArticles,
 } from "@/utils/articles";
+import { SITE_URL } from "@/utils/site";
+import {
+  bcp47Locale,
+  buildBreadcrumbJsonLd,
+  buildNewsArticleJsonLd,
+  jsonLdScript,
+} from "@/utils/structuredData";
 import styles from "./page.module.scss";
 
 // Articles are static MDX baked in at build time — generateStaticParams
@@ -78,6 +85,7 @@ export default async function ArticlePage({
   }
 
   const t = await getTranslations("article");
+  const tBreadcrumb = await getTranslations("breadcrumb");
   const isFallback = article.servedLocale !== locale;
 
   // Sourced from the served locale, not the requested one: news is
@@ -87,12 +95,43 @@ export default async function ArticlePage({
   const related = selectRelatedArticles(siblingArticles, article);
   const { previous, next } = selectAdjacentArticles(siblingArticles, article.slug);
 
+  // Same URL as generateMetadata's own canonical — the fallback view keeps
+  // its own /en URL as the entity id, it never aliases to the /ro one.
+  const url = `${SITE_URL}${getLanguageAlternates(`/stiri/${slug}`, [locale])[locale]}`;
+  const homeUrl = `${SITE_URL}${getLanguageAlternates("/", [locale])[locale]}`;
+
+  const newsArticleJsonLd = buildNewsArticleJsonLd({
+    headline: article.title,
+    datePublished: article.publishedAt,
+    authorName: article.author,
+    imageUrl: `${SITE_URL}${article.image.src}`,
+    url,
+    inLanguage: bcp47Locale(article.servedLocale),
+  });
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: tBreadcrumb("home"), url: homeUrl },
+    { name: article.title, url },
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(newsArticleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
+      />
       <ScrollProgress />
-      <article>
+      {/* lang always matches the served content, not the URL — a no-op
+          value equal to `locale` outside the fallback case, and the fix
+          for the /en-serves-ro case otherwise (WCAG 3.1.2 "Language of
+          Parts"): the fallback notice below stays in the requested
+          locale, only the actual article content is Romanian. */}
+      <article lang={article.servedLocale}>
         {isFallback ? (
-          <p className={styles.fallbackNotice} role="status">
+          <p className={styles.fallbackNotice} role="status" lang={locale}>
             {t("fallbackNotice")}
           </p>
         ) : null}

@@ -3,6 +3,9 @@
     "title": "hailmary.ro",
     "description": "American football NFL coverage, in Romanian."
   },
+  "breadcrumb": {
+    "home": "Home"
+  },
   "nav": {
     "mainLabel": "Main navigation",
     "toggleLabel": "Menu",
