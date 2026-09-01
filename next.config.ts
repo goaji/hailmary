@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Each Hostinger deploy is a fresh versioned directory — .next/cache never carries over, which caused a runtime EEXIST on /program.
+    turbopackFileSystemCacheForBuild: false,
+  },
   images: {
     // next/image's optimizer 400s on any .svg src unless this is set. All
     // SVGs served here are our own (logos, placeholders) — none are
