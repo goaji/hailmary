@@ -42,9 +42,9 @@ export async function generateMetadata({
       canonical: getLanguageAlternates(pathname, [locale])[locale],
       languages: getLanguageAlternates(pathname),
     },
+    // og:image comes from this route's opengraph-image.tsx (badge on brand1), not the raw logo file.
     openGraph: {
       title: team.name,
-      images: [{ url: team.logoUrl }],
     },
   };
 }

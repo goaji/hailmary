@@ -28,9 +28,8 @@ export async function generateMetadata({
   return {
     title: featured?.title ?? t("title"),
     description: featured?.excerpt ?? t("description"),
-    openGraph: {
-      images: featured ? [{ url: featured.image.src }] : [],
-    },
+    // og:image comes from opengraph-image.tsx (the site-wide fallback
+    // template), not the featured article's own cover photo.
     alternates: {
       canonical: getLanguageAlternates("/", [locale])[locale],
       languages: getLanguageAlternates("/"),

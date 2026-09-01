@@ -52,11 +52,12 @@ export async function generateMetadata({
       canonical: getLanguageAlternates(pathname, [locale])[locale],
       languages: getLanguageAlternates(pathname, getAvailableLocales(slug)),
     },
+    // og:image comes from this route's opengraph-image.tsx (title +
+    // category + team accent), not the article's own cover photo.
     openGraph: {
       type: "article",
       title: article.title,
       description: article.excerpt,
-      images: [{ url: article.image.src }],
       publishedTime: article.publishedAt,
       authors: [article.author],
     },
