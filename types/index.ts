@@ -50,7 +50,7 @@ export type Article = ArticleFrontmatter & {
   readingTimeMinutes: number;
 };
 
-export type GameStatus = "scheduled" | "live" | "final";
+export type GameStatus = "scheduled" | "live" | "halftime" | "final" | "postponed";
 
 export type Game = {
   id: string;
@@ -60,6 +60,10 @@ export type Game = {
   kickoff: string;
   week: number;
   status: GameStatus;
+  homeScore?: number;
+  awayScore?: number;
+  quarter?: number;
+  clock?: string;
 };
 
 // Categories for GLOSSARY terms,
