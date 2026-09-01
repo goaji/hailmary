@@ -58,9 +58,7 @@ export function getAvailableWeeks(games: Game[]): number[] {
   return Array.from(new Set(games.map((game) => game.week))).sort((a, b) => a - b);
 }
 
-// The earliest week that still has a game not yet final — once every game
-// in a week is final, the next week (if any) becomes current automatically.
-// Falls back to the latest week once the whole known schedule is final.
+// Earliest week with a non-final game; falls back to the latest week once everything is final.
 export function getCurrentWeek(games: Game[]): number {
   if (games.length === 0) {
     return 1;

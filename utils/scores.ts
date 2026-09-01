@@ -2,10 +2,7 @@ import "server-only";
 
 import type { Game, GameStatus } from "@/types";
 
-// Raw shapes mirror balldontlie's NFL /v1/games response (nfl.balldontlie.io
-// docs, fetched 2026-09-01) — not yet checked against a live payload, since
-// writing this normalizer predates having an API key. Re-verify field names
-// and the `date` field's time-of-day granularity once step 4 has a real key.
+// Docs-derived shape (nfl.balldontlie.io), not yet checked against a live payload — re-verify field names and `date`'s time granularity once there's a real key.
 export type RawTeam = {
   id: number;
   abbreviation: string;
@@ -30,8 +27,7 @@ export type RawGame = {
   visitor_team_score: number | null;
 };
 
-// Provider abbreviation -> our slug. Explicit table, never string-matching
-// on team name. WSH is the one confirmed divergence from our slugs.
+// Provider abbreviation -> our slug, explicit table. WSH is the one confirmed divergence from our slugs.
 const TEAM_ID_MAP: Record<string, string> = {
   ARI: "ari",
   ATL: "atl",
@@ -67,9 +63,7 @@ const TEAM_ID_MAP: Record<string, string> = {
   WSH: "was",
 };
 
-// status_state values per the provider's docs. There is no "halftime"
-// value and no clock/period field on the free tier, so halftime is
-// unreachable from this provider today — it always normalizes to "live".
+// No "halftime" status_state and no clock/period on the free tier — halftime is unreachable from this provider, always normalizes to "live".
 const STATUS_MAP: Record<string, GameStatus> = {
   scheduled: "scheduled",
   in_progress: "live",
@@ -125,4 +119,52 @@ export function normalizeGames(rawGames: RawGame[]): Game[] {
     }
   }
   return games;
+}
+
+const GAMES_URL = "https://api.balldontlie.io/nfl/v1/games";
+const FETCH_TIMEOUT_MS = 8_000;
+
+export type FetchGamesOutcome = { ok: true; games: Game[] } | { ok: false; reason: string };
+
+function utcDateString(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+// Today+yesterday (UTC) in one call, not a "current week" call — no season calendar to compute that from, and this covers a late US kickoff crossing UTC midnight. Envelope shape ({ data: [...] }) is also unverified — re-check with a real key.
+export async function fetchLatestGames(
+  apiKey: string,
+  now: Date = new Date(),
+): Promise<FetchGamesOutcome> {
+  const url = new URL(GAMES_URL);
+  url.searchParams.append("dates[]", utcDateString(new Date(now.getTime() - 86_400_000)));
+  url.searchParams.append("dates[]", utcDateString(now));
+  url.searchParams.set("per_page", "100");
+
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: { Authorization: apiKey },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+  } catch (error) {
+    return { ok: false, reason: `network error: ${(error as Error).message}` };
+  }
+
+  if (!response.ok) {
+    return { ok: false, reason: `provider responded ${response.status}` };
+  }
+
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    return { ok: false, reason: "provider returned invalid JSON" };
+  }
+
+  const rawGames = (body as { data?: unknown } | null)?.data;
+  if (!Array.isArray(rawGames)) {
+    return { ok: false, reason: "provider response missing a data array" };
+  }
+
+  return { ok: true, games: normalizeGames(rawGames as RawGame[]) };
 }

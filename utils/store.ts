@@ -38,10 +38,7 @@ export function readScores(storePath: string = DEFAULT_STORE_PATH): ScoreStore {
   }
 }
 
-// Temp-file-then-rename: a rename is atomic on the same filesystem, so a
-// reader never observes a half-written file, and two overlapping writers
-// each finish with a complete file (last rename wins) rather than
-// interleaved bytes.
+// Temp-file-then-rename: atomic on the same filesystem, so overlapping writers never interleave into a corrupt file.
 export function writeScores(
   games: Game[],
   meta: ScoreStoreMeta,

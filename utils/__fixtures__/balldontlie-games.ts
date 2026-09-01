@@ -1,8 +1,6 @@
 import type { RawGame } from "@/utils/scores";
 
-// Docs-derived samples (balldontlie NFL /v1/games shape, not live-captured
-// — see the provenance note at the top of utils/scores.ts). One record per
-// case the normalizer must handle correctly.
+// Docs-derived samples, not live-captured — see utils/scores.ts. One record per case the normalizer must handle.
 
 function team(abbreviation: string, name: string): RawGame["home_team"] {
   return {
@@ -72,9 +70,7 @@ export const POSTPONED_GAME: RawGame = {
   visitor_team_score: null,
 };
 
-// Deliberately malformed: an unmapped provider team abbreviation.
-// normalizeGame must throw; normalizeGames must skip and log it, not
-// blank the rest of the payload.
+// Deliberately malformed (unmapped team abbreviation): normalizeGame must throw, normalizeGames must skip+log it without blanking the rest.
 export const MALFORMED_GAME: RawGame = {
   id: 1005,
   season: 2026,

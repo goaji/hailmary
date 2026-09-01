@@ -23,10 +23,7 @@
     min-width: 560px;
   }
 
-  // Column headers only mean something once GameRow renders real table
-  // rows/cells (from md up) — below that, content order alone carries the
-  // meaning, so the header row adds nothing and is dropped rather than
-  // only visually hidden.
+  // Headers only mean something once GameRow is real table rows/cells (md up) — dropped below that, not just visually hidden.
   thead {
     display: none;
 

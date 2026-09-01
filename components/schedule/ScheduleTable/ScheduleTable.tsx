@@ -13,9 +13,7 @@ export async function ScheduleTable({ games, week }: ScheduleTableProps) {
   const t = await getTranslations("scheduleTable");
 
   return (
-    // A generic <div> has no accessible-name mechanism on its own — role
-    // "region" is what lets aria-label apply, same pattern as MDX article
-    // tables (ArticleBody's MdxTable).
+    // role="region" is what lets aria-label apply to a <div> — same pattern as ArticleBody's MdxTable.
     <div role="region" aria-label={t("scrollLabel")} tabIndex={0} className={styles.tableWrapper}>
       <table className={styles.table}>
         <caption className={styles.caption}>{t("caption", { week })}</caption>

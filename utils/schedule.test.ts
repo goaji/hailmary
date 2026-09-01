@@ -4,9 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Game } from "@/types";
 import { getAvailableWeeks, getCurrentWeek, getSchedule, getScheduleFixture } from "./schedule";
 
-// Same path writeScores/readScores default to (utils/store.ts), duplicated
-// here rather than exported since only this test needs to reach past the
-// public readScores(storePath?) API to exercise getSchedule()'s own default.
+// Same default path as utils/store.ts, duplicated since only this test needs to reach past readScores(storePath?) to exercise getSchedule()'s own default.
 const STORE_PATH = path.join(process.cwd(), ".data", "scores.json");
 
 const LIVE_GAME: Game = {

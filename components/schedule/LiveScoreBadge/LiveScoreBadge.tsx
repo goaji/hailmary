@@ -6,9 +6,7 @@ type LiveScoreBadgeProps = {
   clock?: string;
 };
 
-// The dot is decorative only — "live" state is conveyed by the visible
-// "în direct" text itself, not by color, so it reads correctly with CSS
-// off or on a screen reader.
+// The dot is decorative — "live" is conveyed by the visible "în direct" text, not by color.
 export async function LiveScoreBadge({ quarter, clock }: LiveScoreBadgeProps) {
   const t = await getTranslations("liveScoreBadge");
 

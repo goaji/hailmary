@@ -9,11 +9,7 @@ import { getAvailableWeeks, getCurrentWeek, getSchedule } from "@/utils/schedule
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
 import styles from "./page.module.scss";
 
-// Reading searchParams (the week filter) opts this page into per-request
-// dynamic rendering, so there's no `export const revalidate` here — it
-// wouldn't apply. That's fine: the only work each request does is read
-// the local score store (utils/store.ts), never the third-party API, so
-// there's nothing expensive to cache against.
+// searchParams (the week filter) opts this page into per-request dynamic rendering, so no `export const revalidate` — it wouldn't apply, and there's nothing expensive to cache against anyway (just a local file read).
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

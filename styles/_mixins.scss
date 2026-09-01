@@ -25,8 +25,7 @@ $breakpoints: (
   outline-offset: 2px;
 }
 
-// Visible to screen readers only — the table caption and similar cases
-// where the accessible name shouldn't also take up visual layout space.
+// Visible to screen readers only, e.g. a caption that shouldn't take up visual space.
 @mixin visually-hidden {
   position: absolute;
   width: 1px;

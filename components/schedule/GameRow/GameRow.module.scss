@@ -1,9 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-// Mobile-first: a stacked block by default (each cell its own line), a
-// real table row from md up — ScheduleTable's scroll container only
-// matters at that width, since below it there's nothing to scroll.
+// Mobile-first: stacked blocks by default, a real table row from md up.
 .row {
   display: flex;
   flex-direction: column;
