@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import type { Conference, Division, Team } from "@/types";
 import { TeamCard } from "@/components/teams/TeamCard/TeamCard";
 import styles from "./DivisionGroup.module.scss";
@@ -9,14 +8,15 @@ type DivisionGroupProps = {
   teams: Team[];
 };
 
-export async function DivisionGroup({ conference, division, teams }: DivisionGroupProps) {
-  const tDivision = await getTranslations("divisions");
+// Division names are proper nouns ("AFC East"), not translated — same
+// treatment as team names, per AGENTS.md.
+export function DivisionGroup({ conference, division, teams }: DivisionGroupProps) {
   const headingId = `division-${conference}-${division}`;
 
   return (
     <section aria-labelledby={headingId} className={styles.group}>
       <h3 id={headingId} className={styles.heading}>
-        {tDivision(division)}
+        {division}
       </h3>
       <ul className={styles.list}>
         {teams.map((team) => (

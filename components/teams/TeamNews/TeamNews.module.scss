@@ -1,0 +1,28 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.news {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(20);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(22);
+
+  @include mix.mq(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mix.mq(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.empty {
+  margin: 0;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

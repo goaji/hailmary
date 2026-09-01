@@ -26,15 +26,25 @@
     "title": "Echipe",
     "metaDescription": "Toate cele 32 de echipe din NFL, grupate pe conferință și divizie."
   },
-  "conferences": {
-    "AFC": "AFC",
-    "NFC": "NFC"
-  },
-  "divisions": {
-    "East": "Est",
-    "North": "Nord",
-    "South": "Sud",
-    "West": "Vest"
+  "teamDetail": {
+    "metaDescription": "{team} — știri, program și informații din NFL.",
+    "news": {
+      "heading": "Știri recente",
+      "empty": "Nu sunt încă știri despre {team}."
+    },
+    "schedule": {
+      "heading": "Program",
+      "empty": "Niciun meci programat momentan pentru {team}."
+    },
+    "blurb": {
+      "heading": "Despre echipă",
+      "placeholder": "Conținutul dedicat acestei echipe este în lucru."
+    },
+    "prevNext": {
+      "navLabel": "Echipe",
+      "previous": "Echipa anterioară",
+      "next": "Echipa următoare"
+    }
   },
   "categories": {
     "transferuri": "Transferuri",
@@ -93,6 +103,11 @@
     "title": "Articolul nu a fost găsit",
     "description": "Articolul pe care îl cauți nu există sau a fost mutat.",
     "backHome": "Înapoi la pagina principală"
+  },
+  "teamNotFound": {
+    "title": "Echipa nu a fost găsită",
+    "description": "Echipa pe care o cauți nu există.",
+    "backToTeams": "Înapoi la echipe"
   },
   "glossary": {
     "title": "Glosar",

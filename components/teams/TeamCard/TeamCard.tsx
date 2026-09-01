@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import type { CSSProperties } from "react";
 import type { Team } from "@/types";
 import { Link } from "@/i18n";
@@ -14,10 +13,7 @@ type WrapperStyle = CSSProperties & {
   "--team-brand": string;
 };
 
-export async function TeamCard({ team }: TeamCardProps) {
-  const tConference = await getTranslations("conferences");
-  const tDivision = await getTranslations("divisions");
-
+export function TeamCard({ team }: TeamCardProps) {
   const wrapperStyle: WrapperStyle = { "--team-brand": team.brand1 };
 
   return (
@@ -34,8 +30,10 @@ export async function TeamCard({ team }: TeamCardProps) {
           <TeamBadge team={team} size="md" />
         </Link>
 
+        {/* Conference/division are proper nouns ("AFC East"), not translated
+            — same treatment as team names, per AGENTS.md. */}
         <p className={styles.divisionLabel}>
-          {tConference(team.conference)} · {tDivision(team.division)}
+          {team.conference} · {team.division}
         </p>
       </Card>
     </div>

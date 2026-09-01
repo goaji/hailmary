@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { CONFERENCES, DEFAULT_TEAM, DIVISIONS, getTeam, getTeamsByDivision, TEAMS } from "./teams";
+import {
+  CONFERENCES,
+  DEFAULT_TEAM,
+  DIVISIONS,
+  getAdjacentTeams,
+  getTeam,
+  getTeamsByDivision,
+  TEAMS,
+} from "./teams";
 import { contrastRatio } from "./contrast";
 
 // The two dark surfaces accent1/accent2 are calibrated against — see the
@@ -51,6 +59,31 @@ describe("getTeamsByDivision", () => {
     );
     expect(grouped).toHaveLength(TEAMS.length);
     expect(new Set(grouped.map((team) => team.slug)).size).toBe(TEAMS.length);
+  });
+});
+
+describe("getAdjacentTeams", () => {
+  it("returns the previous and next team in TEAMS order", () => {
+    // AFC North is bal, cin, cle, pit — cin sits between bal and cle.
+    const { previous, next } = getAdjacentTeams("cin");
+    expect(previous?.slug).toBe("bal");
+    expect(next?.slug).toBe("cle");
+  });
+
+  it("has no previous team for the first team in the list", () => {
+    const { previous, next } = getAdjacentTeams(TEAMS[0].slug);
+    expect(previous).toBeUndefined();
+    expect(next?.slug).toBe(TEAMS[1].slug);
+  });
+
+  it("has no next team for the last team in the list", () => {
+    const { previous, next } = getAdjacentTeams(TEAMS[TEAMS.length - 1].slug);
+    expect(next).toBeUndefined();
+    expect(previous?.slug).toBe(TEAMS[TEAMS.length - 2].slug);
+  });
+
+  it("returns neither for an unknown slug", () => {
+    expect(getAdjacentTeams("not-a-real-team")).toEqual({});
   });
 });
 

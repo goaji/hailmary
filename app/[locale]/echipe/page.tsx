@@ -40,18 +40,19 @@ export default async function TeamsPage({
   }
 
   const t = await getTranslations("teams");
-  const tConference = await getTranslations("conferences");
 
   return (
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
 
+      {/* Conference names are proper nouns ("AFC"/"NFC"), not translated —
+          same treatment as team names, per AGENTS.md. */}
       {CONFERENCES.map((conference) => {
         const headingId = `conference-${conference}`;
 
         return (
           <section key={conference} aria-labelledby={headingId} className={styles.conference}>
-            <SectionHeading id={headingId}>{tConference(conference)}</SectionHeading>
+            <SectionHeading id={headingId}>{conference}</SectionHeading>
             {DIVISIONS.map((division) => (
               <DivisionGroup
                 key={division}

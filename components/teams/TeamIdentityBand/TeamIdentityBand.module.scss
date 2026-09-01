@@ -1,0 +1,50 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.band {
+  display: flex;
+  align-items: center;
+  gap: v.space(20);
+  padding: v.space(32) v.space(20);
+  background: var(--band-bg);
+  // Full opacity throughout — onBrandColor's contrast guarantee is computed
+  // against this exact color, so dimming it (e.g. via opacity) for the meta
+  // line would silently break the guarantee.
+  color: var(--band-fg);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32);
+  }
+}
+
+.logo {
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(4);
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-family: v.$font-display;
+  font-size: 32px; // mobile; v.$fs-team-name from md up
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.05;
+
+  @include mix.mq(md) {
+    font-size: v.$fs-team-name;
+  }
+}
+
+.meta {
+  margin: 0;
+  font-size: v.$fs-meta;
+  font-weight: 500;
+}

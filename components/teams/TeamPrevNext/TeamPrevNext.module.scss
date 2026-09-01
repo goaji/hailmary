@@ -1,0 +1,57 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.nav {
+  display: grid;
+  grid-template-columns: 1fr; // mobile-first: stacked
+  gap: v.space(16);
+  margin: v.space(48) 0 0;
+  padding: v.space(32) 0 0;
+  border-top: 1px solid v.$c-border;
+
+  @include mix.mq(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.previous,
+.next {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(4);
+  text-decoration: none;
+
+  &:hover .name {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.next {
+  // Explicit placement, not DOM order: keeps "next" right-aligned even
+  // when "previous" is absent, with no empty spacer element needed.
+  grid-column: 1;
+  text-align: left;
+
+  @include mix.mq(md) {
+    grid-column: 2;
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+.direction {
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.name {
+  font-size: v.$fs-body-lg;
+  font-weight: 600;
+  color: v.$c-text;
+}

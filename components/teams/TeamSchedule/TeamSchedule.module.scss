@@ -1,0 +1,14 @@
+@use "variables" as v;
+
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(20);
+  max-width: 420px; // a short label/value list reads worse stretched full-width
+}
+
+.empty {
+  margin: 0;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

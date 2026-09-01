@@ -26,15 +26,25 @@
     "title": "Teams",
     "metaDescription": "All 32 NFL teams, grouped by conference and division."
   },
-  "conferences": {
-    "AFC": "AFC",
-    "NFC": "NFC"
-  },
-  "divisions": {
-    "East": "East",
-    "North": "North",
-    "South": "South",
-    "West": "West"
+  "teamDetail": {
+    "metaDescription": "{team} — NFL news, schedule and team info.",
+    "news": {
+      "heading": "Recent news",
+      "empty": "No news about {team} yet."
+    },
+    "schedule": {
+      "heading": "Schedule",
+      "empty": "No games currently scheduled for {team}."
+    },
+    "blurb": {
+      "heading": "About the team",
+      "placeholder": "Team-specific content is coming soon."
+    },
+    "prevNext": {
+      "navLabel": "Teams",
+      "previous": "Previous team",
+      "next": "Next team"
+    }
   },
   "categories": {
     "transferuri": "Transfers",
@@ -93,6 +103,11 @@
     "title": "Article not found",
     "description": "The article you're looking for doesn't exist or has been moved.",
     "backHome": "Back to the homepage"
+  },
+  "teamNotFound": {
+    "title": "Team not found",
+    "description": "The team you're looking for doesn't exist.",
+    "backToTeams": "Back to teams"
   },
   "glossary": {
     "title": "Glossary",

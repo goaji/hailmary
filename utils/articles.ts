@@ -27,6 +27,7 @@ const articleFrontmatterSchema = z.object({
   featured: z.boolean().optional(),
   tags: z.array(z.string()).optional(),
   kicker: z.string().optional(),
+  teams: z.array(z.string()).optional(),
 });
 
 /**
@@ -235,5 +236,17 @@ export const getFeaturedArticle = cache((locale: Locale): Article | undefined =>
 export const getArticlesByCategory = cache(
   (category: Category, locale: Locale): Article[] => {
     return getAllArticles(locale).filter((article) => article.category === category);
+  },
+);
+
+/**
+ * Newest-first, up to `limit`. Empty for most of the 32 teams — render an
+ * honest empty state, not a hidden section (AGENTS.md).
+ */
+export const getArticlesByTeam = cache(
+  (teamSlug: string, locale: Locale, limit = 4): Article[] => {
+    return getAllArticles(locale)
+      .filter((article) => article.teams?.includes(teamSlug))
+      .slice(0, limit);
   },
 );

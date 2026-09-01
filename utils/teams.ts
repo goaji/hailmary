@@ -1,3 +1,5 @@
+import { contrastRatio } from './contrast';
+
 // The single source of truth for team colors.
 //
 // brand1 / brand2  — the team's true brand colors. Use for badges, swatches,
@@ -103,6 +105,40 @@ export const DIVISIONS: Division[] = ['East', 'North', 'South', 'West'];
 
 export function getTeamsByDivision(conference: Conference, division: Division): Team[] {
   return TEAMS.filter((team) => team.conference === conference && team.division === division);
+}
+
+/**
+ * The neighbouring teams either side of `currentSlug` in TEAMS's own order
+ * (conference then division, matching the /echipe index) — for the
+ * detail page's prev/next foot nav. `undefined` at either end of the
+ * 32-team list, same absent-not-disabled contract as
+ * utils/articles.ts's selectAdjacentArticles.
+ */
+export function getAdjacentTeams(currentSlug: string): { previous?: Team; next?: Team } {
+  const index = TEAMS.findIndex((team) => team.slug === currentSlug);
+
+  if (index === -1) {
+    return {};
+  }
+
+  return { previous: TEAMS[index - 1], next: TEAMS[index + 1] };
+}
+
+// $c-text / $c-page from styles/_variables.scss, duplicated here — Sass
+// variables aren't importable into TS. Matches the PAGE_BACKGROUND literal
+// already duplicated in teams.test.ts for the same reason.
+const C_TEXT = '#f5f4f2';
+const C_PAGE = '#14151a';
+
+/**
+ * Contrast-safe foreground for text on a `brand1` background (the
+ * identity band on /echipe/[team]). brand1 has no contrast guarantee
+ * against either surface (AGENTS.md — some primaries are near-black, some
+ * near-white), so this picks whichever of $c-text / $c-page wins rather
+ * than assuming one always does.
+ */
+export function onBrandColor(team: Team): string {
+  return contrastRatio(team.brand1, C_TEXT) >= contrastRatio(team.brand1, C_PAGE) ? C_TEXT : C_PAGE;
 }
 
 /** Six teams shown in the header picker. */

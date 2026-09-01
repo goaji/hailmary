@@ -53,6 +53,7 @@ $fs-h2: 30px; // large in-page headings (not the SectionHeading primitive — se
 // diverge even where their px values start out matching.
 $fs-logo: 28px;
 $fs-section-heading: 20px; // the SectionHeading primitive specifically
+$fs-team-name: 44px; // /echipe/[team] identity band h1
 
 // Font stacks. The CSS variables come from next/font/google in
 // app/[locale]/layout.tsx; the literal names are the fallback before

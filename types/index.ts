@@ -38,6 +38,8 @@ export type ArticleFrontmatter = {
   tags?: string[];
   /** Editorial superlative badge (e.g. "SUPER BOWL LX") — not the category. */
   kicker?: string;
+  /** Team slugs this article is about — powers /echipe/[team]'s news section and ArticleCard's TeamBadge. */
+  teams?: string[];
 };
 
 export type Article = ArticleFrontmatter & {
