@@ -33,7 +33,8 @@ export type ArticleFrontmatter = {
   /** ISO date string, e.g. "2026-08-24" */
   publishedAt: string;
   author: string;
-  image: ArticleImage;
+  /** Omit to fall back to one of the site's default cover images — see `pickDefaultImage` in `utils/articles.ts`. */
+  image?: ArticleImage;
   featured?: boolean;
   tags?: string[];
   /** Editorial superlative badge (e.g. "SUPER BOWL LX") — not the category. */
@@ -44,6 +45,8 @@ export type ArticleFrontmatter = {
 
 export type Article = ArticleFrontmatter & {
   content: string;
+  /** Always set — `readArticleFile` fills in a default when frontmatter omits `image`. */
+  image: ArticleImage;
   /** Which locale actually served this article — the i18n fallback contract. */
   servedLocale: Locale;
   /** Estimated minutes to read the body, computed at parse time. */

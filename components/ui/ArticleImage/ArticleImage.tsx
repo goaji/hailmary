@@ -19,8 +19,10 @@ type ArticleImageProps =
   | (ArticleImageBaseProps & { fill: true; sizes: string; width?: never; height?: never })
   | (ArticleImageBaseProps & { fill?: false; sizes?: never; width: number; height: number });
 
-// Added in task 3 step 5 (seed content). Until then this path 404s, which
-// only surfaces once something actually renders the no-image fallback.
+// Last-resort fallback for the rare caller that renders `image` as fully
+// absent (e.g. an MDX inline image with no src). Frontmatter itself never
+// reaches this: `readArticleFile` (utils/articles.ts) already assigns one of
+// the site's default cover images whenever an article omits `image`.
 const PLACEHOLDER_SRC = "/placeholder/hatch.svg";
 
 export function ArticleImage(props: ArticleImageProps) {

@@ -88,7 +88,8 @@
     "readingTime": "{minutes} min citire"
   },
   "article": {
-    "fallbackNotice": "Acest articol este disponibil doar în română."
+    "fallbackNotice": "Acest articol este disponibil doar în română.",
+    "defaultImageAlt": "Imagine generică NFL"
   },
   "articleBody": {
     "tableScrollLabel": "Tabel derulabil orizontal",

@@ -21,6 +21,18 @@ test.describe("article page", () => {
     expect(alt).toBeTruthy();
   });
 
+  test("an article with no `image` in frontmatter still renders a default cover image", async ({
+    page,
+  }) => {
+    await page.goto("/ro/stiri/programul-saptamanii-13");
+
+    const heroImage = page.locator("header img").first();
+    // next/image rewrites src through its optimizer, so the original path
+    // survives only as the (percent-encoded) `url` query param.
+    await expect(heroImage).toHaveAttribute("src", /url=%2Fplaceholder%2Fdefault-/);
+    await expect(heroImage).toHaveAttribute("alt", ro.article.defaultImageAlt);
+  });
+
   test("heading tree is exactly one h1, then h2s and h3s", async ({ page }) => {
     await page.goto(`/ro/stiri/${SLUG}`);
 

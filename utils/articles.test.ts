@@ -3,6 +3,7 @@ import {
   estimateReadingTimeMinutes,
   excludeArticleBySlug,
   parseArticleFrontmatter,
+  pickDefaultImage,
   resolveServedLocale,
   selectAdjacentArticles,
   selectFeatured,
@@ -43,6 +44,35 @@ describe("parseArticleFrontmatter", () => {
         "test.mdx",
       ),
     ).toThrow(/"category"/);
+  });
+
+  it("accepts a file with no image — readArticleFile assigns a default", () => {
+    const { image, ...noImage } = validFrontmatter;
+    void image;
+
+    expect(parseArticleFrontmatter(noImage, "test.mdx")).toEqual(noImage);
+  });
+});
+
+describe("pickDefaultImage", () => {
+  it("is deterministic — the same slug always picks the same image", () => {
+    const first = pickDefaultImage("titlu-articol", "ro");
+    const second = pickDefaultImage("titlu-articol", "ro");
+
+    expect(first).toEqual(second);
+  });
+
+  it("varies across different slugs instead of always picking the same image", () => {
+    const slugs = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const srcs = new Set(slugs.map((slug) => pickDefaultImage(slug, "ro").src));
+
+    expect(srcs.size).toBeGreaterThan(1);
+  });
+
+  it("uses the alt text for the requested locale", () => {
+    expect(pickDefaultImage("titlu-articol", "ro").alt).not.toBe(
+      pickDefaultImage("titlu-articol", "en").alt,
+    );
   });
 });
 

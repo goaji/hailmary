@@ -7,10 +7,41 @@ import matter from "gray-matter";
 import { z } from "zod";
 import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
-import type { Article, ArticleFrontmatter, Category, Locale } from "@/types";
+import type { Article, ArticleFrontmatter, ArticleImage, Category, Locale } from "@/types";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
+import roMessages from "@/messages/ro.json";
+import enMessages from "@/messages/en.json";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "articles");
+
+// Used whenever frontmatter omits `image`. Kept to a handful of generic,
+// team-agnostic licensed photos rather than one single fallback, so a news
+// grid of un-illustrated articles doesn't read as visibly broken.
+const DEFAULT_IMAGE_SRCS = [
+  "/placeholder/default-floodlights.jpg",
+  "/placeholder/default-goalpost.jpg",
+  "/placeholder/default-field.jpg",
+];
+
+const DEFAULT_IMAGE_ALT: Record<Locale, string> = {
+  ro: roMessages.article.defaultImageAlt,
+  en: enMessages.article.defaultImageAlt,
+};
+
+/**
+ * Deterministic pick from `DEFAULT_IMAGE_SRCS`, keyed by slug — the same
+ * article always gets the same default (stable across rebuilds/requests)
+ * while different articles vary instead of all sharing one image.
+ */
+export function pickDefaultImage(slug: string, locale: Locale): ArticleImage {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) {
+    hash = (hash * 31 + slug.charCodeAt(i)) | 0;
+  }
+  const index = Math.abs(hash) % DEFAULT_IMAGE_SRCS.length;
+
+  return { src: DEFAULT_IMAGE_SRCS[index], alt: DEFAULT_IMAGE_ALT[locale] };
+}
 
 const articleFrontmatterSchema = z.object({
   title: z.string(),
@@ -19,11 +50,13 @@ const articleFrontmatterSchema = z.object({
   category: z.enum(CATEGORY_IDS),
   publishedAt: z.string(),
   author: z.string(),
-  image: z.object({
-    src: z.string(),
-    alt: z.string(),
-    caption: z.string().optional(),
-  }),
+  image: z
+    .object({
+      src: z.string(),
+      alt: z.string(),
+      caption: z.string().optional(),
+    })
+    .optional(),
   featured: z.boolean().optional(),
   tags: z.array(z.string()).optional(),
   kicker: z.string().optional(),
@@ -184,6 +217,7 @@ function readArticleFile(locale: Locale, slug: string): Article {
 
   return {
     ...frontmatter,
+    image: frontmatter.image ?? pickDefaultImage(frontmatter.slug, locale),
     content,
     servedLocale: locale,
     readingTimeMinutes: estimateReadingTimeMinutes(content),

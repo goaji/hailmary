@@ -7,19 +7,24 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 ## Add a new article
 
 1. Create `content/articles/ro/<slug>.mdx`. Slug is lowercase, hyphenated, Romanian, no diacritics (`mahomes-record-sezon`) — and shared across locales, so an English twin reuses the same slug.
-2. Frontmatter — all fields required except `teams` and `featured`:
+2. Frontmatter — all fields required except `teams`, `featured`, `kicker`, and `image`:
    ```yaml
    ---
    title: "Mahomes stabilește un nou record de sezon"
+   slug: "mahomes-record-sezon"
    excerpt: "Două paragrafe de context care apar în grid și în meta description."
-   coverImage: "/images/articles/mahomes-record.jpg"
+   author: "Admin"
    publishedAt: "2026-08-24"
    category: "stiri"
+   image:
+     src: "/images/articles/mahomes-record.jpg"
+     alt: "Descriere a ceea ce se vede în imagine"
    teams: ["kc"]
    tags: ["analiza", "playoffs"]
    featured: false
    ---
    ```
+   Omit `image` entirely if there's no real cover photo yet — `readArticleFile` (`utils/articles.ts`) assigns one of the site's default cover images (`pickDefaultImage`, picked deterministically from the slug so it stays stable across rebuilds) rather than leaving the card without one. Once a real photo is ready, add the `image` block and it takes over — 1600×900 (16:9), subject centered, since the hero/card slots crop it with `object-fit: cover`.
 3. Write the body in MDX. Jargon gets a short parenthetical gloss on first use in any article tagged for beginners.
 4. Tag it three ways: `category` for content type, `teams` for who it's about, `tags` for what it's about. `tags` is a controlled vocabulary in `utils/tags.ts` — add a new one there first if none fits, and only if at least two articles will use it. Never invent a tag inline; free-form tags fragment into near-duplicates and leave tag pages with one article on them. The first tag in the array renders as the card chip, so order it deliberately.
 5. Only one article may have `featured: true` — it fills the homepage hero. Unset the previous one in the same commit.
