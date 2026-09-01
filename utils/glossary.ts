@@ -66,7 +66,8 @@ export function resolveServedLocale(
   return undefined;
 }
 
-function termFilePath(locale: Locale, slug: string): string {
+/** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
+export function termFilePath(locale: Locale, slug: string): string {
   return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
 }
 

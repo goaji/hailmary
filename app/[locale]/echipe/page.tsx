@@ -26,6 +26,7 @@ export async function generateMetadata({
     title: t("title"),
     description: t("metaDescription"),
     alternates: {
+      canonical: getLanguageAlternates("/echipe", [locale])[locale],
       languages: getLanguageAlternates("/echipe"),
     },
   };

@@ -31,6 +31,7 @@ export async function generateMetadata({
     title: t("title"),
     description: t("metaDescription"),
     alternates: {
+      canonical: getLanguageAlternates("/program", [locale])[locale],
       languages: getLanguageAlternates("/program"),
     },
   };

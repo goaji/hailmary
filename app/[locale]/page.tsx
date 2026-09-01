@@ -32,6 +32,7 @@ export async function generateMetadata({
       images: featured ? [{ url: featured.image.src }] : [],
     },
     alternates: {
+      canonical: getLanguageAlternates("/", [locale])[locale],
       languages: getLanguageAlternates("/"),
     },
   };

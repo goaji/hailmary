@@ -10,6 +10,7 @@ import { TeamColorProvider } from "@/components/layout/TeamColorProvider/TeamCol
 import { ExplainerProvider } from "@/components/explainer/ExplainerProvider/ExplainerProvider";
 import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
 import { getAllTerms } from "@/utils/glossary";
+import { SITE_URL } from "@/utils/site";
 import "../../styles/globals.scss";
 
 const bebasNeue = Bebas_Neue({
@@ -37,7 +38,7 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
-    metadataBase: new URL("https://hailmary.ro"),
+    metadataBase: new URL(SITE_URL),
   };
 }
 

@@ -27,6 +27,7 @@ export async function generateMetadata({
     title: t("title"),
     description: t("metaDescription"),
     alternates: {
+      canonical: getLanguageAlternates("/glosar", [locale])[locale],
       languages: getLanguageAlternates("/glosar"),
     },
   };

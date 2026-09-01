@@ -147,7 +147,8 @@ export function parseSeeAlso(
   return match ? { slug: match[1], id: match[2] || undefined } : undefined;
 }
 
-function referenceFilePath(locale: Locale, slug: string): string {
+/** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
+export function referenceFilePath(locale: Locale, slug: string): string {
   return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
 }
 
