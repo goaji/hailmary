@@ -4,14 +4,20 @@ import styles from "./ArticleImage.module.scss";
 
 type ArticleImageBaseProps = {
   image?: ArticleImageData;
-  priority?: boolean;
+  /** The page's one unambiguous LCP candidate (a hero image) — inserts a <link rel="preload">. Next 16's replacement for the old `priority` prop. */
+  preload?: boolean;
+  /** One of several possible LCP candidates depending on viewport (e.g. a grid's first row) — eager-loads at high fetch priority without the ambiguous preload link next/image warns against for this case. */
+  eager?: boolean;
 };
 
 // Explicit dimensions (the common case) or fill (an absolutely-positioned
 // parent supplies the box, e.g. a responsive full-bleed hero) — never both.
+// `sizes` is required with fill: next/image defaults it to 100vw, which
+// over-fetches for anything narrower than the full viewport (a grid card, a
+// capped reading column) — see AGENTS.md's image sizing rule.
 type ArticleImageProps =
-  | (ArticleImageBaseProps & { fill: true; width?: never; height?: never })
-  | (ArticleImageBaseProps & { fill?: false; width: number; height: number });
+  | (ArticleImageBaseProps & { fill: true; sizes: string; width?: never; height?: never })
+  | (ArticleImageBaseProps & { fill?: false; sizes?: never; width: number; height: number });
 
 // Added in task 3 step 5 (seed content). Until then this path 404s, which
 // only surfaces once something actually renders the no-image fallback.
@@ -23,7 +29,16 @@ export function ArticleImage(props: ArticleImageProps) {
 
   if (props.fill) {
     return (
-      <Image src={src} alt={alt} fill priority={props.priority} className={styles.image} />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={props.sizes}
+        preload={props.preload}
+        loading={props.eager ? "eager" : undefined}
+        fetchPriority={props.eager ? "high" : undefined}
+        className={styles.image}
+      />
     );
   }
 
@@ -33,7 +48,9 @@ export function ArticleImage(props: ArticleImageProps) {
       alt={alt}
       width={props.width}
       height={props.height}
-      priority={props.priority}
+      preload={props.preload}
+      loading={props.eager ? "eager" : undefined}
+      fetchPriority={props.eager ? "high" : undefined}
       className={styles.image}
     />
   );

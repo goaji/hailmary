@@ -11,7 +11,7 @@ type HeroArticleProps = {
 export function HeroArticle({ article }: HeroArticleProps) {
   return (
     <div className={styles.hero}>
-      <ArticleImage image={article.image} fill priority />
+      <ArticleImage image={article.image} fill preload sizes="100vw" />
       <div className={styles.overlay} />
 
       <div className={styles.content}>

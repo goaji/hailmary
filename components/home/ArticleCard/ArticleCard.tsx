@@ -10,9 +10,11 @@ import styles from "./ArticleCard.module.scss";
 
 type ArticleCardProps = {
   article: Article;
+  /** True for the first row of cards, which land above the fold on both the 1-column mobile and 2-column desktop grid. */
+  priority?: boolean;
 };
 
-export async function ArticleCard({ article }: ArticleCardProps) {
+export async function ArticleCard({ article, priority }: ArticleCardProps) {
   const locale = await getLocale();
   // First tagged team only, same "first item is the one shown" convention
   // as the category chip (SKILLS.md) — the payoff for the `teams` field.
@@ -21,7 +23,12 @@ export async function ArticleCard({ article }: ArticleCardProps) {
   return (
     <div className={styles.card}>
       <div className={styles.imageWrap}>
-        <ArticleImage image={article.image} fill />
+        <ArticleImage
+          image={article.image}
+          fill
+          eager={priority}
+          sizes="(min-width: 768px) 33vw, 100vw"
+        />
       </div>
 
       <div className={styles.meta}>

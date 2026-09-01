@@ -18,8 +18,8 @@ export async function NewsGrid({ articles }: NewsGridProps) {
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
       {articles.length > 0 ? (
         <div className={styles.grid}>
-          {articles.map((article) => (
-            <ArticleCard key={article.slug} article={article} />
+          {articles.map((article, index) => (
+            <ArticleCard key={article.slug} article={article} priority={index < 2} />
           ))}
         </div>
       ) : (

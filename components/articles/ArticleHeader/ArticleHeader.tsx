@@ -24,7 +24,7 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
 
       <figure className={styles.figure}>
         <div className={styles.imageWrap}>
-          <ArticleImage image={article.image} fill priority />
+          <ArticleImage image={article.image} fill preload sizes="(min-width: 960px) 896px, 100vw" />
         </div>
         {article.image.caption ? (
           <figcaption className={styles.caption}>{article.image.caption}</figcaption>

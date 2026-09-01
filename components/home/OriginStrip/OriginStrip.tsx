@@ -11,9 +11,11 @@ export function OriginStrip() {
   const t = useTranslations("originStrip");
   const [isDismissed, setIsDismissed] = useState(false);
 
-  // Read in an effect, not during render: avoids a hydration mismatch,
-  // at the cost of one visible frame of the strip for returning visitors.
-  // Same set-state-in-effect exception as TeamColorProvider.
+  // React state still syncs in an effect (avoids a hydration mismatch) —
+  // but that alone measured 0.22 CLS for returning visitors (the strip
+  // painting, then disappearing). The inline script below hides it
+  // synchronously during HTML parsing, before first paint, so by the time
+  // this effect runs the element already has zero footprint to remove.
   useEffect(() => {
     const stored = window.localStorage.getItem(DISMISS_KEY);
     if (stored === "true") {
@@ -32,7 +34,13 @@ export function OriginStrip() {
   }
 
   return (
-    <div className={styles.strip}>
+    <div className={styles.strip} id="origin-strip">
+      {/* Static string, no user input. Runs synchronously pre-hydration to prevent the flash/CLS a React effect can't avoid. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `if(localStorage.getItem(${JSON.stringify(DISMISS_KEY)})==="true"){document.getElementById("origin-strip").style.display="none"}`,
+        }}
+      />
       <div className={styles.copy}>
         <p className={styles.kicker}>{t("kicker")}</p>
         <p className={styles.story}>

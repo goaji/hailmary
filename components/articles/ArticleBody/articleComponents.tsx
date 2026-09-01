@@ -36,7 +36,11 @@ function MdxLink({ href = "", children, ...rest }: ComponentPropsWithoutRef<"a">
 function MdxImage({ src, alt }: { src?: string; alt?: string }) {
   return (
     <div className={styles.imageWrap}>
-      <ArticleImage image={{ src: src ?? "", alt: alt ?? "" }} fill />
+      <ArticleImage
+        image={{ src: src ?? "", alt: alt ?? "" }}
+        fill
+        sizes="(min-width: 960px) 896px, 100vw"
+      />
     </div>
   );
 }
