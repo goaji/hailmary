@@ -5,6 +5,8 @@
   display: flex;
   flex-direction: column; // mobile-first: sidebar goes below the main content
   gap: 32px; // bespoke to this page
+  max-width: 1200px; // same content-width cap as /echipe, /program, /stiri
+  margin: 0 auto;
   padding: 36px 40px; // bespoke to this page
 
   @include mix.mq(md) {

@@ -1,10 +1,10 @@
 @use "variables" as v;
 
 // .article itself is unconstrained — ArticleHeader and ArticleBody each own
-// the 720px reading measure, so a future full-width section (related
+// the 960px reading measure, so a future full-width section (related
 // articles, step 4) isn't boxed in by an outer wrapper here.
 .fallbackNotice {
-  max-width: 720px;
+  max-width: 960px;
   margin: v.space(32) auto 0 auto;
   background: v.$c-surface;
   border: 1px solid v.$c-border;

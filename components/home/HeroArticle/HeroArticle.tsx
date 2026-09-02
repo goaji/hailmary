@@ -11,7 +11,7 @@ type HeroArticleProps = {
 export function HeroArticle({ article }: HeroArticleProps) {
   return (
     <div className={styles.hero}>
-      <ArticleImage image={article.image} fill preload sizes="100vw" />
+      <ArticleImage image={article.image} fill preload sizes="(min-width: 1200px) 1200px, 100vw" />
       <div className={styles.overlay} />
 
       <div className={styles.content}>

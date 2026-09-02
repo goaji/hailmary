@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 .page {
-  max-width: 720px;
+  max-width: 1200px; // same content-width cap as the homepage, /echipe, /stiri
   margin: 0 auto;
   padding: v.space(32) v.space(20) v.space(64);
 

@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 .page {
-  max-width: 1040px;
+  max-width: 1200px; // same content-width cap as the homepage, /echipe, /stiri
   margin: 0 auto;
   padding: v.space(32) v.space(20) v.space(64);
 
@@ -27,8 +27,7 @@
 .content {
   min-width: 0;
   width: 100%;
-
-  @include mix.mq(lg) {
-    max-width: 720px;
-  }
+  // No explicit max-width at lg: it's a flex sibling of RuleToc's fixed
+  // 220px column, so it naturally fills whatever's left of .page's
+  // 1200px cap — stays correct if the cap, gap, or TOC width ever change.
 }

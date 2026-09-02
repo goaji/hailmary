@@ -7,6 +7,8 @@
   align-items: flex-end;
   height: 260px; // mobile, bespoke to this component
   overflow: hidden;
+  max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
+  margin: 0 auto;
 
   @include mix.mq(md) {
     height: 380px;

@@ -3,6 +3,8 @@
 .footer {
   background: v.$c-header;
   border-top: 1px solid v.$c-border;
+  max-width: 1200px; // same content-width cap as SiteHeader and the page body
+  margin: 0 auto;
   padding: v.space(32);
   color: v.$c-text-muted;
   font-size: v.$fs-ui;

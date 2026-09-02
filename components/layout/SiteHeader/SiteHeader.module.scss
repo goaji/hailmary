@@ -7,6 +7,8 @@
   align-items: center;
   justify-content: space-between;
   gap: v.space(20);
+  max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
+  margin: 0 auto;
   padding: v.space(18) v.space(32);
   background: v.$c-header;
   border-bottom: 2px solid var(--accent-1);
