@@ -50,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const homeLastModified = resolveLastModified(roArticles[0]?.publishedAt, new Date(0));
   for (const locale of routing.locales) {
     entries.push(entry("/", locale, routing.locales, homeLastModified));
+    entries.push(entry("/stiri", locale, routing.locales, homeLastModified));
   }
 
   // News is ro-only: every article gets one ro entry, never an /en one.

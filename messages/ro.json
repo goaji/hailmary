@@ -29,6 +29,11 @@
     "title": "Echipe",
     "metaDescription": "Toate cele 32 de echipe din NFL, grupate pe conferință și divizie."
   },
+  "newsIndex": {
+    "title": "Știri",
+    "metaDescription": "Toate știrile NFL, traduse și explicate în română.",
+    "empty": "Nu sunt încă știri publicate."
+  },
   "teamDetail": {
     "metaDescription": "{team} — știri, program și informații din NFL.",
     "news": {

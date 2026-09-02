@@ -6,7 +6,7 @@ import { Link, usePathname } from "@/i18n";
 import styles from "./SiteNav.module.scss";
 
 const NAV_ITEMS = [
-  { key: "news", href: "/" },
+  { key: "news", href: "/stiri" },
   { key: "teams", href: "/echipe" },
   { key: "rules", href: "/regulament" },
   { key: "history", href: "/istorie" },
@@ -44,16 +44,11 @@ export function SiteNav() {
       >
         <ul className={styles.nav}>
           {NAV_ITEMS.map((item) => {
-            // Matches child routes too (e.g. /echipe/kc under /echipe) —
-            // only "teams" has any today, but this is harmless for items
-            // that don't. "news" is the one exception: there's no /stiri
-            // index route (articles only exist at /stiri/[slug]), so it
-            // links to home but must still read as active on an article
-            // page, which a plain "/" prefix match can't express.
+            // Matches child routes too (e.g. /echipe/kc under /echipe,
+            // /stiri/[slug] under /stiri) — harmless for items that don't
+            // have any.
             const isActive =
-              item.key === "news"
-                ? pathname === "/" || pathname.startsWith("/stiri/")
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+              pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <li key={item.key}>

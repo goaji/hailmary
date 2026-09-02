@@ -29,6 +29,11 @@
     "title": "Teams",
     "metaDescription": "All 32 NFL teams, grouped by conference and division."
   },
+  "newsIndex": {
+    "title": "News",
+    "metaDescription": "All NFL news, translated and explained in Romanian.",
+    "empty": "NFL news is only available in Romanian."
+  },
   "teamDetail": {
     "metaDescription": "{team} — NFL news, schedule and team info.",
     "news": {

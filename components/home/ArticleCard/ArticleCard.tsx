@@ -12,13 +12,22 @@ type ArticleCardProps = {
   article: Article;
   /** True for the first row of cards, which land above the fold on both the 1-column mobile and 2-column desktop grid. */
   priority?: boolean;
+  /**
+   * Every existing caller (NewsGrid, TeamNews, RelatedArticles) nests its
+   * grid under its own h2 SectionHeading, so "h3" stays the default. A
+   * flat archive page with no such intermediate heading (e.g. /stiri)
+   * passes "h2" instead, to avoid an h1 → h3 skip that axe's
+   * heading-order rule (and real screen-reader users) flag.
+   */
+  headingLevel?: "h2" | "h3";
 };
 
-export async function ArticleCard({ article, priority }: ArticleCardProps) {
+export async function ArticleCard({ article, priority, headingLevel = "h3" }: ArticleCardProps) {
   const locale = await getLocale();
   // First tagged team only, same "first item is the one shown" convention
   // as the category chip (SKILLS.md) — the payoff for the `teams` field.
   const team = article.teams?.[0] ? getTeam(article.teams[0]) : undefined;
+  const Heading = headingLevel;
 
   return (
     <div className={styles.card}>
@@ -36,11 +45,11 @@ export async function ArticleCard({ article, priority }: ArticleCardProps) {
         {team ? <TeamBadge team={team} size="sm" /> : null}
       </div>
 
-      <h3 className={styles.title}>
+      <Heading className={styles.title}>
         <Link href={`/stiri/${article.slug}`} className={styles.titleLink}>
           {article.title}
         </Link>
-      </h3>
+      </Heading>
 
       <p className={styles.time}>{formatPublishedAt(article.publishedAt, locale)}</p>
     </div>
