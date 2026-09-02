@@ -1,11 +1,10 @@
 import { ImageResponse } from "next/og";
 import { OG_FONTS } from "@/utils/og";
+import { HEADER_BG } from "@/utils/theme";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
 
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
-
-const HEADER_BG = "#0d0e12"; // $c-header
 
 export default function Icon() {
   const accent = TEAMS_BY_SLUG[DEFAULT_TEAM].accent1;

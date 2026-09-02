@@ -12,6 +12,7 @@ import { ExplainerProvider } from "@/components/explainer/ExplainerProvider/Expl
 import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
 import { getAllTerms } from "@/utils/glossary";
 import { SITE_URL } from "@/utils/site";
+import { HEADER_BG } from "@/utils/theme";
 import "../../styles/globals.scss";
 
 // "latin" alone silently drops ă/â/î/ș/ț — latin-ext is required too, alongside it (its own range excludes plain ASCII).
@@ -35,9 +36,8 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-// $c-header from styles/_variables.scss — Sass variables aren't importable into TS.
 export const viewport: Viewport = {
-  themeColor: "#0d0e12",
+  themeColor: HEADER_BG,
 };
 
 export async function generateMetadata({
