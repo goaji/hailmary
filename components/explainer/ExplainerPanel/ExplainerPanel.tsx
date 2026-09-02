@@ -2,7 +2,6 @@
 
 import { useEffect, useId, useRef, type RefObject } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n";
 import {
   useArticleTerms,
   useExplainer,
@@ -118,9 +117,8 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
           <div className={styles.content}>
             {entry.content}
 
-            {relatedEntries.length > 0 || articleEntries.length > 0 || entry.seeAlso ? (
+            {relatedEntries.length > 0 || articleEntries.length > 0 ? (
               <div className={styles.footer}>
-                {/* Chips swap content in place; seeAlso below navigates away — two different affordances. */}
                 {relatedEntries.length > 0 ? (
                   <div className={styles.chipGroup}>
                     <p className={styles.chipGroupLabel}>{t("relatedTerms")}</p>
@@ -154,11 +152,6 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
                       ))}
                     </div>
                   </div>
-                ) : null}
-                {entry.seeAlso ? (
-                  <Link href={entry.seeAlso} className={styles.seeAlso}>
-                    {t("seeAlso")}
-                  </Link>
                 ) : null}
               </div>
             ) : null}

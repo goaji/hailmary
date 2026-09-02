@@ -9,7 +9,6 @@ export type ExplainerPanelEntry = {
   term: string;
   short: string;
   relatedTerms?: string[];
-  seeAlso?: string;
   content: ReactNode;
 };
 

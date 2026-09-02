@@ -151,9 +151,6 @@
   gap: v.space(8);
 }
 
-// Pill buttons that swap the panel's content — deliberately not styled
-// like .seeAlso below, which navigates away instead (AGENTS.md: two
-// different affordances, don't render them alike).
 .chip {
   padding: v.space(4) v.space(10);
   background: none;
@@ -174,9 +171,3 @@
   }
 }
 
-.seeAlso {
-  display: inline-block;
-  font-size: v.$fs-ui;
-  font-weight: 600;
-  color: var(--accent-2); // panel surface — see .chipGroupLabel above
-}

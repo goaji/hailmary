@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { PICKER_TEAMS, getTeam } from "../utils/teams";
-import ro from "../messages/ro.json";
 
 const SLUG = "chiefs-al-treilea-titlu-consecutiv";
 const ARTICLE_URL = `/ro/stiri/${SLUG}`;
@@ -65,13 +64,14 @@ test.describe("explainer panel", () => {
     await expect(page.getByRole("heading", { name: "Play action" })).toBeVisible();
   });
 
-  test("seeAlso navigates to the linked route, keeping the locale prefix", async ({ page }) => {
+  test("panel never renders a seeAlso link, even for a term whose glossary entry has one", async ({
+    page,
+  }) => {
     await page.goto(ARTICLE_URL);
     await page.getByRole("button", { name: "quarterback-ul" }).click();
-    await page.getByRole("button", { name: "Play action" }).click(); // play-action has a seeAlso
+    await page.getByRole("button", { name: "Play action" }).click(); // play-action has a seeAlso, but only /glosar renders it
 
-    await page.getByRole("link", { name: ro.explainerPanel.seeAlso }).click();
-    await expect(page).toHaveURL(/\/ro\/regulament#pase$/);
+    await expect(page.getByRole("dialog").getByRole("link")).toHaveCount(0);
   });
 
   test("desktop: the article column actually shifts when the panel opens", async ({ page }) => {

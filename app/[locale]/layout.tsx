@@ -72,7 +72,6 @@ export default async function LocaleLayout({
     term: entry.term,
     short: entry.short,
     relatedTerms: entry.relatedTerms,
-    seeAlso: entry.seeAlso,
     content: <ExplainerContent content={entry.extended} />,
   }));
 
