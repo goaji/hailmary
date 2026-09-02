@@ -109,12 +109,15 @@ test.describe("week selector and table structure", () => {
   test("week links change the URL and the rendered week; back button works", async ({ page }) => {
     await page.goto("/ro/program");
 
-    await expect(page.getByRole("link", { name: "Etapa 2" })).toHaveAttribute("aria-current", "page");
+    const week2Link = ro.schedulePage.week.replace("{week}", "2");
+    const week3Link = ro.schedulePage.week.replace("{week}", "3");
+
+    await expect(page.getByRole("link", { name: week2Link })).toHaveAttribute("aria-current", "page");
     await expect(page.getByText("Chiefs")).toBeVisible();
 
-    await page.getByRole("link", { name: "Etapa 3" }).click();
+    await page.getByRole("link", { name: week3Link }).click();
     await expect(page).toHaveURL(/\?etapa=3$/);
-    await expect(page.getByRole("link", { name: "Etapa 3" })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("link", { name: week3Link })).toHaveAttribute("aria-current", "page");
     await expect(page.getByText("Seahawks")).toBeVisible();
     await expect(page.getByText("Chiefs")).not.toBeVisible();
 
@@ -126,7 +129,7 @@ test.describe("week selector and table structure", () => {
   test("table has a caption naming the week and th scope=col headers", async ({ page }) => {
     await page.goto("/ro/program");
 
-    const table = page.getByRole("table", { name: "Programul etapei 2" });
+    const table = page.getByRole("table", { name: ro.scheduleTable.caption.replace("{week}", "2") });
     await expect(table).toBeVisible();
     for (const name of [ro.scheduleTable.matchup, ro.scheduleTable.kickoff, ro.scheduleTable.score]) {
       await expect(table.getByRole("columnheader", { name })).toBeVisible();
