@@ -1,7 +1,11 @@
 import "server-only";
 
+import fs from "node:fs";
+import path from "node:path";
 import type { Game } from "@/types";
 import { readScores } from "@/utils/store";
+
+const SCHEDULE_FILE = path.join(process.cwd(), "utils", "schedule.ts");
 
 // FIXTURE DATA — not a real feed. No MDX, no API; a placeholder until
 // live score data is wired up (see AGENTS.md's "Consume live score data"
@@ -35,6 +39,11 @@ const SCHEDULE_FIXTURE: Game[] = [
 
 export function getScheduleFixture(): Game[] {
   return SCHEDULE_FIXTURE;
+}
+
+/** mtime of this file — the fixture's own freshness signal for the sitemap when the live store is empty (see getSchedule below). */
+export function getScheduleFixtureLastModified(): Date {
+  return fs.statSync(SCHEDULE_FILE).mtime;
 }
 
 export type ScheduleResult = {

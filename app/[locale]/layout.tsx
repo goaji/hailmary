@@ -3,6 +3,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Bebas_Neue, Work_Sans } from "next/font/google";
+import Script from "next/script";
 import { routing } from "@/i18n";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader/SiteHeader";
@@ -80,6 +81,14 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
       <body>
+        {/* Lives here, not in OriginStrip, so it survives client-side nav — "hm.strip" must match its DISMISS_KEY. */}
+        <Script
+          id="origin-strip-hide"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `if(localStorage.getItem("hm.strip")==="true"){var el=document.getElementById("origin-strip");if(el)el.style.display="none"}`,
+          }}
+        />
         <NextIntlClientProvider messages={messages}>
           <TeamColorProvider>
             <ExplainerProvider entries={explainerEntries}>

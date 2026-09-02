@@ -152,6 +152,11 @@ export function referenceFilePath(locale: Locale, slug: string): string {
   return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
 }
 
+/** mtime of the reference MDX file backing `slug`/`locale` — the sitemap's freshness signal for a page with no frontmatter "last changed" date of its own. */
+export function getReferenceLastModified(locale: Locale, slug: string): Date {
+  return fs.statSync(referenceFilePath(locale, slug)).mtime;
+}
+
 function readReferenceFile(locale: Locale, slug: string): ReferencePage {
   const filePath = referenceFilePath(locale, slug);
   const raw = fs.readFileSync(filePath, "utf8");

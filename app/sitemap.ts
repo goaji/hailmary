@@ -1,11 +1,10 @@
 import type { MetadataRoute } from "next";
-import fs from "node:fs";
 import path from "node:path";
 import { getLanguageAlternates, routing, type Locale } from "@/i18n";
 import { getAllArticles, getAvailableLocales } from "@/utils/articles";
 import { getAllTerms, termFilePath } from "@/utils/glossary";
-import { getReferenceLocales, referenceFilePath } from "@/utils/reference";
-import { getSchedule } from "@/utils/schedule";
+import { getReferenceLastModified, getReferenceLocales } from "@/utils/reference";
+import { getSchedule, getScheduleFixtureLastModified } from "@/utils/schedule";
 import { latestMtime, resolveLastModified } from "@/utils/sitemap";
 import { SITE_URL } from "@/utils/site";
 import { TEAMS } from "@/utils/teams";
@@ -16,7 +15,10 @@ import { TEAMS } from "@/utils/teams";
 export const revalidate = 3600;
 
 const REFERENCE_SLUGS = ["istorie", "regulament"] as const;
-const UTILS_DIR = path.join(process.cwd(), "utils");
+// teams.ts is imported directly by client components (TeamColorProvider,
+// TeamPicker), so it can't itself take a node:fs import — latestMtime (the
+// sitemap's own freshness helper) stats it from out here instead.
+const TEAMS_FILE = path.join(process.cwd(), "utils", "teams.ts");
 
 function withSiteUrl(languages: Record<string, string>): Record<string, string> {
   return Object.fromEntries(
@@ -69,7 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const slug of REFERENCE_SLUGS) {
     const locales = getReferenceLocales(slug);
     for (const locale of locales) {
-      const lastModified = fs.statSync(referenceFilePath(locale, slug)).mtime;
+      const lastModified = getReferenceLastModified(locale, slug);
       entries.push(entry(`/${slug}`, locale, locales, lastModified));
     }
   }
@@ -81,7 +83,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }
 
   // Team pages share one freshness signal: the single source-of-truth file.
-  const teamsLastModified = fs.statSync(path.join(UTILS_DIR, "teams.ts")).mtime;
+  const teamsLastModified = latestMtime([TEAMS_FILE]);
   for (const team of TEAMS) {
     for (const locale of routing.locales) {
       entries.push(entry(`/echipe/${team.slug}`, locale, routing.locales, teamsLastModified));
@@ -94,7 +96,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // /program: the live store's updatedAt when synced, else the fixture file's own mtime.
   const scheduleLastModified = resolveLastModified(
     getSchedule().updatedAt,
-    fs.statSync(path.join(UTILS_DIR, "schedule.ts")).mtime,
+    getScheduleFixtureLastModified(),
   );
   for (const locale of routing.locales) {
     entries.push(entry("/program", locale, routing.locales, scheduleLastModified));
