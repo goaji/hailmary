@@ -9,6 +9,7 @@ import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
 import type { Article, ArticleFrontmatter, ArticleImage, Category, Locale } from "@/types";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
+import { TEAMS_BY_SLUG } from "@/utils/teams";
 import roMessages from "@/messages/ro.json";
 import enMessages from "@/messages/en.json";
 
@@ -208,12 +209,25 @@ function articleFilePath(locale: Locale, slug: string): string {
   return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
 }
 
+/** Fails the build if an article's `teams` frontmatter names a slug that isn't a real team — the only place a dangling team reference is caught. */
+export function validateTeamSlugs(teams: string[], filePath: string): void {
+  for (const slug of teams) {
+    if (!(slug in TEAMS_BY_SLUG)) {
+      throw new Error(`${filePath}: teams "${slug}" is not a known team slug`);
+    }
+  }
+}
+
 function readArticleFile(locale: Locale, slug: string): Article {
   const filePath = articleFilePath(locale, slug);
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   const frontmatter = parseArticleFrontmatter(data, filePath);
   validateTermLinks(content, getTermSlugs(locale), filePath);
+
+  if (frontmatter.teams) {
+    validateTeamSlugs(frontmatter.teams, filePath);
+  }
 
   return {
     ...frontmatter,

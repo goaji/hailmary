@@ -10,6 +10,7 @@ import {
   selectFeatured,
   selectRelatedArticles,
   sortByPublishedAtDesc,
+  validateTeamSlugs,
 } from "./articles";
 
 const validFrontmatter = {
@@ -47,11 +48,29 @@ describe("parseArticleFrontmatter", () => {
     ).toThrow(/"category"/);
   });
 
+  it("accepts a file with team slugs — validateTeamSlugs checks those separately", () => {
+    const withTeams = { ...validFrontmatter, teams: ["kc", "phi"] };
+
+    expect(parseArticleFrontmatter(withTeams, "test.mdx")).toEqual(withTeams);
+  });
+
   it("accepts a file with no image — readArticleFile assigns a default", () => {
     const { image, ...noImage } = validFrontmatter;
     void image;
 
     expect(parseArticleFrontmatter(noImage, "test.mdx")).toEqual(noImage);
+  });
+});
+
+describe("validateTeamSlugs", () => {
+  it("accepts known team slugs", () => {
+    expect(() => validateTeamSlugs(["kc", "phi"], "test.mdx")).not.toThrow();
+  });
+
+  it("rejects an unknown team slug, naming the file and the slug", () => {
+    expect(() =>
+      validateTeamSlugs(["not-a-real-team"], "content/articles/ro/x.mdx"),
+    ).toThrow('content/articles/ro/x.mdx: teams "not-a-real-team"');
   });
 });
 

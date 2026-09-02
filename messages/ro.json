@@ -33,7 +33,7 @@
     "title": "Știri",
     "metaDescription": "Toate știrile NFL, traduse și explicate în română.",
     "empty": "Nu sunt încă știri publicate.",
-    "fallbackNotice": "Pagina este disponibile doar în limba română."
+    "fallbackNotice": "Pagina este disponibilă doar în limba română."
   },
   "teamDetail": {
     "metaDescription": "{team} — știri, program și informații din NFL.",
