@@ -6,15 +6,17 @@ import styles from "./NewsGrid.module.scss";
 
 type NewsGridProps = {
   articles: Article[];
+  /** Set when articles are ro-fallback content served under a different locale — see HeroArticle's equivalent use of article.servedLocale. */
+  lang?: string;
 };
 
 const HEADING_ID = "news-grid-heading";
 
-export async function NewsGrid({ articles }: NewsGridProps) {
+export async function NewsGrid({ articles, lang }: NewsGridProps) {
   const t = await getTranslations("newsGrid");
 
   return (
-    <section className={styles.newsGrid} aria-labelledby={HEADING_ID}>
+    <section className={styles.newsGrid} aria-labelledby={HEADING_ID} lang={lang}>
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
       {articles.length > 0 ? (
         <div className={styles.grid}>

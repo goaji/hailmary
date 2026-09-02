@@ -10,7 +10,7 @@ type HeroArticleProps = {
 
 export function HeroArticle({ article }: HeroArticleProps) {
   return (
-    <div className={styles.hero}>
+    <div className={styles.hero} lang={article.servedLocale}>
       <div className={styles.content}>
         {article.kicker ? <span className={styles.kicker}>{article.kicker}</span> : null}
         <h1 className={styles.title}>

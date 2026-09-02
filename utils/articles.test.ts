@@ -4,6 +4,7 @@ import {
   excludeArticleBySlug,
   parseArticleFrontmatter,
   pickDefaultImage,
+  resolveArticlesLocale,
   resolveServedLocale,
   selectAdjacentArticles,
   selectFeatured,
@@ -271,5 +272,19 @@ describe("resolveServedLocale", () => {
 
   it("returns undefined when the article doesn't exist in any locale", () => {
     expect(resolveServedLocale("en", [])).toBeUndefined();
+  });
+});
+
+describe("resolveArticlesLocale", () => {
+  it("uses the requested locale when it has articles", () => {
+    expect(resolveArticlesLocale("en", 3)).toBe("en");
+  });
+
+  it("falls back to ro when the requested locale has none", () => {
+    expect(resolveArticlesLocale("en", 0)).toBe("ro");
+  });
+
+  it("stays on ro when ro itself has none, rather than fall back to itself in a loop", () => {
+    expect(resolveArticlesLocale("ro", 0)).toBe("ro");
   });
 });

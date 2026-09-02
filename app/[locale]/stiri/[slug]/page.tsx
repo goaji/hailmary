@@ -3,6 +3,7 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
+import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
 import { ArticleTeams } from "@/components/articles/ArticleTeams/ArticleTeams";
@@ -23,7 +24,6 @@ import {
   buildNewsArticleJsonLd,
   jsonLdScript,
 } from "@/utils/structuredData";
-import styles from "./page.module.scss";
 
 // Articles are static MDX baked in at build time — generateStaticParams
 // already covers every known slug, so this isn't chasing freshness. It's a
@@ -130,11 +130,7 @@ export default async function ArticlePage({
           Parts"): the fallback notice below stays in the requested
           locale, only the actual article content is Romanian. */}
       <article lang={article.servedLocale}>
-        {isFallback ? (
-          <p className={styles.fallbackNotice} role="status" lang={locale}>
-            {t("fallbackNotice")}
-          </p>
-        ) : null}
+        {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
 
         <ArticleHeader article={article} />
         <ArticleBody content={article.content} tags={article.tags} />

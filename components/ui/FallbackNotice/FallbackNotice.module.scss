@@ -1,0 +1,12 @@
+@use "variables" as v;
+
+.notice {
+  max-width: 960px; // same reading width as article/glosar/istorie/regulament content
+  margin: v.space(32) auto 0 auto;
+  background: v.$c-surface;
+  border: 1px solid v.$c-border;
+  border-radius: 3px;
+  padding: v.space(12) v.space(16);
+  color: v.$c-text-dim;
+  font-size: v.$fs-meta;
+}

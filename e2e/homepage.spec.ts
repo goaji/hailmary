@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import ro from "../messages/ro.json";
+import en from "../messages/en.json";
 
 const VIEWPORTS = [
   { label: "375", width: 375, height: 1200 },
@@ -17,6 +18,24 @@ test.describe("homepage composition", () => {
 
     expect(cardTitles.length).toBeGreaterThan(0);
     expect(cardTitles).not.toContain(heroTitle);
+  });
+
+  // News is Romanian-only — content/articles/en has no files, so the en
+  // homepage falls back to the ro hero/grid with a translated notice,
+  // the same ro-fallback contract an individual article page has.
+  test("en locale falls back to the ro hero/grid, with a translated notice", async ({ page }) => {
+    await page.goto("/en");
+
+    await expect(page.getByText(en.newsIndex.fallbackNotice)).toBeVisible();
+
+    // lang lives on HeroArticle's own container (article.servedLocale), not the h1 itself.
+    const heroLang = await page
+      .getByRole("heading", { level: 1 })
+      .evaluate((el) => el.closest("[lang]")?.getAttribute("lang"));
+    expect(heroLang).toBe("ro");
+
+    const cardTitles = await page.getByRole("heading", { level: 3 }).allTextContents();
+    expect(cardTitles.length).toBeGreaterThan(0);
   });
 
   test("heading order is h1, then h2 section headings, then h3 card titles", async ({

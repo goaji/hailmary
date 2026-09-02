@@ -7,7 +7,8 @@ import { OriginStrip } from "@/components/home/OriginStrip/OriginStrip";
 import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
 import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
 import { Sidebar } from "@/components/home/Sidebar/Sidebar";
-import { excludeArticleBySlug, getAllArticles, getFeaturedArticle } from "@/utils/articles";
+import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
+import { excludeArticleBySlug, getAllArticlesWithFallback, selectFeatured } from "@/utils/articles";
 import { getSchedule, selectUpcomingGames } from "@/utils/schedule";
 import styles from "./page.module.scss";
 
@@ -22,7 +23,7 @@ export async function generateMetadata({
     notFound();
   }
 
-  const featured = getFeaturedArticle(locale);
+  const featured = selectFeatured(getAllArticlesWithFallback(locale).articles);
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return {
@@ -43,11 +44,12 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
     notFound();
   }
 
-  // getFeaturedArticle/getAllArticles/getSchedule are synchronous
+  // getAllArticlesWithFallback/getSchedule are synchronous
   // (fs.readFileSync-backed, React-cache-memoized) — there's no real async
   // work to parallelize here, so no Promise.all.
-  const featured = getFeaturedArticle(locale);
-  const allArticles = getAllArticles(locale);
+  const { articles: allArticles, servedLocale } = getAllArticlesWithFallback(locale);
+  const isFallback = servedLocale !== locale;
+  const featured = selectFeatured(allArticles);
   const games = selectUpcomingGames(getSchedule().games, SIDEBAR_GAME_COUNT);
 
   const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(
@@ -55,14 +57,17 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
     GRID_SIZE,
   );
 
+  const t = await getTranslations("newsIndex");
+
   return (
     <>
       <OriginStrip />
+      {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
       {featured ? <HeroArticle article={featured} /> : null}
 
       <div className={styles.newsSection}>
         <div className={styles.newsGridColumn}>
-          <NewsGrid articles={gridArticles} />
+          <NewsGrid articles={gridArticles} lang={isFallback ? servedLocale : undefined} />
         </div>
         <div className={styles.sidebarColumn}>
           <Sidebar games={games} />

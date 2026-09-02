@@ -161,9 +161,9 @@ export function selectAdjacentArticles<T extends { slug: string }>(
 
 /**
  * Which locale to actually serve for a request, given which locales have
- * a translation on disk. Falls back to `ro`, per the i18n scope in
- * AGENTS.md — the caller decides whether to show a fallback notice, this
- * function only decides what content to load.
+ * a translation on disk. Falls back to `ro` — the caller decides whether
+ * to show a fallback notice, this function only decides what content to
+ * load.
  */
 export function resolveServedLocale(
   requestedLocale: Locale,
@@ -243,6 +243,32 @@ export const getAllArticles = cache((locale: Locale): Article[] => {
 });
 
 /**
+ * Which locale's article list to actually serve, given how many the
+ * requested locale has. Falls back to ro when that count is zero (news
+ * is ro-only) — the list-level counterpart to resolveServedLocale's
+ * per-article version above.
+ */
+export function resolveArticlesLocale(requestedLocale: Locale, requestedCount: number): Locale {
+  return requestedCount > 0 || requestedLocale === "ro" ? requestedLocale : "ro";
+}
+
+/**
+ * getAllArticles(locale), falling back to the ro list when the locale has
+ * none (news is ro-only). Only for the homepage/stiri index —
+ * getArticlesByTeam and plain getAllArticles keep their own honest-empty
+ * behavior; a team having no coverage yet is a different, temporary case.
+ */
+export const getAllArticlesWithFallback = cache(
+  (locale: Locale): { articles: Article[]; servedLocale: Locale } => {
+    const requested = getAllArticles(locale);
+    const servedLocale = resolveArticlesLocale(locale, requested.length);
+    return servedLocale === locale
+      ? { articles: requested, servedLocale }
+      : { articles: getAllArticles(servedLocale), servedLocale };
+  },
+);
+
+/**
  * Which locales have a real, dedicated translation file for this slug —
  * not which locales the article *serves* (every slug with a `ro` file
  * serves every locale, via fallback). Used for `alternates.languages`:
@@ -263,10 +289,6 @@ export const getArticleBySlug = cache(
   },
 );
 
-export const getFeaturedArticle = cache((locale: Locale): Article | undefined => {
-  return selectFeatured(getAllArticles(locale));
-});
-
 export const getArticlesByCategory = cache(
   (category: Category, locale: Locale): Article[] => {
     return getAllArticles(locale).filter((article) => article.category === category);
@@ -275,7 +297,7 @@ export const getArticlesByCategory = cache(
 
 /**
  * Newest-first, up to `limit`. Empty for most of the 32 teams — render an
- * honest empty state, not a hidden section (AGENTS.md).
+ * honest empty state, not a hidden section.
  */
 export const getArticlesByTeam = cache(
   (teamSlug: string, locale: Locale, limit = 4): Article[] => {

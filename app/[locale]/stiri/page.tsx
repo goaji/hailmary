@@ -5,7 +5,8 @@ import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ArticleCard } from "@/components/home/ArticleCard/ArticleCard";
-import { getAllArticles } from "@/utils/articles";
+import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
+import { getAllArticlesWithFallback } from "@/utils/articles";
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
@@ -40,20 +41,20 @@ export default async function NewsIndexPage({
     notFound();
   }
 
-  // News is Romanian-only (AGENTS.md) — getAllArticles(locale) reads
-  // content/articles/<locale>, which has no "en" files, so this is
-  // legitimately empty under /en rather than falling back to the ro list.
-  // Same honest-empty-state contract as TeamNews, not a silent language
-  // switch.
-  const articles = getAllArticles(locale);
+  // News is Romanian-only — getAllArticlesWithFallback falls back to the
+  // ro list under /en (with a notice below), the same ro-fallback contract
+  // as an individual article page rather than a silent language switch.
+  const { articles, servedLocale } = getAllArticlesWithFallback(locale);
+  const isFallback = servedLocale !== locale;
   const t = await getTranslations("newsIndex");
 
   return (
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
+      {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
 
       {articles.length > 0 ? (
-        <div className={styles.grid}>
+        <div className={styles.grid} lang={isFallback ? servedLocale : undefined}>
           {articles.map((article, index) => (
             <ArticleCard
               key={article.slug}

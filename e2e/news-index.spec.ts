@@ -33,15 +33,17 @@ test.describe("news index", () => {
     await expect(navLink).toHaveAttribute("aria-current", "page");
   });
 
-  // News is Romanian-only (AGENTS.md) — content/articles/en has no files,
-  // so /en/stiri renders an honest empty state rather than falling back
-  // to the ro list (that would be a silent language switch).
-  test("en locale shows the honest empty state, not the ro articles", async ({ page }) => {
+  // News is Romanian-only — content/articles/en has no files, so /en/stiri
+  // falls back to the ro list with a translated notice, the same
+  // ro-fallback contract an individual article page already has.
+  test("en locale falls back to the ro articles, with a translated notice", async ({ page }) => {
     await page.goto("/en/stiri");
 
     await expect(page.getByRole("heading", { level: 1, name: en.newsIndex.title })).toBeVisible();
-    await expect(page.getByText(en.newsIndex.empty)).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2 })).toHaveCount(0);
+    await expect(page.getByText(en.newsIndex.fallbackNotice)).toBeVisible();
+
+    const titles = await page.getByRole("heading", { level: 2 }).allTextContents();
+    expect(titles).toHaveLength(RO_ARTICLE_COUNT);
   });
 });
 

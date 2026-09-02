@@ -32,7 +32,8 @@
   "newsIndex": {
     "title": "News",
     "metaDescription": "All NFL news, translated and explained in Romanian.",
-    "empty": "NFL news is only available in Romanian."
+    "empty": "No news published yet.",
+    "fallbackNotice": "This page is only available in Romanian."
   },
   "teamDetail": {
     "metaDescription": "{team} — NFL news, schedule and team info.",
