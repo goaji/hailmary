@@ -4,6 +4,13 @@
 html {
   height: 100%;
   box-sizing: border-box;
+  // Reserves the vertical scrollbar's space on every page, whether or not
+  // that page actually needs to scroll. Without this, centered content
+  // (the sticky header included) sits at a slightly different x position
+  // on a short page (no scrollbar) than a tall one (scrollbar present) —
+  // only visible on browsers/platforms with a reserved-space scrollbar,
+  // not overlay scrollbars, which is why it wasn't reproducible headless.
+  scrollbar-gutter: stable;
 }
 
 // Anchor scrolling (TOC links, seeAlso deep links) — smooth unless the reader prefers reduced motion.

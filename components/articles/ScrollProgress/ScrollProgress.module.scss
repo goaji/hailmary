@@ -1,12 +1,10 @@
-// Sticky, not fixed: the header isn't fixed/sticky itself, so a fixed bar
-// at top:0 would sit exactly on top of it. Starting the bar in normal flow
-// right after the header and letting it stick to the viewport top gives
-// "under the header while at the top of the page, pinned once you scroll
-// past it" without hardcoding the header's height (which varies by
-// breakpoint and whether the mobile nav is open).
+// Sticky, not fixed: SiteHeader is sticky too, so this bar sticks just
+// below it instead of at the very top (HeaderHeightVar keeps
+// --header-height in sync — the header's own height isn't fixed, since it
+// wraps at narrow widths and grows again when the mobile nav opens).
 .bar {
   position: sticky;
-  top: 0;
+  top: var(--header-height, 71px);
   z-index: 10;
   height: 2px;
   width: 100%;

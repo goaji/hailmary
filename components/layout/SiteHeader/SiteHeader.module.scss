@@ -1,7 +1,23 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
+// Full-width bar: background/border span the whole viewport, sticky-pinned
+// to the top. Only .inner (below) caps at the page's 1200px content width —
+// capping .header itself would leave the sticky bar's background stopping
+// short at 1200px, exposing scrolled-past content in the side gutters on
+// wide viewports instead of a solid bar.
 .header {
+  position: sticky;
+  top: 0;
+  // Above ScrollProgress (10) and TermLink's hover tooltip (20) — the
+  // explainer panel's native <dialog> renders in the browser's top layer
+  // regardless of z-index, so it always sits above this either way.
+  z-index: 30;
+  background: v.$c-header;
+  border-bottom: 2px solid var(--accent-1);
+}
+
+.inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -10,8 +26,6 @@
   max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
   margin: 0 auto;
   padding: v.space(18) v.space(32);
-  background: v.$c-header;
-  border-bottom: 2px solid var(--accent-1);
 }
 
 .logo {

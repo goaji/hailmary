@@ -7,17 +7,19 @@ import styles from "./SiteHeader.module.scss";
 export function SiteHeader() {
   return (
     <header className={styles.header}>
-      <Link href="/" className={styles.logo}>
-        <span className={styles.logoHail}>HAIL</span>
-        <span className={styles.logoMary}>MARY</span>
-        <span className={styles.logoRo}>.RO</span>
-      </Link>
+      <div className={styles.inner}>
+        <Link href="/" className={styles.logo}>
+          <span className={styles.logoHail}>HAIL</span>
+          <span className={styles.logoMary}>MARY</span>
+          <span className={styles.logoRo}>.RO</span>
+        </Link>
 
-      <SiteNav />
+        <SiteNav />
 
-      <div className={styles.rightGroup}>
-        <TeamPicker />
-        <LanguageSwitcher />
+        <div className={styles.rightGroup}>
+          <TeamPicker />
+          <LanguageSwitcher />
+        </div>
       </div>
     </header>
   );
