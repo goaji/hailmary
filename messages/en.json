@@ -128,7 +128,8 @@
     "filterLabel": "Search for a term",
     "filterPlaceholder": "e.g. blitz, safety, spread",
     "noResults": "No terms match your search.",
-    "seeAlso": "See also"
+    "seeAlso": "See also",
+    "fallbackNotice": "This term is currently only available in Romanian."
   },
   "rulesPage": {
     "tocLabel": "Contents"
@@ -162,7 +163,8 @@
   "explainerPanel": {
     "close": "Close",
     "relatedTerms": "Related terms",
-    "otherTermsInArticle": "Other terms in this article"
+    "otherTermsInArticle": "Other terms in this article",
+    "fallbackNotice": "This term is currently only available in Romanian."
   },
   "notFoundPage": {
     "title": "Page not found",

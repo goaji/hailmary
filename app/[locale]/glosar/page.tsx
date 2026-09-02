@@ -49,6 +49,7 @@ export default async function GlossaryPage({
     term: entry.term,
     short: entry.short,
     seeAlso: entry.seeAlso,
+    isFallback: entry.servedLocale !== locale,
     extended: <ExplainerContent key={entry.slug} content={entry.extended} />,
   }));
 

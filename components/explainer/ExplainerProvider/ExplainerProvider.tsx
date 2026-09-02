@@ -9,6 +9,8 @@ export type ExplainerPanelEntry = {
   term: string;
   short: string;
   relatedTerms?: string[];
+  /** True when this entry has no translation for the reader's locale and is serving the ro content instead. */
+  isFallback?: boolean;
   content: ReactNode;
 };
 

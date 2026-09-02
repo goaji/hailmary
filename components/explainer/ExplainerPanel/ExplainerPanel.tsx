@@ -1,12 +1,14 @@
 "use client"; // owns the native <dialog> imperative lifecycle, focus and Escape/backdrop handling
 
 import { useEffect, useId, useRef, type RefObject } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import {
   useArticleTerms,
   useExplainer,
   type ExplainerPanelEntry,
 } from "@/components/explainer/ExplainerProvider/ExplainerProvider";
+import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
+import type { Locale } from "@/types";
 import styles from "./ExplainerPanel.module.scss";
 
 type ExplainerPanelProps = {
@@ -17,6 +19,7 @@ type ExplainerPanelProps = {
 // <dialog> + showModal(): native focus trap and Escape-to-close, safer than hand-rolling the a11y risk TASK-6 flags.
 export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
   const t = useTranslations("explainerPanel");
+  const locale = useLocale() as Locale; // next-intl types this as string; always one of routing.locales
   const { activeTerm, open, close } = useExplainer();
   const entry = entries.find((candidate) => candidate.slug === activeTerm);
   const articleTerms = useArticleTerms();
@@ -115,6 +118,9 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
             </button>
           </div>
           <div className={styles.content}>
+            {entry.isFallback ? (
+              <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+            ) : null}
             {entry.content}
 
             {relatedEntries.length > 0 || articleEntries.length > 0 ? (

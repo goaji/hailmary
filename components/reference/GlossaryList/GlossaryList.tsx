@@ -1,8 +1,10 @@
 "use client"; // live filter text is local UI state (AGENTS.md — useState, not lifted)
 
 import { useId, useState, type ReactNode } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n";
+import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
+import type { Locale } from "@/types";
 import styles from "./GlossaryList.module.scss";
 
 export type GlossaryListItem = {
@@ -10,6 +12,8 @@ export type GlossaryListItem = {
   term: string;
   short: string;
   seeAlso?: string;
+  /** True when this entry has no translation for the reader's locale and is serving the ro content instead. */
+  isFallback?: boolean;
   extended: ReactNode;
 };
 
@@ -29,6 +33,7 @@ function matchesQuery(item: GlossaryListItem, query: string): boolean {
 
 export function GlossaryList({ items }: GlossaryListProps) {
   const t = useTranslations("glossary");
+  const locale = useLocale() as Locale; // next-intl types this as string; always one of routing.locales
   const [query, setQuery] = useState("");
   const filterId = useId();
   const filtered = items.filter((item) => matchesQuery(item, query));
@@ -83,6 +88,9 @@ export function GlossaryList({ items }: GlossaryListProps) {
                   <span className={styles.chevron} aria-hidden="true" />
                 </summary>
                 <div id={item.slug} className={styles.detailsContent}>
+                  {item.isFallback ? (
+                    <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+                  ) : null}
                   <p className={styles.short}>{item.short}</p>
                   {item.extended}
                   {item.seeAlso ? (

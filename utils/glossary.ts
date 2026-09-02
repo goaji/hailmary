@@ -97,10 +97,16 @@ function listSlugs(locale: Locale): string[] {
     .map((file) => file.replace(/\.mdx$/, ""));
 }
 
-export const getAllTerms = cache((locale: Locale): GlossaryEntry[] => {
-  const entries = listSlugs(locale).map((slug) => readTermFile(locale, slug));
-  return sortByTerm(entries);
-});
+/** Every slug that exists in at least one locale's content/glossary directory. */
+function listAllSlugs(): string[] {
+  const slugs = new Set<string>();
+  for (const candidate of routing.locales) {
+    for (const slug of listSlugs(candidate)) {
+      slugs.add(slug);
+    }
+  }
+  return [...slugs];
+}
 
 export const getTermBySlug = cache(
   (slug: string, locale: Locale): GlossaryEntry | undefined => {
@@ -112,6 +118,20 @@ export const getTermBySlug = cache(
     return servedLocale ? readTermFile(servedLocale, slug) : undefined;
   },
 );
+
+/**
+ * Every glossary entry available for `locale`, falling back per-slug to ro
+ * via getTermBySlug rather than just listing whatever .mdx files happen to
+ * exist for `locale` — so a ro-only term still appears (its servedLocale
+ * marks it as a fallback) instead of silently shrinking the list the
+ * moment locale parity breaks (AGENTS.md: never a silent language switch).
+ */
+export const getAllTerms = cache((locale: Locale): GlossaryEntry[] => {
+  const entries = listAllSlugs()
+    .map((slug) => getTermBySlug(slug, locale))
+    .filter((entry): entry is GlossaryEntry => entry !== undefined);
+  return sortByTerm(entries);
+});
 
 export const getTermSlugs = cache((locale: Locale): string[] => {
   return listSlugs(locale);

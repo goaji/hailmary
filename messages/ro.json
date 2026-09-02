@@ -128,7 +128,8 @@
     "filterLabel": "Caută un termen",
     "filterPlaceholder": "ex. blitz, safety, spread",
     "noResults": "Niciun termen nu corespunde căutării tale.",
-    "seeAlso": "Vezi și"
+    "seeAlso": "Vezi și",
+    "fallbackNotice": "Acest termen este disponibil momentan doar în română."
   },
   "rulesPage": {
     "tocLabel": "Cuprins"
@@ -162,7 +163,8 @@
   "explainerPanel": {
     "close": "Închide",
     "relatedTerms": "Termeni înrudiți",
-    "otherTermsInArticle": "Alți termeni din articol"
+    "otherTermsInArticle": "Alți termeni din articol",
+    "fallbackNotice": "Acest termen este disponibil momentan doar în română."
   },
   "notFoundPage": {
     "title": "Pagina nu a fost găsită",
