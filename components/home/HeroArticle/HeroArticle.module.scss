@@ -2,32 +2,40 @@
 @use "mixins" as mix;
 
 .hero {
-  position: relative;
   display: flex;
-  align-items: flex-end;
-  height: 260px; // mobile, bespoke to this component
-  overflow: hidden;
+  flex-direction: column;
   max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
   margin: 0 auto;
 
   @include mix.mq(md) {
-    height: 380px;
+    flex-direction: row;
+    min-height: 380px; // not height — a long headline can wrap past this in the narrow 1/3 column, and the image (flex: 1) stretches to match either way
   }
 }
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(13, 14, 18, 0.92) 10%, rgba(13, 14, 18, 0.15) 60%);
-}
-
 .content {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 24px 20px; // mobile, bespoke to this component
-  max-width: 760px;
+  background: v.$c-header; // solid surface now that text no longer overlays the image
 
   @include mix.mq(md) {
-    padding: 36px 40px;
+    flex: 0 0 33.333%;
+    width: 33.333%;
+    padding: 32px;
+  }
+}
+
+.imageWrap {
+  position: relative;
+  height: 200px; // mobile, bespoke to this component
+  order: -1; // image above the headline on mobile; h1 stays first in the DOM for a11y/SEO regardless
+
+  @include mix.mq(md) {
+    flex: 1;
+    height: auto;
+    order: 0;
   }
 }
 
@@ -36,30 +44,21 @@
   padding: 5px v.space(12);
   margin-bottom: 14px; // bespoke to this component
   background: var(--accent-2);
-  // Not var(--accent-1)/white text: accent2 is only calibrated for text
-  // *on* the dark panel, not as a background with text on top of it — for
-  // that direction, white fails contrast against every team's accent2
-  // (best case 3.6:1, several teams under 2:1). Dark text against accent2
-  // clears 4.5:1 for all 32 teams.
-  color: v.$c-header;
+  color: v.$c-header; // dark text, not white — accent2 is only calibrated for text on the panel, not as a background (fails contrast for several teams the other way)
   font-size: v.$fs-ui;
   font-weight: 700;
+  align-self: flex-start;
 }
 
 .title {
   margin: 0 0 v.space(12) 0;
   font-family: v.$font-display;
-  font-size: 34px; // mobile, bespoke to this component
+  font-size: 30px; // mobile, bespoke to this component
   line-height: 1.05;
   letter-spacing: 0.5px;
-  // The overlay alone can't guarantee legibility for an arbitrary future
-  // photo (verified: a bright test photo left the title borderline even
-  // bottom-anchored in the gradient's darkest zone). A shadow guarantees
-  // it regardless of what's underneath.
-  text-shadow: 0 2px 8px rgba(13, 14, 18, 0.8);
 
   @include mix.mq(md) {
-    font-size: 52px;
+    font-size: 38px; // smaller than a full-bleed hero would use — this column is only ~1/3 of the 1200px cap
   }
 }
 
@@ -78,8 +77,6 @@
 
 .excerpt {
   margin: 0 0 14px 0; // bespoke to this component
-  max-width: 600px;
   font-size: v.$fs-body-lg;
   color: v.$c-text-dim;
-  text-shadow: 0 1px 6px rgba(13, 14, 18, 0.8);
 }
