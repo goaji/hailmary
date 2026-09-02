@@ -6,6 +6,7 @@
   flex-direction: column;
   max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
   margin: 0 auto;
+  padding-top: v.space(32);
 
   @include mix.mq(md) {
     flex-direction: row;
