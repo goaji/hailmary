@@ -18,6 +18,10 @@
 
 .h2 {
   margin: 28px 0 v.space(12) 0; // bespoke top value — not in the spacing scale
+  // RuleSection reuses this component for its anchor-scroll targets
+  // (regulament TOC links, seeAlso deep links) — without this, the sticky
+  // header covers the heading on arrival.
+  scroll-margin-top: calc(var(--header-height, 71px) + #{v.space(16)});
   font-family: v.$font-display;
   font-size: v.$fs-h2;
   line-height: 1.15;

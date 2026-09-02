@@ -101,7 +101,10 @@
 
 .detailsContent {
   padding: 0 v.space(20) v.space(20);
-  scroll-margin-top: v.space(20); // so a #slug jump doesn't tuck the content under a sticky header
+  // So a #slug jump doesn't tuck the content under the sticky header —
+  // --header-height (kept in sync by HeaderHeightVar) plus the original
+  // breathing room.
+  scroll-margin-top: calc(var(--header-height, 71px) + #{v.space(20)});
 }
 
 .short {

@@ -7,7 +7,11 @@
   @include mix.mq(lg) {
     display: block;
     position: sticky;
-    top: v.space(32);
+    // Sticks just below the sticky header (--header-height, kept in sync
+    // by HeaderHeightVar) plus the original breathing room, not from the
+    // very top of the viewport — otherwise the header covers it while
+    // scrolling.
+    top: calc(var(--header-height, 71px) + #{v.space(32)});
     flex: 0 0 220px;
     width: 220px;
   }
