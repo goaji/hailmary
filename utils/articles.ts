@@ -9,6 +9,7 @@ import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
 import type { Article, ArticleFrontmatter, ArticleImage, Category, Locale } from "@/types";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
+import { TAG_IDS } from "@/utils/tags";
 import { TEAMS_BY_SLUG } from "@/utils/teams";
 import roMessages from "@/messages/ro.json";
 import enMessages from "@/messages/en.json";
@@ -59,7 +60,7 @@ const articleFrontmatterSchema = z.object({
     })
     .optional(),
   featured: z.boolean().optional(),
-  tags: z.array(z.string()).optional(),
+  tags: z.array(z.enum(TAG_IDS)).optional(),
   kicker: z.string().optional(),
   teams: z.array(z.string()).optional(),
 });

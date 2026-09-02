@@ -1,7 +1,8 @@
 import type { Locale } from "@/i18n";
 import type { Conference, Division, Team } from "@/utils/teams";
+import type { Tag } from "@/utils/tags";
 
-export type { Locale, Team, Conference, Division };
+export type { Locale, Team, Conference, Division, Tag };
 
 // Categories for ARTICLES — six to eight ids covering the mockup's four card
 // chips (transferuri, accidentari, analiza, antrenori) plus Draft, Program and Regulament. 
@@ -36,7 +37,7 @@ export type ArticleFrontmatter = {
   /** Omit to fall back to one of the site's default cover images — see `pickDefaultImage` in `utils/articles.ts`. */
   image?: ArticleImage;
   featured?: boolean;
-  tags?: string[];
+  tags?: Tag[];
   /** Editorial superlative badge (e.g. "SUPER BOWL LX") — not the category. */
   kicker?: string;
   /** Team slugs this article is about — powers /echipe/[team]'s news section and ArticleCard's TeamBadge. */

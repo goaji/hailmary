@@ -54,6 +54,21 @@ describe("parseArticleFrontmatter", () => {
     expect(parseArticleFrontmatter(withTeams, "test.mdx")).toEqual(withTeams);
   });
 
+  it("accepts a file with known tags", () => {
+    const withTags = { ...validFrontmatter, tags: ["playoffs", "super-bowl"] };
+
+    expect(parseArticleFrontmatter(withTags, "test.mdx")).toEqual(withTags);
+  });
+
+  it("rejects a file with an unknown tag", () => {
+    expect(() =>
+      parseArticleFrontmatter(
+        { ...validFrontmatter, tags: ["not-a-real-tag"] },
+        "test.mdx",
+      ),
+    ).toThrow(/"tags/);
+  });
+
   it("accepts a file with no image — readArticleFile assigns a default", () => {
     const { image, ...noImage } = validFrontmatter;
     void image;
