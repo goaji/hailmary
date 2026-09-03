@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   extractTermLinkSlugs,
   parseGlossaryFrontmatter,
-  resolveServedLocale,
   sortByTerm,
   validateTermLinks,
 } from "./glossary";
@@ -55,20 +54,6 @@ describe("sortByTerm", () => {
       "Întoarcere",
       "Touchdown",
     ]);
-  });
-});
-
-describe("resolveServedLocale", () => {
-  it("uses the requested locale when a translation exists", () => {
-    expect(resolveServedLocale("en", ["ro", "en"])).toBe("en");
-  });
-
-  it("falls back to ro when the requested locale has no translation", () => {
-    expect(resolveServedLocale("en", ["ro"])).toBe("ro");
-  });
-
-  it("returns undefined when the term doesn't exist in any locale", () => {
-    expect(resolveServedLocale("en", [])).toBeUndefined();
   });
 });
 

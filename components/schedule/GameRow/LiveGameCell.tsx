@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import type { Game } from "@/types";
 import { LiveScoreBadgeView } from "@/components/schedule/LiveScoreBadge/LiveScoreBadgeView";
 import { useLiveScores } from "@/components/schedule/useLiveScores";
+import { hasGameScore, isLiveStatus } from "@/utils/liveGames";
 import styles from "./GameRow.module.scss";
 
 type LiveGameCellProps = {
@@ -18,8 +19,8 @@ export function LiveGameCell({ gameId, initialGame }: LiveGameCellProps) {
   const t = useTranslations("liveScoreBadge");
   const { data } = useLiveScores(true);
   const current = data?.games.find((game) => game.id === gameId) ?? initialGame;
-  const hasScore = typeof current.homeScore === "number" && typeof current.awayScore === "number";
-  const isLive = current.status === "live" || current.status === "halftime";
+  const hasScore = hasGameScore(current);
+  const isLive = isLiveStatus(current.status);
 
   return (
     <>

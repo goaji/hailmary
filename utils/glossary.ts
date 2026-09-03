@@ -8,7 +8,10 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { GLOSSARY_CATEGORY_IDS } from "@/types";
 import type { GlossaryEntry, GlossaryEntryFrontmatter, Locale } from "@/types";
+import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "@/utils/content";
 import { validateSeeAlso } from "@/utils/reference";
+
+export { resolveServedLocale } from "@/utils/content";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "glossary");
 
@@ -21,54 +24,20 @@ const glossaryFrontmatterSchema = z.object({
   seeAlso: z.string().optional(),
 });
 
-/**
- * Validates raw frontmatter data against GlossaryEntryFrontmatter. Throws
- * with the file path and the offending field on failure — never silently
- * falls back to a default, since that would hide a content typo forever.
- */
 export function parseGlossaryFrontmatter(
   data: unknown,
   filePath: string,
 ): GlossaryEntryFrontmatter {
-  const result = glossaryFrontmatterSchema.safeParse(data);
-
-  if (!result.success) {
-    const issue = result.error.issues[0];
-    const field = issue.path.join(".") || "(root)";
-    throw new Error(
-      `Invalid frontmatter in ${filePath}: field "${field}" — ${issue.message}`,
-    );
-  }
-
-  return result.data;
+  return parseFrontmatter(glossaryFrontmatterSchema, data, filePath);
 }
 
 export function sortByTerm<T extends { term: string }>(entries: T[]): T[] {
   return [...entries].sort((a, b) => a.term.localeCompare(b.term, "ro"));
 }
 
-/**
- * Which locale to actually serve for a request, given which locales have
- * a translation on disk. Falls back to `ro`, per the i18n scope in
- * AGENTS.md — the caller decides whether to show a fallback notice, this
- * function only decides what content to load.
- */
-export function resolveServedLocale(
-  requestedLocale: Locale,
-  availableLocales: Locale[],
-): Locale | undefined {
-  if (availableLocales.includes(requestedLocale)) {
-    return requestedLocale;
-  }
-  if (availableLocales.includes("ro")) {
-    return "ro";
-  }
-  return undefined;
-}
-
 /** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
 export function termFilePath(locale: Locale, slug: string): string {
-  return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
+  return contentFilePath(CONTENT_DIR, locale, slug);
 }
 
 function readTermFile(locale: Locale, slug: string): GlossaryEntry {
@@ -84,24 +53,11 @@ function readTermFile(locale: Locale, slug: string): GlossaryEntry {
   return { ...frontmatter, extended: content, servedLocale: locale };
 }
 
-function listSlugs(locale: Locale): string[] {
-  const dir = path.join(CONTENT_DIR, locale);
-
-  if (!fs.existsSync(dir)) {
-    return [];
-  }
-
-  return fs
-    .readdirSync(dir)
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => file.replace(/\.mdx$/, ""));
-}
-
 /** Every slug that exists in at least one locale's content/glossary directory. */
 function listAllSlugs(): string[] {
   const slugs = new Set<string>();
   for (const candidate of routing.locales) {
-    for (const slug of listSlugs(candidate)) {
+    for (const slug of listMdxSlugs(CONTENT_DIR, candidate)) {
       slugs.add(slug);
     }
   }
@@ -134,7 +90,7 @@ export const getAllTerms = cache((locale: Locale): GlossaryEntry[] => {
 });
 
 export const getTermSlugs = cache((locale: Locale): string[] => {
-  return listSlugs(locale);
+  return listMdxSlugs(CONTENT_DIR, locale);
 });
 
 const TERM_LINK_PATTERN = /<TermLink\b[^>]*\bterm=(["'])(.*?)\1/g;

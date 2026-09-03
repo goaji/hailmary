@@ -8,6 +8,8 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
 import type { Article, ArticleFrontmatter, ArticleImage, Category, Locale } from "@/types";
+import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "@/utils/content";
+export { resolveServedLocale } from "@/utils/content";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
 import { TAG_IDS } from "@/utils/tags";
 import { TEAMS_BY_SLUG } from "@/utils/teams";
@@ -65,26 +67,11 @@ const articleFrontmatterSchema = z.object({
   teams: z.array(z.string()).optional(),
 });
 
-/**
- * Validates raw frontmatter data against ArticleFrontmatter. Throws with
- * the file path and the offending field on failure — never silently
- * falls back to a default, since that would hide a content typo forever.
- */
 export function parseArticleFrontmatter(
   data: unknown,
   filePath: string,
 ): ArticleFrontmatter {
-  const result = articleFrontmatterSchema.safeParse(data);
-
-  if (!result.success) {
-    const issue = result.error.issues[0];
-    const field = issue.path.join(".") || "(root)";
-    throw new Error(
-      `Invalid frontmatter in ${filePath}: field "${field}" — ${issue.message}`,
-    );
-  }
-
-  return result.data;
+  return parseFrontmatter(articleFrontmatterSchema, data, filePath);
 }
 
 export function sortByPublishedAtDesc<T extends { publishedAt: string }>(
@@ -162,25 +149,6 @@ export function selectAdjacentArticles<T extends { slug: string }>(
 }
 
 /**
- * Which locale to actually serve for a request, given which locales have
- * a translation on disk. Falls back to `ro` — the caller decides whether
- * to show a fallback notice, this function only decides what content to
- * load.
- */
-export function resolveServedLocale(
-  requestedLocale: Locale,
-  availableLocales: Locale[],
-): Locale | undefined {
-  if (availableLocales.includes(requestedLocale)) {
-    return requestedLocale;
-  }
-  if (availableLocales.includes("ro")) {
-    return "ro";
-  }
-  return undefined;
-}
-
-/**
  * Reading time from MDX body word count at ~200 wpm (a reasonable rate for
  * Romanian). Strips the markdown syntax that would otherwise inflate the
  * count as if it were prose — code, images, link targets (keeping link
@@ -207,7 +175,7 @@ export function estimateReadingTimeMinutes(content: string, wordsPerMinute = 200
 }
 
 function articleFilePath(locale: Locale, slug: string): string {
-  return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
+  return contentFilePath(CONTENT_DIR, locale, slug);
 }
 
 /** Fails the build if an article's `teams` frontmatter names a slug that isn't a real team — the only place a dangling team reference is caught. */
@@ -239,21 +207,8 @@ function readArticleFile(locale: Locale, slug: string): Article {
   };
 }
 
-function listSlugs(locale: Locale): string[] {
-  const dir = path.join(CONTENT_DIR, locale);
-
-  if (!fs.existsSync(dir)) {
-    return [];
-  }
-
-  return fs
-    .readdirSync(dir)
-    .filter((file) => file.endsWith(".mdx"))
-    .map((file) => file.replace(/\.mdx$/, ""));
-}
-
 export const getAllArticles = cache((locale: Locale): Article[] => {
-  const articles = listSlugs(locale).map((slug) => readArticleFile(locale, slug));
+  const articles = listMdxSlugs(CONTENT_DIR, locale).map((slug) => readArticleFile(locale, slug));
   return sortByPublishedAtDesc(articles);
 });
 

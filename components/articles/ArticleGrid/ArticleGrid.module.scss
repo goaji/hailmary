@@ -1,13 +1,29 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.news {
+.newsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; // bespoke to the homepage grid
+}
+
+.teamSection {
   display: flex;
   flex-direction: column;
   gap: v.space(20);
 }
 
-.grid {
+.newsGrid {
+  display: grid;
+  grid-template-columns: 1fr; // mobile-first: single column
+  gap: v.space(22);
+
+  @include mix.mq(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.teamGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: v.space(22);

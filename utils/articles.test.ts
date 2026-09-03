@@ -5,7 +5,6 @@ import {
   parseArticleFrontmatter,
   pickDefaultImage,
   resolveArticlesLocale,
-  resolveServedLocale,
   selectAdjacentArticles,
   selectFeatured,
   selectRelatedArticles,
@@ -292,20 +291,6 @@ describe("estimateReadingTimeMinutes", () => {
     // "touchdown-ul" must count as one word, not two.
     const content = Array(200).fill("touchdown-ul").join(" ");
     expect(estimateReadingTimeMinutes(content, 200)).toBe(1);
-  });
-});
-
-describe("resolveServedLocale", () => {
-  it("uses the requested locale when a translation exists", () => {
-    expect(resolveServedLocale("en", ["ro", "en"])).toBe("en");
-  });
-
-  it("falls back to ro when the requested locale has no translation", () => {
-    expect(resolveServedLocale("en", ["ro"])).toBe("ro");
-  });
-
-  it("returns undefined when the article doesn't exist in any locale", () => {
-    expect(resolveServedLocale("en", [])).toBeUndefined();
   });
 });
 

@@ -13,6 +13,7 @@ import type {
   ReferenceSection,
   TimelineEntry,
 } from "@/types";
+import { contentFilePath, parseFrontmatter } from "@/utils/content";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "reference");
 
@@ -36,22 +37,11 @@ const referenceFrontmatterSchema = z.object({
   entries: z.array(timelineEntrySchema).optional(),
 });
 
-/** Throws naming the file and field on invalid frontmatter — never falls back silently. */
 export function parseReferenceFrontmatter(
   data: unknown,
   filePath: string,
 ): ReferencePageFrontmatter {
-  const result = referenceFrontmatterSchema.safeParse(data);
-
-  if (!result.success) {
-    const issue = result.error.issues[0];
-    const field = issue.path.join(".") || "(root)";
-    throw new Error(
-      `Invalid frontmatter in ${filePath}: field "${field}" — ${issue.message}`,
-    );
-  }
-
-  return result.data;
+  return parseFrontmatter(referenceFrontmatterSchema, data, filePath);
 }
 
 const H2_PATTERN = /^##\s+(.+?)\s*$/gm;
@@ -149,7 +139,7 @@ export function parseSeeAlso(
 
 /** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
 export function referenceFilePath(locale: Locale, slug: string): string {
-  return path.join(CONTENT_DIR, locale, `${slug}.mdx`);
+  return contentFilePath(CONTENT_DIR, locale, slug);
 }
 
 /** mtime of the reference MDX file backing `slug`/`locale` — the sitemap's freshness signal for a page with no frontmatter "last changed" date of its own. */

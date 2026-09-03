@@ -22,6 +22,8 @@ type ArticleCardProps = {
   headingLevel?: "h2" | "h3";
 };
 
+// Doesn't wrap in the shared Card: Card's padding would inset the edge-to-edge
+// image, and its unpositioned root would break the stretched-click-target trick below.
 export async function ArticleCard({ article, priority, headingLevel = "h3" }: ArticleCardProps) {
   const locale = await getLocale();
   // First tagged team only, same "first item is the one shown" convention
