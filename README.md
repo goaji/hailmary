@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# hailmary.ro
 
-## Getting Started
+Romanian-language American football site: NFL news plus evergreen reference content (rules, history, glossary) — built for Romanian readers who already follow the NFL *and* readers who are still learning the sport.
 
-First, run the development server:
+## Stack
+
+- Next.js (App Router), TypeScript (strict)
+- Sass + CSS Modules — no Tailwind, no CSS-in-JS
+- MDX content in-repo under `content/` (no CMS)
+- `next-intl` — `ro` default, `en` for UI + evergreen reference (news stays Romanian-only for now)
+- Typed sports-data fetch layer, cached via ISR, refreshed by a cron route
+
+See [AGENTS.md](AGENTS.md) for the full architecture and the non-negotiables behind these choices.
+
+## Getting started
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in SPORTS_API_KEY and CRON_SECRET
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — it redirects to `/ro`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Node version: see `.nvmrc`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Testing
 
-## Learn More
+```bash
+npm run test:unit   # Vitest — pure logic in utils/
+npm run test:e2e    # Playwright — behavior, accessibility (axe), visual regression
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project docs
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **[AGENTS.md](AGENTS.md)** — stack, architecture, state management, i18n scope, betting-odds editorial policy, testing conventions
+- **[SKILLS.md](SKILLS.md)** — step-by-step recipes for recurring tasks (add an article, add a component, wire a team accent color, write a Playwright test, ...)
+- **[DEPLOY.md](DEPLOY.md)** — build & deploy, environment variables, hPanel cron setup, rollback, post-deploy smoke check
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Primary target is **Hostinger Business** (Node.js app, builds on push to `main`). A parallel **Vercel** deploy off the same repo serves as the portfolio link and gives per-PR previews. See [DEPLOY.md](DEPLOY.md) for details.
