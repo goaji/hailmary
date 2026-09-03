@@ -7,7 +7,7 @@ import matter from "gray-matter";
 import { z } from "zod";
 import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
-import type { Article, ArticleFrontmatter, ArticleImage, Category, Locale } from "@/types";
+import type { Article, ArticleFrontmatter, ArticleImage, Locale } from "@/types";
 import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "@/utils/content";
 export { resolveServedLocale } from "@/utils/content";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
@@ -256,12 +256,6 @@ export const getArticleBySlug = cache(
     const servedLocale = resolveServedLocale(locale, getAvailableLocales(slug));
 
     return servedLocale ? readArticleFile(servedLocale, slug) : undefined;
-  },
-);
-
-export const getArticlesByCategory = cache(
-  (category: Category, locale: Locale): Article[] => {
-    return getAllArticles(locale).filter((article) => article.category === category);
   },
 );
 

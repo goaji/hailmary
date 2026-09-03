@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ArticleCard } from "@/components/home/ArticleCard/ArticleCard";
+import { NewsFilters } from "@/components/articles/NewsFilters/NewsFilters";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { getAllArticlesWithFallback } from "@/utils/articles";
 import styles from "./page.module.scss";
@@ -48,22 +49,22 @@ export default async function NewsIndexPage({
   const isFallback = servedLocale !== locale;
   const t = await getTranslations("newsIndex");
 
+  const items = articles.map((article, index) => ({
+    slug: article.slug,
+    category: article.category,
+    teams: article.teams,
+    node: (
+      <ArticleCard key={article.slug} article={article} priority={index < 3} headingLevel="h2" />
+    ),
+  }));
+
   return (
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
       {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
 
       {articles.length > 0 ? (
-        <div className={styles.grid} lang={isFallback ? servedLocale : undefined}>
-          {articles.map((article, index) => (
-            <ArticleCard
-              key={article.slug}
-              article={article}
-              priority={index < 3}
-              headingLevel="h2"
-            />
-          ))}
-        </div>
+        <NewsFilters items={items} lang={isFallback ? servedLocale : undefined} />
       ) : (
         <p className={styles.empty}>{t("empty")}</p>
       )}

@@ -11,21 +11,6 @@
   }
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr; // mobile-first: single column
-  gap: v.space(22);
-  margin-top: v.space(32);
-
-  @include mix.mq(md) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @include mix.mq(lg) {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
 .empty {
   margin-top: v.space(32);
   color: v.$c-text-muted;

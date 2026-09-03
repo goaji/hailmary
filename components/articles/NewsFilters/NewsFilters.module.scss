@@ -1,0 +1,60 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.filterBar {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(16);
+
+  @include mix.mq(md) {
+    flex-direction: row;
+  }
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: v.space(10);
+}
+
+.label {
+  color: v.$c-text-muted;
+  font-size: v.$fs-ui;
+  font-weight: 600;
+}
+
+.select {
+  padding: v.space(8) v.space(12);
+  border: 1px solid v.$c-border;
+  border-radius: 4px;
+  background: v.$c-surface-raised;
+  color: v.$c-text;
+  font-size: v.$fs-ui;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr; // mobile-first: single column
+  gap: v.space(22);
+  margin-top: v.space(32);
+
+  @include mix.mq(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include mix.mq(lg) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.empty {
+  margin-top: v.space(32);
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

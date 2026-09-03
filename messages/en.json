@@ -33,7 +33,12 @@
     "title": "News",
     "metaDescription": "All NFL news, translated and explained in Romanian.",
     "empty": "No news published yet.",
-    "fallbackNotice": "This page is only available in Romanian."
+    "fallbackNotice": "This page is only available in Romanian.",
+    "categoryFilterLabel": "Category",
+    "allCategories": "All",
+    "teamFilterLabel": "Team",
+    "allTeams": "All teams",
+    "emptyFiltered": "No news matching this filter yet."
   },
   "teamDetail": {
     "metaDescription": "{team} — NFL news, schedule and team info.",
