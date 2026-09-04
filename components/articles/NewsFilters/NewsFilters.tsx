@@ -1,7 +1,7 @@
 "use client"; // local filter selections are page-local UI state (AGENTS.md — useState, not lifted)
 
 import { useTranslations } from "next-intl";
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 import { CATEGORY_IDS } from "@/types";
 import type { Category } from "@/types";
 import { CATEGORIES } from "@/utils/categories";
@@ -21,13 +21,31 @@ type NewsFiltersProps = {
   lang?: string;
 };
 
+type View = "grid" | "list";
+
+const VIEW_KEY = "hm.newsView";
+
 export function NewsFilters({ items, lang }: NewsFiltersProps) {
   const t = useTranslations("newsIndex");
   const tCategories = useTranslations("categories");
   const [category, setCategory] = useState<"all" | Category>("all");
   const [team, setTeam] = useState("all");
+  const [view, setView] = useState<View>("grid");
   const categorySelectId = useId();
   const teamSelectId = useId();
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem(VIEW_KEY);
+    if (stored === "grid" || stored === "list") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setView(stored);
+    }
+  }, []);
+
+  function updateView(next: View) {
+    setView(next);
+    window.localStorage.setItem(VIEW_KEY, next);
+  }
 
   const byCategory = category === "all" ? items : items.filter((item) => item.category === category);
   const filtered = team === "all" ? byCategory : byCategory.filter((item) => item.teams?.includes(team));
@@ -78,10 +96,31 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
             )}
           </select>
         </div>
+
+        <div className={styles.viewToggle} role="radiogroup" aria-label={t("viewToggleLabel")}>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={view === "grid"}
+            className={styles.viewButton}
+            onClick={() => updateView("grid")}
+          >
+            {t("gridView")}
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={view === "list"}
+            className={styles.viewButton}
+            onClick={() => updateView("list")}
+          >
+            {t("listView")}
+          </button>
+        </div>
       </div>
 
       {filtered.length > 0 ? (
-        <div className={styles.grid} lang={lang}>
+        <div className={styles.grid} data-view={view} lang={lang}>
           {filtered.map((item) => item.node)}
         </div>
       ) : (

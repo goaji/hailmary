@@ -38,6 +38,39 @@
   }
 }
 
+.viewToggle {
+  display: flex;
+  gap: v.space(8);
+
+  @include mix.mq(md) {
+    margin-left: auto;
+  }
+}
+
+.viewButton {
+  padding: v.space(8) v.space(12);
+  border: 1px solid v.$c-border;
+  border-radius: 4px;
+  background: v.$c-surface-raised;
+  color: v.$c-text-muted;
+  font: inherit;
+  font-size: v.$fs-ui;
+  cursor: pointer;
+
+  &[aria-checked="true"] {
+    color: v.$c-text;
+    border-color: var(--accent-1);
+  }
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr; // mobile-first: single column
@@ -50,6 +83,13 @@
 
   @include mix.mq(lg) {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  // Compact list view (NewsFilters.tsx sets data-view from the toggle above).
+  &[data-view="list"] {
+    display: flex;
+    flex-direction: column;
+    gap: v.space(12);
   }
 }
 
