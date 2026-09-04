@@ -3,8 +3,8 @@ import path from "node:path";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { PICKER_TEAMS, getTeam } from "../utils/teams";
-import ro from "../messages/ro.json";
-import en from "../messages/en.json";
+import ro from "../messages/ro";
+import en from "../messages/en";
 
 const RO_ARTICLE_COUNT = fs
   .readdirSync(path.join(process.cwd(), "content/articles/ro"))

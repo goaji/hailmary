@@ -3,7 +3,7 @@ import path from "node:path";
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { PICKER_TEAMS, getTeam } from "../utils/teams";
-import ro from "../messages/ro.json";
+import ro from "../messages/ro";
 import type { Game } from "../types";
 
 // The store is a real file on disk, shared by every worker hitting this

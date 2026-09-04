@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import ro from "../messages/ro.json";
-import en from "../messages/en.json";
+import ro from "../messages/ro";
+import en from "../messages/en";
 
 const VIEWPORTS = [
   { label: "375", width: 375, height: 1200 },

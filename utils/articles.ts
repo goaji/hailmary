@@ -13,8 +13,8 @@ export { resolveServedLocale } from "@/utils/content";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
 import { TAG_IDS } from "@/utils/tags";
 import { TEAMS_BY_SLUG } from "@/utils/teams";
-import roMessages from "@/messages/ro.json";
-import enMessages from "@/messages/en.json";
+import roMessages from "@/messages/ro";
+import enMessages from "@/messages/en";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "articles");
 

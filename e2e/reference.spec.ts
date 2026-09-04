@@ -1,8 +1,8 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { PICKER_TEAMS, getTeam } from "../utils/teams";
-import ro from "../messages/ro.json";
-import en from "../messages/en.json";
+import ro from "../messages/ro";
+import en from "../messages/en";
 
 // Excludes ReferenceLinks' own h2 ("Citește și" / "Read also") — this counts content sections, not every h2 on the page.
 async function sectionIds(page: Page): Promise<string[]> {

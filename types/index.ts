@@ -1,8 +1,9 @@
 import type { Locale } from "@/i18n";
 import type { Conference, Division, Team } from "@/utils/teams";
 import type { Tag } from "@/utils/tags";
+import type { Game, GameStatus } from "@hailmary/shared";
 
-export type { Locale, Team, Conference, Division, Tag };
+export type { Locale, Team, Conference, Division, Tag, Game, GameStatus };
 
 // Categories for ARTICLES — six to eight ids covering the mockup's four card
 // chips (transferuri, accidentari, analiza, antrenori) plus Draft, Program and Regulament. 
@@ -52,22 +53,6 @@ export type Article = ArticleFrontmatter & {
   servedLocale: Locale;
   /** Estimated minutes to read the body, computed at parse time. */
   readingTimeMinutes: number;
-};
-
-export type GameStatus = "scheduled" | "live" | "halftime" | "final" | "postponed";
-
-export type Game = {
-  id: string;
-  homeTeamId: string;
-  awayTeamId: string;
-  /** ISO datetime string */
-  kickoff: string;
-  week: number;
-  status: GameStatus;
-  homeScore?: number;
-  awayScore?: number;
-  quarter?: number;
-  clock?: string;
 };
 
 // Categories for GLOSSARY terms,

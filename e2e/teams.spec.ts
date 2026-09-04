@@ -1,7 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { CONFERENCES, DIVISIONS, PICKER_TEAMS, TEAMS, getTeam } from "../utils/teams";
-import ro from "../messages/ro.json";
+import ro from "../messages/ro";
 
 // --accent-1 inherits from the TeamColorProvider wrapper to every
 // descendant, so reading it off the header landmark (already reachable by
