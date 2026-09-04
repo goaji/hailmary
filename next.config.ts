@@ -3,8 +3,6 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
-  // @hailmary/shared ships raw .ts — node_modules isn't transpiled by default.
-  transpilePackages: ["@hailmary/shared"],
   images: {
     // next/image's optimizer 400s on any .svg src unless this is set. All
     // SVGs served here are our own (logos, placeholders) — none are
