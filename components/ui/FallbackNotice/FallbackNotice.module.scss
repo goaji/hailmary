@@ -1,4 +1,5 @@
 @use "variables" as v;
+@use "mixins" as mix;
 
 .notice {
   max-width: 960px; // same reading width as article/glosar/istorie/regulament content
@@ -9,4 +10,5 @@
   padding: v.space(12) v.space(16);
   color: v.$c-text-dim;
   font-size: v.$fs-meta;
+  @include mix.panel-shift-align;
 }

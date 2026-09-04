@@ -9,6 +9,7 @@
   max-width: 960px;
   margin: 0 auto;
   padding: 40px 32px; // bespoke to the reading column, not the spacing scale
+  @include mix.panel-shift-align;
 }
 
 .title {

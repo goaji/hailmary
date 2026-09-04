@@ -38,6 +38,16 @@ $breakpoints: (
   border: 0;
 }
 
+// Keeps the reading column's left edge pinned to the header's, instead of drifting past it as <main> narrows for the open panel.
+@mixin panel-shift-align {
+  @include mq(panel) {
+    :global([data-panel-open]) & {
+      margin-left: max(0px, calc((100vw - 1200px) / 2));
+      margin-right: 0;
+    }
+  }
+}
+
 // Single-line ellipsis at 1 (the common case); -webkit-line-clamp above.
 @mixin truncate($lines: 1) {
   @if $lines == 1 {

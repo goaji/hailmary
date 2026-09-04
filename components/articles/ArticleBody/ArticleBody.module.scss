@@ -5,6 +5,7 @@
 .body {
   max-width: 960px;
   margin: 0 auto;
+  @include mix.panel-shift-align;
   padding: 0 32px 40px 32px; // bespoke to the reading column, not the spacing scale
 }
 
