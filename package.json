@@ -10,8 +10,6 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "test:e2e": "playwright test",
-    "test:smoke": "playwright test --config=playwright.smoke.config.ts",
     "test:unit": "vitest run"
   },
   "dependencies": {
@@ -29,8 +27,6 @@
     "zod": "^4.5.4"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
-    "@playwright/test": "^1.62.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

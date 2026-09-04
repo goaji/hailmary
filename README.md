@@ -28,9 +28,14 @@ Node version: see `.nvmrc`.
 
 ```bash
 npm run test:unit   # Vitest — pure logic in utils/
-npm run test:e2e    # Playwright — behavior, accessibility (axe), visual regression
 npm run lint
 ```
+
+End-to-end, accessibility (axe), and visual-regression tests live in a
+separate repo, [hailmary-e2e](https://github.com/goaji/hailmary-e2e) — it
+runs against a deployed URL (a Vercel preview or `hailmary.ro`), not local
+dev, since it has no access to this repo's app source. See
+[E2E-SPLIT-PLAN.md](E2E-SPLIT-PLAN.md) for why.
 
 ## Project docs
 
