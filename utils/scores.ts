@@ -2,7 +2,7 @@ import "server-only";
 
 import type { Game, GameStatus } from "@/types";
 
-// Docs-derived shape (nfl.balldontlie.io), not yet checked against a live payload — re-verify field names and `date`'s time granularity once there's a real key.
+// Verified against a live nfl.balldontlie.io payload (Sep 2026) — envelope, field names, and full ISO `date` all confirmed.
 export type RawTeam = {
   id: number;
   abbreviation: string;
@@ -130,7 +130,7 @@ function utcDateString(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
-// Today+yesterday (UTC) in one call, not a "current week" call — no season calendar to compute that from, and this covers a late US kickoff crossing UTC midnight. Envelope shape ({ data: [...] }) is also unverified — re-check with a real key.
+// Today+yesterday (UTC) in one call, not a "current week" call — no season calendar to compute that from, and this covers a late US kickoff crossing UTC midnight.
 export async function fetchLatestGames(
   apiKey: string,
   now: Date = new Date(),

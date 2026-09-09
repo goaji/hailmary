@@ -69,7 +69,7 @@ export default async function TeamDetailPage({
   }
 
   const articles = getArticlesByTeam(team.slug, locale);
-  const games = getSchedule().games;
+  const { games, isLive } = getSchedule();
   const { previous, next } = getAdjacentTeams(team.slug);
 
   const tBreadcrumb = await getTranslations({ locale, namespace: "breadcrumb" });
@@ -103,7 +103,7 @@ export default async function TeamDetailPage({
       <TeamIdentityBand team={team} />
       <div className={styles.sections}>
         <TeamNews teamName={team.name} articles={articles} />
-        <TeamSchedule team={team} games={games} />
+        <TeamSchedule team={team} games={games} isLive={isLive} />
         <TeamBlurb />
         <TeamPrevNext previous={previous} next={next} />
       </div>

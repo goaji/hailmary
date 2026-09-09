@@ -2,8 +2,10 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Game, Team } from "@/types";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { LinkList } from "@/components/ui/LinkList/LinkList";
+import { LiveScoreStatus } from "@/components/schedule/LiveScoreStatus/LiveScoreStatus";
 import { getTeam } from "@/utils/teams";
 import { formatKickoff } from "@/utils/formatKickoff";
+import { hasLiveGame } from "@/utils/liveGames";
 import styles from "./TeamSchedule.module.scss";
 
 const HEADING_ID = "team-schedule-heading";
@@ -11,12 +13,14 @@ const HEADING_ID = "team-schedule-heading";
 type TeamScheduleProps = {
   team: Team;
   games: Game[];
+  /** Whether `games` is real (non-fixture) data — see AGENTS.md's fallback-disclosure rule. */
+  isLive: boolean;
 };
 
 // The fixture only covers a handful of teams (task 4's placeholder data,
 // not a live feed) — most of the 32 will have zero games here too, same
 // honest-empty-state contract as TeamNews.
-export async function TeamSchedule({ team, games }: TeamScheduleProps) {
+export async function TeamSchedule({ team, games, isLive }: TeamScheduleProps) {
   const locale = await getLocale();
   const t = await getTranslations("teamDetail.schedule");
 
@@ -27,6 +31,7 @@ export async function TeamSchedule({ team, games }: TeamScheduleProps) {
   return (
     <section className={styles.schedule} aria-labelledby={HEADING_ID}>
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
+      <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(teamGames)} />
       {teamGames.length > 0 ? (
         <LinkList
           variant="value"

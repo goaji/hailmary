@@ -50,7 +50,8 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const { articles: allArticles, servedLocale } = getAllArticlesWithFallback(locale);
   const isFallback = servedLocale !== locale;
   const featured = selectFeatured(allArticles);
-  const games = selectUpcomingGames(getSchedule().games, SIDEBAR_GAME_COUNT);
+  const { games: allGames, isLive } = getSchedule();
+  const games = selectUpcomingGames(allGames, SIDEBAR_GAME_COUNT);
 
   const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(
     0,
@@ -70,7 +71,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
           <NewsGrid articles={gridArticles} lang={isFallback ? servedLocale : undefined} />
         </div>
         <div className={styles.sidebarColumn}>
-          <Sidebar games={games} />
+          <Sidebar games={games} isLive={isLive} />
         </div>
       </div>
     </>
