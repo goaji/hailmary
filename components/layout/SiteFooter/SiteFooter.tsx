@@ -11,6 +11,9 @@ export async function SiteFooter() {
   return (
     <footer className={styles.footer}>
       <p>{t("copyright", { year })}</p>
+      <p className={styles.contact}>
+        Email: <a href="mailto:contact@hailmary.ro" className={styles.contactLink}>contact@hailmary.ro</a>
+      </p>
     </footer>
   );
 }

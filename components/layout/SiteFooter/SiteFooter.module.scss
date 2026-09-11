@@ -1,6 +1,12 @@
 @use "variables" as v;
+@use "mixins" as mix;
 
 .footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: v.space(8);
   background: v.$c-header;
   border-top: 1px solid v.$c-border;
   max-width: 1200px; // same content-width cap as SiteHeader and the page body
@@ -8,4 +14,26 @@
   padding: v.space(32);
   color: v.$c-text-muted;
   font-size: v.$fs-ui;
+
+  p {
+    margin: 0;
+  }
+}
+
+.contact {
+  color: v.$c-text-muted;
+}
+
+.contactLink {
+  color: var(--accent-1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
 }
