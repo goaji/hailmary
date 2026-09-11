@@ -98,7 +98,7 @@ utils/
 messages/
   ro.json en.json       # all UI strings
 content/
-  articles/ro/*.mdx articles/en/*.mdx     # en/ holds reference content only in v1
+  articles/ro/<year>/<month>/*.mdx        # nested by publishedAt; en/ unused — news is ro-only in v1
   glossary/ro/*.mdx glossary/en/*.mdx
 styles/
   _variables.scss _mixins.scss globals.scss

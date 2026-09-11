@@ -3,7 +3,14 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { z } from "zod";
-import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "./content";
+import {
+  contentFilePath,
+  findMdxFilePath,
+  listMdxSlugs,
+  listMdxSlugsRecursive,
+  parseFrontmatter,
+  resolveServedLocale,
+} from "./content";
 
 describe("contentFilePath", () => {
   it("joins baseDir, locale and slug into a .mdx path", () => {
@@ -36,6 +43,65 @@ describe("listMdxSlugs", () => {
 
   it("returns an empty array when the locale directory doesn't exist", () => {
     expect(listMdxSlugs(tmpDir, "en")).toEqual([]);
+  });
+});
+
+describe("listMdxSlugsRecursive", () => {
+  let tmpDir: string;
+
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "content-test-"));
+  });
+
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  it("returns slugs for .mdx files nested at any depth under baseDir/locale", () => {
+    const augDir = path.join(tmpDir, "ro", "2026", "08");
+    const sepDir = path.join(tmpDir, "ro", "2026", "09");
+    fs.mkdirSync(augDir, { recursive: true });
+    fs.mkdirSync(sepDir, { recursive: true });
+    fs.writeFileSync(path.join(augDir, "a.mdx"), "");
+    fs.writeFileSync(path.join(sepDir, "b.mdx"), "");
+    fs.writeFileSync(path.join(sepDir, "notes.txt"), "");
+
+    expect(listMdxSlugsRecursive(tmpDir, "ro").sort()).toEqual(["a", "b"]);
+  });
+
+  it("returns an empty array when the locale directory doesn't exist", () => {
+    expect(listMdxSlugsRecursive(tmpDir, "en")).toEqual([]);
+  });
+});
+
+describe("findMdxFilePath", () => {
+  let tmpDir: string;
+
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "content-test-"));
+  });
+
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
+  });
+
+  it("finds a file nested at any depth under baseDir/locale", () => {
+    const nestedDir = path.join(tmpDir, "ro", "2026", "08");
+    fs.mkdirSync(nestedDir, { recursive: true });
+    const filePath = path.join(nestedDir, "un-articol.mdx");
+    fs.writeFileSync(filePath, "");
+
+    expect(findMdxFilePath(tmpDir, "ro", "un-articol")).toBe(filePath);
+  });
+
+  it("returns undefined when no file matches the slug", () => {
+    fs.mkdirSync(path.join(tmpDir, "ro"), { recursive: true });
+
+    expect(findMdxFilePath(tmpDir, "ro", "nu-exista")).toBeUndefined();
+  });
+
+  it("returns undefined when the locale directory doesn't exist", () => {
+    expect(findMdxFilePath(tmpDir, "en", "un-articol")).toBeUndefined();
   });
 });
 

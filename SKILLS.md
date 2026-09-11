@@ -6,7 +6,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 
 ## Add a new article
 
-1. Create `content/articles/ro/<slug>.mdx`. Slug is lowercase, hyphenated, Romanian, no diacritics (`mahomes-record-sezon`) — and shared across locales, so an English twin reuses the same slug.
+1. Create `content/articles/ro/<year>/<month>/<slug>.mdx`, where `<year>`/`<month>` (zero-padded, e.g. `08`) come from the article's `publishedAt`. Slug is lowercase, hyphenated, Romanian, no diacritics (`mahomes-record-sezon`) — and shared across locales, so an English twin reuses the same slug. Slugs must stay unique across the whole locale tree, not just within a folder — the build fails otherwise.
 2. Frontmatter — all fields required except `teams`, `featured`, `kicker`, and `image`:
    ```yaml
    ---

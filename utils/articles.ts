@@ -8,7 +8,7 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@/types";
 import type { Article, ArticleFrontmatter, ArticleImage, Locale } from "@/types";
-import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "@/utils/content";
+import { findMdxFilePath, listMdxSlugsRecursive, parseFrontmatter, resolveServedLocale } from "@/utils/content";
 export { resolveServedLocale } from "@/utils/content";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
 import { TAG_IDS } from "@/utils/tags";
@@ -174,8 +174,10 @@ export function estimateReadingTimeMinutes(content: string, wordsPerMinute = 200
   return Math.max(1, Math.round(wordCount / wordsPerMinute));
 }
 
-function articleFilePath(locale: Locale, slug: string): string {
-  return contentFilePath(CONTENT_DIR, locale, slug);
+// Articles are stored nested under `<year>/<month>/` rather than flat, so
+// the file has to be located by slug rather than reconstructed from it.
+function articleFilePath(locale: Locale, slug: string): string | undefined {
+  return findMdxFilePath(CONTENT_DIR, locale, slug);
 }
 
 /** Fails the build if an article's `teams` frontmatter names a slug that isn't a real team — the only place a dangling team reference is caught. */
@@ -189,6 +191,9 @@ export function validateTeamSlugs(teams: string[], filePath: string): void {
 
 function readArticleFile(locale: Locale, slug: string): Article {
   const filePath = articleFilePath(locale, slug);
+  if (!filePath) {
+    throw new Error(`Article not found: content/articles/${locale}/**/${slug}.mdx`);
+  }
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   const frontmatter = parseArticleFrontmatter(data, filePath);
@@ -207,8 +212,21 @@ function readArticleFile(locale: Locale, slug: string): Article {
   };
 }
 
+/** Throws naming both the slug and locale if the same slug appears under more than one year/month folder — a leftover file from a move, not a valid state. */
+export function validateUniqueSlugs(slugs: string[], locale: Locale): void {
+  const seen = new Set<string>();
+  for (const slug of slugs) {
+    if (seen.has(slug)) {
+      throw new Error(`Duplicate article slug "${slug}" under content/articles/${locale}`);
+    }
+    seen.add(slug);
+  }
+}
+
 export const getAllArticles = cache((locale: Locale): Article[] => {
-  const articles = listMdxSlugs(CONTENT_DIR, locale).map((slug) => readArticleFile(locale, slug));
+  const slugs = listMdxSlugsRecursive(CONTENT_DIR, locale);
+  validateUniqueSlugs(slugs, locale);
+  const articles = slugs.map((slug) => readArticleFile(locale, slug));
   return sortByPublishedAtDesc(articles);
 });
 
@@ -246,9 +264,7 @@ export const getAllArticlesWithFallback = cache(
  * duplicate the `ro` fallback under an `en` URL.
  */
 export const getAvailableLocales = cache((slug: string): Locale[] => {
-  return routing.locales.filter((candidate) =>
-    fs.existsSync(articleFilePath(candidate, slug)),
-  );
+  return routing.locales.filter((candidate) => articleFilePath(candidate, slug) !== undefined);
 });
 
 export const getArticleBySlug = cache(

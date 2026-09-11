@@ -10,6 +10,7 @@ import {
   selectRelatedArticles,
   sortByPublishedAtDesc,
   validateTeamSlugs,
+  validateUniqueSlugs,
 } from "./articles";
 
 const validFrontmatter = {
@@ -85,6 +86,18 @@ describe("validateTeamSlugs", () => {
     expect(() =>
       validateTeamSlugs(["not-a-real-team"], "content/articles/ro/x.mdx"),
     ).toThrow('content/articles/ro/x.mdx: teams "not-a-real-team"');
+  });
+});
+
+describe("validateUniqueSlugs", () => {
+  it("accepts a list with no repeated slugs", () => {
+    expect(() => validateUniqueSlugs(["a", "b"], "ro")).not.toThrow();
+  });
+
+  it("rejects a slug appearing under more than one year/month folder", () => {
+    expect(() => validateUniqueSlugs(["a", "b", "a"], "ro")).toThrow(
+      'Duplicate article slug "a" under content/articles/ro',
+    );
   });
 });
 
