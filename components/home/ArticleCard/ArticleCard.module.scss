@@ -32,6 +32,14 @@
     width: 160px;
     align-self: center;
   }
+
+  :global([data-hide-image-mobile]) & {
+    display: none;
+
+    @include mix.mq(md) {
+      display: block;
+    }
+  }
 }
 
 .meta {

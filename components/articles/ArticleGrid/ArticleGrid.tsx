@@ -33,7 +33,11 @@ export function ArticleGrid({
     <section className={sectionClass} aria-labelledby={headingId} lang={lang}>
       <SectionHeading id={headingId}>{heading}</SectionHeading>
       {articles.length > 0 ? (
-        <div className={gridClass}>
+        <div
+          className={gridClass}
+          // Read by ArticleCard.module.scss to hide the cover image below md.
+          data-hide-image-mobile={variant === "news" ? "" : undefined}
+        >
           {articles.map((article, index) => (
             <ArticleCard key={article.slug} article={article} priority={index < priorityCount} />
           ))}
