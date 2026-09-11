@@ -30,12 +30,12 @@
 
 .imageWrap {
   position: relative;
-  height: 200px; // mobile, bespoke to this component
+  aspect-ratio: 16 / 9; // mobile — matches the site's one editorial cover-photo ratio
   order: -1; // image above the headline on mobile; h1 stays first in the DOM for a11y/SEO regardless
 
   @include mix.mq(md) {
     flex: 1;
-    height: auto;
+    aspect-ratio: auto; // desktop stretches to match the content column's row height instead
     order: 0;
   }
 }

@@ -12,7 +12,7 @@
   // grid rather than adding list-only markup to ArticleCard itself.
   :global([data-view="list"]) & {
     display: grid;
-    grid-template-columns: 96px 1fr;
+    grid-template-columns: 160px 1fr;
     grid-template-rows: auto auto 1fr;
     column-gap: v.space(12);
     row-gap: v.space(4);
@@ -22,19 +22,15 @@
 .imageWrap {
   position: relative;
   width: 100%;
-  height: 180px; // mobile, bespoke to this component
+  aspect-ratio: 16 / 9; // the site's one editorial cover-photo ratio, everywhere an article image appears
   border-radius: 3px;
   overflow: hidden;
-
-  @include mix.mq(md) {
-    height: 150px;
-  }
 
   :global([data-view="list"]) & {
     grid-column: 1;
     grid-row: 1 / span 3;
-    width: 96px;
-    height: 96px;
+    width: 160px;
+    align-self: center;
   }
 }
 
