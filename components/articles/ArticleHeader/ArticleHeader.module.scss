@@ -32,20 +32,3 @@
 .byline {
   margin-bottom: v.space(32);
 }
-
-.figure {
-  margin: 0;
-}
-
-.imageWrap {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.caption {
-  margin-top: v.space(8);
-  font-size: 12px; // bespoke to this component, per the caption spec
-  color: v.$c-text-muted;
-}

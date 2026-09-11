@@ -1,5 +1,4 @@
 import type { Article } from "@/types";
-import { ArticleImage } from "@/components/ui/ArticleImage/ArticleImage";
 import { Byline } from "@/components/ui/Byline/Byline";
 import { Tag } from "@/components/ui/Tag/Tag";
 import styles from "./ArticleHeader.module.scss";
@@ -21,15 +20,6 @@ export function ArticleHeader({ article }: ArticleHeaderProps) {
           readingTimeMinutes={article.readingTimeMinutes}
         />
       </div>
-
-      <figure className={styles.figure}>
-        <div className={styles.imageWrap}>
-          <ArticleImage image={article.image} fill preload sizes="(min-width: 960px) 896px, 100vw" />
-        </div>
-        {article.image.caption ? (
-          <figcaption className={styles.caption}>{article.image.caption}</figcaption>
-        ) : null}
-      </figure>
     </header>
   );
 }
