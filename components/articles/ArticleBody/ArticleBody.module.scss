@@ -23,16 +23,18 @@
   // (regulament TOC links, seeAlso deep links) — without this, the sticky
   // header covers the heading on arrival.
   scroll-margin-top: calc(var(--header-height, 71px) + #{v.space(16)});
-  font-family: v.$font-display;
+  font-family: v.$font-body;
+  font-weight: 700;
   font-size: v.$fs-h2;
-  line-height: 1.15;
+  line-height: 1.25;
 }
 
 .h3 {
   margin: v.space(20) 0 v.space(8) 0;
-  font-family: v.$font-display;
+  font-family: v.$font-body;
+  font-weight: 700;
   font-size: v.$fs-h3;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .list {
