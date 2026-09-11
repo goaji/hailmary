@@ -16,6 +16,7 @@ export const CATEGORY_IDS = [
   "draft",
   "program",
   "regulament",
+  "meciuri"
 ] as const;
 
 export type Category = (typeof CATEGORY_IDS)[number];

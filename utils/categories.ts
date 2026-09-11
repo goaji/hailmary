@@ -19,4 +19,5 @@ export const CATEGORIES: Record<Category, CategoryDefinition> = {
   draft: { id: "draft", messageKey: "draft", accent: 2 },
   program: { id: "program", messageKey: "program", accent: 1 },
   regulament: { id: "regulament", messageKey: "regulament", accent: 2 },
+  meciuri: { id: "meciuri", messageKey: "meciuri", accent: 1 },
 };
