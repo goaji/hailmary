@@ -27,7 +27,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "meta" });
 
   return {
-    title: featured?.title ?? t("title"),
+    title: t("title"),
     description: featured?.excerpt ?? t("description"),
     // og:image comes from opengraph-image.tsx (the site-wide fallback
     // template), not the featured article's own cover photo.
