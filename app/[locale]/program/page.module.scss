@@ -16,3 +16,9 @@
   color: v.$c-text-muted;
   font-size: v.$fs-meta;
 }
+
+.empty {
+  margin: v.space(16) 0 0;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

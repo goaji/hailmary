@@ -70,20 +70,26 @@ export default async function SchedulePage({ params }: PageProps<"/[locale]/prog
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
 
-      <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />
+      {games.length > 0 ? (
+        <>
+          <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />
 
-      <ScheduleWeekSwitcher
-        weeks={weeks}
-        defaultWeek={defaultWeek}
-        weekNavLabel={t("weekNavLabel")}
-        weekLabels={weekLabels}
-        tables={tables}
-      />
+          <ScheduleWeekSwitcher
+            weeks={weeks}
+            defaultWeek={defaultWeek}
+            weekNavLabel={t("weekNavLabel")}
+            weekLabels={weekLabels}
+            tables={tables}
+          />
 
-      {updatedAt && (
-        <p className={styles.updatedAt}>
-          {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
-        </p>
+          {updatedAt && (
+            <p className={styles.updatedAt}>
+              {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
+            </p>
+          )}
+        </>
+      ) : (
+        <p className={styles.empty}>{t("empty")}</p>
       )}
     </div>
   );

@@ -2,13 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Game } from "@/types";
-import {
-  getAvailableWeeks,
-  getCurrentWeek,
-  getSchedule,
-  getScheduleFixture,
-  selectUpcomingGames,
-} from "./schedule";
+import { getAvailableWeeks, getCurrentWeek, getSchedule, selectUpcomingGames } from "./schedule";
 
 // Same default path as utils/store.ts, duplicated since only this test needs to reach past readScores(storePath?) to exercise getSchedule()'s own default.
 const STORE_PATH = path.join(process.cwd(), ".data", "scores.json");
@@ -105,9 +99,9 @@ describe("selectUpcomingGames", () => {
 });
 
 describe("getSchedule", () => {
-  it("falls back to the fixture when the store is empty", () => {
+  it("returns an empty schedule when the store is empty", () => {
     const result = getSchedule();
-    expect(result).toEqual({ games: getScheduleFixture(), isLive: false, updatedAt: null });
+    expect(result).toEqual({ games: [], isLive: false, updatedAt: null });
   });
 
   it("returns store games and isLive:true once the store has data", () => {

@@ -1,63 +1,20 @@
 import "server-only";
 
-import fs from "node:fs";
-import path from "node:path";
 import type { Game } from "@/types";
 import { readScores } from "@/utils/store";
 
-const SCHEDULE_FILE = path.join(process.cwd(), "utils", "schedule.ts");
-
-// FIXTURE DATA — not a real feed. No MDX, no API; a placeholder until
-// live score data is wired up (see AGENTS.md's "Consume live score data"
-// recipe, which owns the real utils/scores.ts implementation).
-const SCHEDULE_FIXTURE: Game[] = [
-  {
-    id: "2026-w2-sf-bal",
-    homeTeamId: "bal",
-    awayTeamId: "sf",
-    kickoff: "2026-09-13T17:00:00Z",
-    week: 2,
-    status: "scheduled",
-  },
-  {
-    id: "2026-w2-det-gb",
-    homeTeamId: "gb",
-    awayTeamId: "det",
-    kickoff: "2026-09-13T20:25:00Z",
-    week: 2,
-    status: "scheduled",
-  },
-  {
-    id: "2026-w2-buf-mia",
-    homeTeamId: "mia",
-    awayTeamId: "buf",
-    kickoff: "2026-09-15T00:15:00Z",
-    week: 2,
-    status: "scheduled",
-  },
-];
-
-export function getScheduleFixture(): Game[] {
-  return SCHEDULE_FIXTURE;
-}
-
-/** mtime of this file — the fixture's own freshness signal for the sitemap when the live store is empty (see getSchedule below). */
-export function getScheduleFixtureLastModified(): Date {
-  return fs.statSync(SCHEDULE_FILE).mtime;
-}
-
 export type ScheduleResult = {
   games: Game[];
-  /** false when the store was empty and this is the fixture instead. */
+  /** false when the store is empty — no real schedule data synced yet. */
   isLive: boolean;
   updatedAt: string | null;
 };
 
-/** Reads the live score store, falling back to the fixture when it's empty. */
+/** Reads the live score store. Empty until the cron route has synced at least once. */
 export function getSchedule(): ScheduleResult {
   const store = readScores();
   if (store.games.length === 0) {
-    return { games: SCHEDULE_FIXTURE, isLive: false, updatedAt: null };
+    return { games: [], isLive: false, updatedAt: null };
   }
   return { games: store.games, isLive: true, updatedAt: store.updatedAt };
 }

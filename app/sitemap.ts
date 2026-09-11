@@ -4,7 +4,7 @@ import { getLanguageAlternates, routing, type Locale } from "@/i18n";
 import { getAllArticles, getAvailableLocales } from "@/utils/articles";
 import { getAllTerms, termFilePath } from "@/utils/glossary";
 import { getReferenceLastModified, getReferenceLocales } from "@/utils/reference";
-import { getSchedule, getScheduleFixtureLastModified } from "@/utils/schedule";
+import { getSchedule } from "@/utils/schedule";
 import { latestMtime, resolveLastModified } from "@/utils/sitemap";
 import { SITE_URL } from "@/utils/site";
 import { TEAMS } from "@/utils/teams";
@@ -93,11 +93,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entries.push(entry("/echipe", locale, routing.locales, teamsLastModified));
   }
 
-  // /program: the live store's updatedAt when synced, else the fixture file's own mtime.
-  const scheduleLastModified = resolveLastModified(
-    getSchedule().updatedAt,
-    getScheduleFixtureLastModified(),
-  );
+  // /program: the live store's updatedAt when synced, else the epoch (no real signal yet).
+  const scheduleLastModified = resolveLastModified(getSchedule().updatedAt, new Date(0));
   for (const locale of routing.locales) {
     entries.push(entry("/program", locale, routing.locales, scheduleLastModified));
   }

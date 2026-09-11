@@ -6,7 +6,7 @@ import { useLiveScores } from "@/components/schedule/useLiveScores";
 import styles from "./LiveScoreStatus.module.scss";
 
 type LiveScoreStatusProps = {
-  /** Whether the server already served real (non-fixture) data. */
+  /** Whether the server already served real synced data. */
   initialIsLive: boolean;
   /** Whether any game on this page was live/halftime at render time — gates whether it's worth polling for errors/staleness at all. */
   hasLiveGames: boolean;
@@ -15,9 +15,7 @@ type LiveScoreStatusProps = {
 const STALE_THRESHOLD_MS = 90_000;
 const STALE_CHECK_INTERVAL_MS = 10_000;
 
-// Same notice as the server-rendered empty-store case (step 2), reused
-// here for two more cases a page load alone can't see: the client poll
-// failing, or the store going stale mid-session.
+// Catches what a page load alone can't see: the client poll failing, or the store going stale mid-session.
 export function LiveScoreStatus({ initialIsLive, hasLiveGames }: LiveScoreStatusProps) {
   const t = useTranslations("schedulePage");
   const { data, error } = useLiveScores(hasLiveGames);

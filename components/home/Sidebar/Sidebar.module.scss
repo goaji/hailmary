@@ -17,3 +17,9 @@
   // category Tag chips. Verified 4.5:1 for all 32 teams against this panel.
   color: var(--accent-2);
 }
+
+.empty {
+  margin: 0;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

@@ -13,13 +13,11 @@ const HEADING_ID = "team-schedule-heading";
 type TeamScheduleProps = {
   team: Team;
   games: Game[];
-  /** Whether `games` is real (non-fixture) data — see AGENTS.md's fallback-disclosure rule. */
+  /** Whether the schedule store has synced real data. */
   isLive: boolean;
 };
 
-// The fixture only covers a handful of teams (task 4's placeholder data,
-// not a live feed) — most of the 32 will have zero games here too, same
-// honest-empty-state contract as TeamNews.
+// Most teams have zero games until the schedule store syncs — same honest-empty-state contract as TeamNews.
 export async function TeamSchedule({ team, games, isLive }: TeamScheduleProps) {
   const locale = await getLocale();
   const t = await getTranslations("teamDetail.schedule");
@@ -31,20 +29,22 @@ export async function TeamSchedule({ team, games, isLive }: TeamScheduleProps) {
   return (
     <section className={styles.schedule} aria-labelledby={HEADING_ID}>
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
-      <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(teamGames)} />
       {teamGames.length > 0 ? (
-        <LinkList
-          variant="value"
-          items={teamGames.map((game) => {
-            const isHome = game.homeTeamId === team.slug;
-            const opponent = getTeam(isHome ? game.awayTeamId : game.homeTeamId);
+        <>
+          <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(teamGames)} />
+          <LinkList
+            variant="value"
+            items={teamGames.map((game) => {
+              const isHome = game.homeTeamId === team.slug;
+              const opponent = getTeam(isHome ? game.awayTeamId : game.homeTeamId);
 
-            return {
-              label: `${isHome ? "vs" : "@"} ${opponent.shortName}`,
-              value: formatKickoff(game.kickoff, locale),
-            };
-          })}
-        />
+              return {
+                label: `${isHome ? "vs" : "@"} ${opponent.shortName}`,
+                value: formatKickoff(game.kickoff, locale),
+              };
+            })}
+          />
+        </>
       ) : (
         <p className={styles.empty}>{t("empty", { team: team.name })}</p>
       )}

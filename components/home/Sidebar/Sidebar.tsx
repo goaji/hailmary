@@ -13,7 +13,7 @@ const SCHEDULE_HEADING_ID = "schedule-heading";
 
 type SidebarProps = {
   games: Game[];
-  /** Whether `games` is real (non-fixture) data — see AGENTS.md's fallback-disclosure rule. */
+  /** Whether the schedule store has synced real data. */
   isLive: boolean;
 };
 
@@ -46,14 +46,20 @@ export async function Sidebar({ games, isLive }: SidebarProps) {
           <h2 id={SCHEDULE_HEADING_ID} className={styles.panelHeading}>
             {t("schedule.heading")}
           </h2>
-          <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />
-          <LinkList
-            variant="value"
-            items={games.map((game) => ({
-              label: `${getTeam(game.awayTeamId).shortName} @ ${getTeam(game.homeTeamId).shortName}`,
-              value: formatKickoff(game.kickoff, locale),
-            }))}
-          />
+          {games.length > 0 ? (
+            <>
+              <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />
+              <LinkList
+                variant="value"
+                items={games.map((game) => ({
+                  label: `${getTeam(game.awayTeamId).shortName} @ ${getTeam(game.homeTeamId).shortName}`,
+                  value: formatKickoff(game.kickoff, locale),
+                }))}
+              />
+            </>
+          ) : (
+            <p className={styles.empty}>{t("schedule.empty")}</p>
+          )}
         </Card>
       </section>
     </div>
