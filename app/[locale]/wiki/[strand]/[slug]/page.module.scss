@@ -1,0 +1,44 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  max-width: 1200px; // same content-width cap as /regulament
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(32);
+  margin-top: v.space(32);
+
+  @include mix.mq(lg) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: v.space(48);
+  }
+}
+
+.content {
+  min-width: 0;
+  width: 100%;
+}
+
+.intro {
+  margin-bottom: v.space(32);
+}
+
+.era {
+  margin-bottom: v.space(48);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

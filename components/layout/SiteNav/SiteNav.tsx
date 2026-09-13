@@ -6,6 +6,7 @@ import { Link, usePathname } from "@/i18n";
 import styles from "./SiteNav.module.scss";
 
 const NAV_ITEMS = [
+  { key: "wiki", href: "/wiki" },
   { key: "news", href: "/stiri" },
   { key: "teams", href: "/echipe" },
   { key: "rules", href: "/regulament" },

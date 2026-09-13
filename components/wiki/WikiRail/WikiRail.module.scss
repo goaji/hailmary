@@ -1,0 +1,252 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.desktopRail {
+  display: none;
+
+  @include mix.mq(lg) {
+    display: block;
+    position: sticky;
+    // Sticks just below the sticky header, matching RuleToc.
+    top: calc(var(--header-height, 71px) + #{v.space(32)});
+    flex: 0 0 220px;
+    // Flex items default to min-width: auto, which lets long unwrapped
+    // content (a strand/page name) burst past the 220px flex-basis and
+    // widen .layout past the viewport — this is what forces the page-wide
+    // horizontal scrollbar. min-width: 0 lets the column actually hold to
+    // 220px and wrap its own content instead.
+    min-width: 0;
+    width: 220px;
+    max-height: calc(100vh - var(--header-height, 71px) - #{v.space(64)});
+    overflow-y: auto;
+    // Setting only overflow-y forces overflow-x to compute as "auto" too
+    // (CSS Overflow spec) — so any slight overflow (a long word, or the
+    // cumulative left-padding of strand > page > section nesting) drew its
+    // own horizontal scrollbar right here. Pin it closed and let long text
+    // wrap instead (see word-break below).
+    overflow-x: hidden;
+  }
+}
+
+.mobileRail {
+  margin-bottom: v.space(32);
+  border: 1px solid v.$c-border;
+  border-radius: 3px;
+  padding: v.space(16);
+
+  @include mix.mq(lg) {
+    display: none;
+  }
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: v.$c-text;
+  list-style: none; // Firefox marker
+  margin-bottom: v.space(12);
+
+  &::-webkit-details-marker {
+    display: none; // Safari/Chrome marker
+  }
+
+  &::marker {
+    content: "";
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid v.$c-text-muted;
+  border-bottom: 2px solid v.$c-text-muted;
+  transform: rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.mobileRail[open] .chevron {
+  transform: rotate(-135deg);
+}
+
+.strandList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: v.space(16);
+}
+
+.strandItem {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(8);
+}
+
+// A toggle, not a link — clicking a strand only expands/collapses its page
+// list; it never navigates. display: block (not flex) so long names wrap
+// in normal block flow instead of forcing the row wider than the rail —
+// the chevron is positioned absolutely rather than as a flex sibling.
+.strandButton {
+  display: block;
+  position: relative;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0 v.space(20) 0 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  overflow-wrap: break-word;
+  font-size: v.$fs-meta;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: v.$c-text-muted;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+
+  // The strand containing the page you're currently reading — independent
+  // of whether it happens to be expanded right now.
+  &.current {
+    color: var(--accent-1);
+  }
+}
+
+.strandChevron {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: 0.7;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.strandButton[aria-expanded="true"] .strandChevron {
+  transform: translateY(-50%) rotate(-135deg);
+}
+
+.pageList {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 v.space(12);
+  display: flex;
+  flex-direction: column;
+  gap: v.space(4);
+  border-left: 1px solid v.$c-border;
+}
+
+.pageLink,
+.pageLinkActive {
+  display: block;
+  padding: v.space(4) 0 v.space(4) v.space(12);
+  overflow-wrap: break-word;
+  font-size: v.$fs-meta;
+  color: v.$c-text-muted;
+
+  &:hover {
+    color: v.$c-text;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.pageLinkActive {
+  color: var(--accent-1);
+  font-weight: 700;
+}
+
+// The current page's own entry, when it has subchapters to collapse —
+// same block + absolutely-positioned-chevron approach as .strandButton,
+// for the same reason (no flex, so long titles wrap instead of overflowing).
+.pageToggle {
+  display: block;
+  position: relative;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: v.space(4) v.space(20) v.space(4) v.space(12);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  overflow-wrap: break-word;
+  font-size: v.$fs-meta;
+  font-weight: 700;
+  color: var(--accent-1);
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.pageChevron {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  opacity: 0.7;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.pageToggle[aria-expanded="true"] .pageChevron {
+  transform: translateY(-50%) rotate(-135deg);
+}
+
+// The current page's in-page sections, nested one level deeper than the
+// page list itself — a "subchapter" of the current page's own rail entry.
+.sectionList {
+  list-style: none;
+  margin: v.space(4) 0 0 0;
+  padding: 0 0 0 v.space(12);
+  display: flex;
+  flex-direction: column;
+  gap: v.space(4);
+  border-left: 1px solid v.$c-border;
+}
+
+.sectionLink {
+  display: block;
+  padding: v.space(4) 0 v.space(4) v.space(12);
+  overflow-wrap: break-word;
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+
+  &:hover {
+    color: v.$c-text;
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+
+  &[aria-current="location"] {
+    color: var(--accent-1);
+    font-weight: 700;
+  }
+}

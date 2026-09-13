@@ -1,0 +1,40 @@
+@use "variables" as v;
+
+.breadcrumbs {
+  margin-bottom: v.space(16);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: v.space(8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: v.$fs-meta;
+  color: v.$c-text-muted;
+
+  li:not(:last-child)::after {
+    content: "›";
+    margin-left: v.space(8);
+    color: v.$c-text-muted;
+  }
+}
+
+.link {
+  color: v.$c-text-muted;
+
+  &:hover {
+    color: v.$c-text;
+  }
+}
+
+.strand {
+  color: v.$c-text-muted;
+}
+
+.current {
+  color: v.$c-text;
+  font-weight: 600;
+}

@@ -1,0 +1,40 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+.intro {
+  margin-top: v.space(16);
+  max-width: 60ch;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body-lg;
+}
+
+.grid {
+  margin-top: v.space(32);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(22);
+
+  @include mix.mq(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mix.mq(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.strandDescription {
+  margin: v.space(8) 0 v.space(16);
+  color: v.$c-text-muted;
+  font-size: v.$fs-meta;
+}

@@ -17,13 +17,16 @@ import { contentFilePath, parseFrontmatter } from "@/utils/content";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "reference");
 
-const referenceSectionSchema = z.object({
+// Exported so utils/wiki.ts can reuse the same section/entry validation
+// instead of a second copy — the Wiki's sectioned and timeline page shapes
+// are the same content shape as Regulament/Istorie, just in a different directory.
+export const referenceSectionSchema = z.object({
   id: z.string(),
   title: z.string(),
   level: z.union([z.literal(2), z.literal(3)]).default(2),
 });
 
-const timelineEntrySchema = z.object({
+export const timelineEntrySchema = z.object({
   year: z.string(),
   title: z.string(),
   body: z.string(),

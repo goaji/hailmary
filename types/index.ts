@@ -114,3 +114,59 @@ export type ReferencePage = {
   /** Same data as frontmatter.sections, exposed directly for the TOC. */
   sections: ReferenceSection[];
 };
+
+// The five Wiki strands (design/new structure/structure.md). Romanian
+// display names are provisional — see messages' wikiStrands namespace.
+export const WIKI_STRAND_IDS = [
+  "the-game",
+  "chess-match",
+  "the-league",
+  "the-numbers",
+  "istorie",
+] as const;
+
+export type WikiStrandId = (typeof WIKI_STRAND_IDS)[number];
+
+// Cosmetic only (ToC label, prev/next framing) — every shape stores content
+// the same way, as sections split from `##` headings or, on the timeline
+// shape, as frontmatter `entries`.
+export const WIKI_PAGE_SHAPES = ["flat", "parent", "collection"] as const;
+
+export type WikiPageShape = (typeof WIKI_PAGE_SHAPES)[number];
+
+export type WikiPageFrontmatter = {
+  title: string;
+  description: string;
+  strand: WikiStrandId;
+  /** Position in this strand's rail list and prev/next thread — unique within the strand, not global. */
+  order: number;
+  shape: WikiPageShape;
+  sections: ReferenceSection[];
+  /** Present only on the timeline shape (e.g. origins & growth of the NFL); absent on sectioned-MDX pages. */
+  entries?: TimelineEntry[];
+};
+
+export type WikiPage = {
+  slug: string;
+  frontmatter: WikiPageFrontmatter;
+  content: string;
+  /** Same data as frontmatter.sections, exposed directly for the TOC. */
+  sections: ReferenceSection[];
+};
+
+export type WikiStrandGroup = {
+  strand: WikiStrandId;
+  /** This strand's pages, sorted by frontmatter.order. */
+  pages: WikiPage[];
+};
+
+export type WikiPrevNextEntry = {
+  strand: WikiStrandId;
+  slug: string;
+  title: string;
+};
+
+export type WikiPrevNext = {
+  prev?: WikiPrevNextEntry;
+  next?: WikiPrevNextEntry;
+};
