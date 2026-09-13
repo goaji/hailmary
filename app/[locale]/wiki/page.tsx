@@ -10,9 +10,7 @@ import { getAllWikiPages, getWikiStrandTree } from "@/utils/wiki";
 import type { Locale } from "@/types";
 import styles from "./page.module.scss";
 
-// Only published for locales that actually have at least one Wiki page —
-// an empty hub (all strands with zero pages) would be worse than a 404
-// while content is still being migrated in.
+// An empty hub (zero pages in every strand) would be worse than a 404, so only locales with at least one page get published.
 function availableLocales(): Locale[] {
   return routing.locales.filter((locale) => getAllWikiPages(locale).length > 0);
 }

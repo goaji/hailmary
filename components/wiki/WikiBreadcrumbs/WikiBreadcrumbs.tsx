@@ -9,9 +9,7 @@ type WikiBreadcrumbsProps = {
   locale: Locale;
 };
 
-// No link on the strand crumb: there's no dedicated strand-landing route
-// (structure.md's model only has category pages), so it's plain text
-// between "Wiki" and the current page.
+// The strand crumb is plain text, not a link — there's no strand-landing route to point it at.
 export async function WikiBreadcrumbs({ strand, pageTitle, locale }: WikiBreadcrumbsProps) {
   const t = await getTranslations({ locale, namespace: "wikiPage" });
   const tNav = await getTranslations({ locale, namespace: "nav" });

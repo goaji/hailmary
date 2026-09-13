@@ -115,8 +115,7 @@ export type ReferencePage = {
   sections: ReferenceSection[];
 };
 
-// The five Wiki strands (design/new structure/structure.md). Romanian
-// display names are provisional — see messages' wikiStrands namespace.
+// Romanian display names are provisional — see messages' wikiStrands namespace.
 export const WIKI_STRAND_IDS = [
   "the-game",
   "chess-match",
@@ -127,9 +126,7 @@ export const WIKI_STRAND_IDS = [
 
 export type WikiStrandId = (typeof WIKI_STRAND_IDS)[number];
 
-// Cosmetic only (ToC label, prev/next framing) — every shape stores content
-// the same way, as sections split from `##` headings or, on the timeline
-// shape, as frontmatter `entries`.
+// Cosmetic only (ToC label, prev/next framing) — storage is identical across shapes.
 export const WIKI_PAGE_SHAPES = ["flat", "parent", "collection"] as const;
 
 export type WikiPageShape = (typeof WIKI_PAGE_SHAPES)[number];

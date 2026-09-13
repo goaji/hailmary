@@ -17,9 +17,7 @@ import { contentFilePath, parseFrontmatter } from "@/utils/content";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "reference");
 
-// Exported so utils/wiki.ts can reuse the same section/entry validation
-// instead of a second copy — the Wiki's sectioned and timeline page shapes
-// are the same content shape as Regulament/Istorie, just in a different directory.
+// Exported so utils/wiki.ts can reuse this validation instead of a second copy.
 export const referenceSectionSchema = z.object({
   id: z.string(),
   title: z.string(),

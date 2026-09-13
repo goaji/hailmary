@@ -20,12 +20,7 @@ type WikiRailTreeProps = {
   currentPageSections: ReferenceSection[];
 };
 
-// Accordion: expanding a strand collapses whichever was open before, and
-// expanding is independent of navigation — clicking a strand name never
-// moves you off the page you're reading, only clicking one of its pages
-// does. The current strand starts expanded so you always see where you
-// are; browsing another strand's pages first requires expanding it, same
-// as any collapsed-by-default doc-site sidebar.
+// Accordion, decoupled from navigation: expanding a strand only reveals its pages, it never moves you off the page you're reading.
 export function WikiRailTree({ strands, currentStrand, currentSlug, currentPageSections }: WikiRailTreeProps) {
   // WikiRail mounts this component twice (desktop nav + mobile details) —
   // ids built from data alone would collide across both instances, which

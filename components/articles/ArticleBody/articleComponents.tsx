@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n";
 import { ArticleImage } from "@/components/ui/ArticleImage/ArticleImage";
 import { TermLink } from "@/components/explainer/TermLink/TermLink";
+import { DownSystemDiagram } from "@/components/wiki/DownSystemDiagram/DownSystemDiagram";
 import styles from "./ArticleBody.module.scss";
 
 function MdxLink({ href = "", children, ...rest }: ComponentPropsWithoutRef<"a">) {
@@ -82,4 +83,5 @@ export const articleComponents = {
   img: MdxImage,
   table: MdxTable,
   TermLink,
+  DownSystemDiagram,
 };

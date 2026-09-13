@@ -8,10 +8,7 @@ type WikiPageTocProps = {
   sections: ReferenceSection[];
 };
 
-// Rendered nested under the current page's rail entry, as a "subchapter"
-// list — not a separate floating box. It used to be RuleToc rendered
-// inside .content, whose own position: sticky pinned it over the article
-// on scroll instead of living in the rail column.
+// Rendered nested under the current page's rail entry — a floating position: sticky box here pinned over the article on scroll instead.
 export function WikiPageToc({ sections }: WikiPageTocProps) {
   const [activeId, setActiveId] = useState<string | undefined>(sections[0]?.id);
 

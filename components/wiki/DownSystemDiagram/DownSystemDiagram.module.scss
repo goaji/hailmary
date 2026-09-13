@@ -1,0 +1,112 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.diagram {
+  padding: v.space(20);
+  margin: v.space(16) 0 v.space(32);
+  border: 1px solid v.$c-border;
+  border-radius: 4px;
+  background: v.$c-surface;
+}
+
+.chip {
+  display: inline-block;
+  padding: v.space(4) v.space(12);
+  margin: 0 0 v.space(16);
+  background: v.$c-header;
+  color: v.$c-text;
+  font-family: v.$font-display;
+  font-size: 22px;
+  letter-spacing: 1px;
+  border-radius: 2px;
+  border: 1px solid var(--accent-1);
+}
+
+.strip {
+  position: relative;
+  height: 28px;
+  // Turf, not themeable UI chrome — deliberately not var(--accent-1).
+  background: linear-gradient(90deg, v.$c-field-dark, v.$c-field 50%, v.$c-field-dark);
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+}
+
+.progress {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, v.$c-text 6%, transparent);
+}
+
+.firstDownLine {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  background: v.$c-first-down-line;
+  box-shadow: 0 0 6px color-mix(in srgb, v.$c-first-down-line 80%, transparent);
+}
+
+.ball {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  transition: left 300ms ease;
+}
+
+.yardLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: v.space(4);
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+}
+
+.outcome {
+  margin: v.space(16) 0 0;
+  min-height: v.$fs-h2;
+  font-family: v.$font-display;
+  font-size: v.$fs-h2;
+  color: var(--accent-1);
+  letter-spacing: 1px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin-top: v.space(16);
+
+  button {
+    padding: v.space(8) v.space(12);
+    background: v.$c-surface-raised;
+    border: 1px solid v.$c-border;
+    color: v.$c-text;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: v.$fs-meta;
+
+    &:hover {
+      border-color: var(--accent-1);
+    }
+
+    &:focus-visible {
+      @include mix.focus-ring;
+    }
+  }
+}
+
+.resetButton {
+  margin-top: v.space(16);
+  padding: v.space(8) v.space(16);
+  background: var(--accent-1);
+  border: none;
+  color: v.$c-header;
+  font-weight: 700;
+  border-radius: 2px;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}

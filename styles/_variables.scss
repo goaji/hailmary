@@ -14,6 +14,11 @@ $c-text-muted: #9a9ba3;
 $c-surface-raised: #1e2027;
 $c-border-soft: #2c2e37;
 
+// Field-diagram colors — turf and the broadcast first-down line, shared by every Wiki hero visual (down system, the field, positions, route tree).
+$c-field-dark: #0e2416;
+$c-field: #123018;
+$c-first-down-line: #f7d331;
+
 // Spacing scale. Access via space($step), never the map or a raw px value.
 $space: (
   4: 4px,
