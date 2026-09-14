@@ -2,11 +2,7 @@
 @use "mixins" as mix;
 
 .diagram {
-  padding: v.space(20);
-  margin: v.space(16) 0 v.space(32);
-  border: 1px solid v.$c-border;
-  border-radius: 4px;
-  background: v.$c-surface;
+  @include mix.diagram-card;
 }
 
 .chip {

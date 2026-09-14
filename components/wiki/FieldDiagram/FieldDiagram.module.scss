@@ -1,0 +1,161 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.diagram {
+  @include mix.diagram-card;
+}
+
+.field {
+  position: relative;
+  height: 90px;
+  background: linear-gradient(90deg, v.$c-field-dark, v.$c-field 50%, v.$c-field-dark);
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.endZone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8%;
+  background: color-mix(in srgb, v.$c-end-zone 65%, transparent);
+  transition: box-shadow 200ms ease;
+
+  &.active {
+    box-shadow: inset 0 0 0 2px var(--accent-1);
+  }
+}
+
+.endZoneLeft {
+  left: 0;
+}
+
+.endZoneRight {
+  right: 0;
+}
+
+// One at each end — the red zone is relative to whichever end zone the offense is driving toward, so it exists on both sides.
+.redZone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18%;
+  background: color-mix(in srgb, v.$c-red-zone 55%, transparent);
+  transition: box-shadow 200ms ease;
+
+  &.active {
+    box-shadow: inset 0 0 0 2px var(--accent-1);
+  }
+}
+
+.redZoneLeft {
+  left: 8%;
+}
+
+.redZoneRight {
+  right: 8%;
+}
+
+.yardLines {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 8%;
+  right: 8%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, v.$c-yard-line 45%, transparent),
+    color-mix(in srgb, v.$c-yard-line 45%, transparent) 2px,
+    transparent 2px,
+    transparent 10%
+  );
+  transition: opacity 200ms ease;
+
+  &.active {
+    background-image: repeating-linear-gradient(
+      90deg,
+      v.$c-yard-line,
+      v.$c-yard-line 2px,
+      transparent 2px,
+      transparent 10%
+    );
+  }
+}
+
+.yardNumbers {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 v.space(4);
+  font-size: v.$fs-ui;
+  color: color-mix(in srgb, v.$c-yard-line 60%, transparent);
+  transition: color 200ms ease;
+
+  &.active {
+    color: v.$c-yard-line;
+  }
+}
+
+.hashMarks {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 14px;
+  transform: translateY(-50%);
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, v.$c-yard-line 35%, transparent),
+    color-mix(in srgb, v.$c-yard-line 35%, transparent) 4px,
+    transparent 4px,
+    transparent 8%
+  );
+  transition: opacity 200ms ease;
+
+  &.active {
+    background-image: repeating-linear-gradient(
+      90deg,
+      v.$c-yard-line,
+      v.$c-yard-line 4px,
+      transparent 4px,
+      transparent 8%
+    );
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin-top: v.space(16);
+}
+
+.legendItem,
+.legendItemActive {
+  padding: v.space(8) v.space(12);
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border;
+  color: v.$c-text;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: v.$fs-meta;
+
+  &:hover {
+    border-color: var(--accent-1);
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.legendItemActive {
+  border-color: var(--accent-1);
+  // Text, not border/UI chrome — 14px bold on $c-surface-raised needs the panel-calibrated accent2 bar (≥4.5), not accent1's ≥3.0.
+  color: var(--accent-2);
+  font-weight: 700;
+}

@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "variables" as v;
 
 // Mobile-first breakpoints. Every media query in the codebase goes through
 // mq() — a raw @media is a review failure.
@@ -46,6 +47,15 @@ $breakpoints: (
       margin-right: 0;
     }
   }
+}
+
+// The boxed-card treatment shared by every Wiki hero diagram (DownSystemDiagram, FieldDiagram, and future ones).
+@mixin diagram-card {
+  padding: v.space(20);
+  margin: v.space(16) 0 v.space(32);
+  border: 1px solid v.$c-border;
+  border-radius: 4px;
+  background: v.$c-surface;
 }
 
 // Single-line ellipsis at 1 (the common case); -webkit-line-clamp above.
