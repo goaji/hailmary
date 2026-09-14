@@ -1,0 +1,49 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.diagram {
+  @include mix.diagram-card;
+}
+
+.field {
+  position: relative;
+  height: 200px;
+  background: linear-gradient(90deg, v.$c-field-dark, v.$c-field 50%, v.$c-field-dark);
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+}
+
+.dot,
+.dotActive {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid v.$c-yard-line;
+  background: v.$c-surface-raised;
+  color: v.$c-text;
+  font-size: v.$fs-ui;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.dotActive {
+  border-color: var(--accent-1);
+  background: var(--accent-1);
+  color: v.$c-header;
+}
+
+.detail {
+  margin-top: v.space(16);
+  min-height: 60px;
+}
+
+.hint {
+  margin: 0;
+  color: v.$c-text-muted;
+}
