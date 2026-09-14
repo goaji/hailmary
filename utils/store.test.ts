@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Game } from "@/types";
-import { readScores, scoreStoreAgeMs, writeScores } from "./store";
+import { readScores, scoreStoreAgeMs, shouldSkipSync, writeScores } from "./store";
 
 const SAMPLE_GAME: Game = {
   id: "2026-w2-kc-buf",
@@ -49,6 +49,20 @@ describe("readScores", () => {
       games: [SAMPLE_GAME],
       updatedAt: "2026-09-13T20:30:00Z",
       source: "balldontlie",
+      lastAttemptAt: null,
+    });
+  });
+
+  it("round-trips a failed-attempt marker without touching games or updatedAt", () => {
+    writeScores([SAMPLE_GAME], { updatedAt: "2026-09-13T20:30:00Z", source: "balldontlie" }, storePath);
+    const existing = readScores(storePath);
+    writeScores(existing.games, { ...existing, lastAttemptAt: "2026-09-13T20:31:00Z", lastAttemptOk: false }, storePath);
+    expect(readScores(storePath)).toEqual({
+      games: [SAMPLE_GAME],
+      updatedAt: "2026-09-13T20:30:00Z",
+      source: "balldontlie",
+      lastAttemptAt: "2026-09-13T20:31:00Z",
+      lastAttemptOk: false,
     });
   });
 });
@@ -57,7 +71,7 @@ describe("writeScores", () => {
   it("creates the parent directory when it doesn't exist yet", () => {
     const nestedPath = path.join(dir, "nested", "scores.json");
     writeScores([], { updatedAt: null }, nestedPath);
-    expect(readScores(nestedPath)).toEqual({ games: [], updatedAt: null });
+    expect(readScores(nestedPath)).toEqual({ games: [], updatedAt: null, lastAttemptAt: null });
   });
 
   it("leaves no leftover temp file behind", () => {
@@ -68,7 +82,12 @@ describe("writeScores", () => {
   it("a second write fully replaces the first, never merging or interleaving", () => {
     writeScores([SAMPLE_GAME], { updatedAt: "2026-09-13T20:30:00Z" }, storePath);
     writeScores([], { updatedAt: "2026-09-13T20:31:00Z", source: "balldontlie" }, storePath);
-    expect(readScores(storePath)).toEqual({ games: [], updatedAt: "2026-09-13T20:31:00Z", source: "balldontlie" });
+    expect(readScores(storePath)).toEqual({
+      games: [],
+      updatedAt: "2026-09-13T20:31:00Z",
+      source: "balldontlie",
+      lastAttemptAt: null,
+    });
   });
 });
 
@@ -80,5 +99,38 @@ describe("scoreStoreAgeMs", () => {
   it("returns the elapsed milliseconds since updatedAt", () => {
     const now = new Date("2026-09-13T20:35:00Z");
     expect(scoreStoreAgeMs("2026-09-13T20:30:00Z", now)).toBe(5 * 60 * 1000);
+  });
+});
+
+describe("shouldSkipSync", () => {
+  const MIN_SUCCESS_MS = 30_000;
+  const MIN_RETRY_MS = 5 * 60_000;
+
+  it("never skips when there has been no prior attempt", () => {
+    expect(shouldSkipSync({ lastAttemptAt: null }, MIN_SUCCESS_MS, MIN_RETRY_MS)).toBe(false);
+  });
+
+  it("skips a successful attempt within the short success interval", () => {
+    const now = new Date("2026-09-13T20:30:20Z");
+    const meta = { lastAttemptAt: "2026-09-13T20:30:00Z", lastAttemptOk: true };
+    expect(shouldSkipSync(meta, MIN_SUCCESS_MS, MIN_RETRY_MS, now)).toBe(true);
+  });
+
+  it("does not skip a successful attempt once the success interval has passed", () => {
+    const now = new Date("2026-09-13T20:30:31Z");
+    const meta = { lastAttemptAt: "2026-09-13T20:30:00Z", lastAttemptOk: true };
+    expect(shouldSkipSync(meta, MIN_SUCCESS_MS, MIN_RETRY_MS, now)).toBe(false);
+  });
+
+  it("still skips a failed attempt after the short success interval — the point of the retry backoff", () => {
+    const now = new Date("2026-09-13T20:30:31Z");
+    const meta = { lastAttemptAt: "2026-09-13T20:30:00Z", lastAttemptOk: false };
+    expect(shouldSkipSync(meta, MIN_SUCCESS_MS, MIN_RETRY_MS, now)).toBe(true);
+  });
+
+  it("stops skipping a failed attempt once the longer retry interval has passed", () => {
+    const now = new Date("2026-09-13T20:35:01Z");
+    const meta = { lastAttemptAt: "2026-09-13T20:30:00Z", lastAttemptOk: false };
+    expect(shouldSkipSync(meta, MIN_SUCCESS_MS, MIN_RETRY_MS, now)).toBe(false);
   });
 });

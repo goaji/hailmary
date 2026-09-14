@@ -28,7 +28,7 @@ Set in hPanel (production) or `.env.local` (dev). Never commit real values — s
 - **URL:** `https://hailmary.ro/api/cron/sync-scores`
 - **Method:** GET
 - **Header:** `X-Cron-Secret: <value matching CRON_SECRET>`
-- **Suggested interval:** every 1 minute. The route itself enforces a 30-second minimum between real syncs (`MIN_SYNC_INTERVAL_MS`) and is idempotent/safe under overlapping calls, so a tighter interval than that is wasted, not harmful.
+- **Suggested interval:** every 1 minute. The route enforces a 30-second minimum between successful syncs (`MIN_SYNC_INTERVAL_MS`) and backs off to 5 minutes after a failed attempt (`MIN_RETRY_INTERVAL_MS`, e.g. a provider rate limit) — both throttle on the attempt itself, not just on success, so calling more often than either window just no-ops rather than hammering the provider. Also idempotent/safe under overlapping calls.
 - **Verify a real sync landed** (not just a 200):
 
 ```bash

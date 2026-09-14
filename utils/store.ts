@@ -9,6 +9,10 @@ export type ScoreStoreMeta = {
   updatedAt: string | null;
   /** Provider name, e.g. "balldontlie". Absent when the store is empty. */
   source?: string;
+  /** ISO datetime of the last sync attempt, success or failure — distinct from `updatedAt` so a run of failures still gets throttled. */
+  lastAttemptAt?: string | null;
+  /** Whether that last attempt succeeded. Absent/undefined for a legacy store predating this field. */
+  lastAttemptOk?: boolean;
 };
 
 export type ScoreStore = ScoreStoreMeta & {
@@ -31,8 +35,8 @@ export function readScores(storePath: string = DEFAULT_STORE_PATH): ScoreStore {
     ) {
       return EMPTY_STORE;
     }
-    const { games, updatedAt, source } = parsed as ScoreStore;
-    return { games, updatedAt: updatedAt ?? null, source };
+    const { games, updatedAt, source, lastAttemptAt, lastAttemptOk } = parsed as ScoreStore;
+    return { games, updatedAt: updatedAt ?? null, source, lastAttemptAt: lastAttemptAt ?? null, lastAttemptOk };
   } catch {
     return EMPTY_STORE;
   }
@@ -47,7 +51,13 @@ export function writeScores(
   const dir = path.dirname(storePath);
   fs.mkdirSync(dir, { recursive: true });
 
-  const store: ScoreStore = { games, updatedAt: meta.updatedAt, source: meta.source };
+  const store: ScoreStore = {
+    games,
+    updatedAt: meta.updatedAt,
+    source: meta.source,
+    lastAttemptAt: meta.lastAttemptAt ?? null,
+    lastAttemptOk: meta.lastAttemptOk,
+  };
   const tmpPath = path.join(dir, `.${path.basename(storePath)}.${process.pid}.${Date.now()}.tmp`);
   fs.writeFileSync(tmpPath, JSON.stringify(store, null, 2), "utf-8");
   fs.renameSync(tmpPath, storePath);
@@ -59,4 +69,19 @@ export function scoreStoreAgeMs(updatedAt: string | null, now: Date = new Date()
     return null;
   }
   return now.getTime() - new Date(updatedAt).getTime();
+}
+
+/** Whether a sync attempt should be skipped: throttles on the last attempt (not just the last success), and applies a longer gap after a failure so a provider outage/rate-limit isn't retried at full speed. */
+export function shouldSkipSync(
+  meta: Pick<ScoreStoreMeta, "lastAttemptAt" | "lastAttemptOk">,
+  minSuccessIntervalMs: number,
+  minRetryIntervalMs: number,
+  now: Date = new Date(),
+): boolean {
+  if (!meta.lastAttemptAt) {
+    return false;
+  }
+  const sinceLastAttempt = now.getTime() - new Date(meta.lastAttemptAt).getTime();
+  const requiredGap = meta.lastAttemptOk === false ? minRetryIntervalMs : minSuccessIntervalMs;
+  return sinceLastAttempt < requiredGap;
 }
