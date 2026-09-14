@@ -31,11 +31,11 @@ export async function Sidebar({ games, isLive }: SidebarProps) {
           <LinkList
             variant="link"
             items={[
-              { label: t("beginnerGuide.rules"), href: "/regulament" },
-              { label: t("beginnerGuide.positions"), href: "/regulament/pozitii" },
+              { label: t("beginnerGuide.rules"), href: "/wiki/the-game/obiectiv-si-scor" },
+              { label: t("beginnerGuide.positions"), href: "/wiki/chess-match/pozitii-ofensive" },
               { label: t("beginnerGuide.glossary"), href: "/glosar" },
-              { label: t("beginnerGuide.hailMaryOrigin"), href: "/istorie/hail-mary" },
-              { label: t("beginnerGuide.history"), href: "/istorie" },
+              { label: t("beginnerGuide.hailMaryOrigin"), href: "/wiki/istorie/meciuri-si-faze-legendare#hail-mary" },
+              { label: t("beginnerGuide.history"), href: "/wiki/istorie/originile-si-cresterea-nfl" },
             ]}
           />
         </Card>

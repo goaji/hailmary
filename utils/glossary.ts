@@ -9,7 +9,7 @@ import { routing } from "@/routing";
 import { GLOSSARY_CATEGORY_IDS } from "@/types";
 import type { GlossaryEntry, GlossaryEntryFrontmatter, Locale } from "@/types";
 import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "@/utils/content";
-import { validateSeeAlso } from "@/utils/reference";
+import { validateSeeAlso } from "@/utils/wiki";
 
 export { resolveServedLocale } from "@/utils/content";
 

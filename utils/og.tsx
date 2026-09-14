@@ -87,7 +87,7 @@ type ReferenceOgCardProps = {
   accentText: string;
 };
 
-/** Shared "title + kicker" card for /regulament, /istorie and /glosar — identical layout per AGENTS.md's step 2 spec, differing only in kicker label and title. */
+/** Shared "title + kicker" card for /glosar — same layout as other section OG images, differing only in kicker label and title. */
 export function ReferenceOgCard({ kicker, title, accentBar, accentText }: ReferenceOgCardProps): ReactElement {
   return (
     <div

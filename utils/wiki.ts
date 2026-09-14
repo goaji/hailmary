@@ -38,9 +38,14 @@ export function isWikiStrandId(value: string): value is WikiStrandId {
   return (WIKI_STRAND_IDS as readonly string[]).includes(value);
 }
 
-/** Exported so callers outside this module (e.g. a future sitemap entry) can stat the file without re-deriving the content-path convention. */
+/** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
 export function wikiFilePath(locale: Locale, strand: WikiStrandId, slug: string): string {
   return path.join(CONTENT_DIR, locale, strand, `${slug}.mdx`);
+}
+
+/** mtime of the wiki MDX file backing `strand`/`slug`/`locale` — the sitemap's freshness signal for a page with no frontmatter "last changed" date of its own. */
+export function getWikiLastModified(locale: Locale, strand: WikiStrandId, slug: string): Date {
+  return fs.statSync(wikiFilePath(locale, strand, slug)).mtime;
 }
 
 function readWikiFile(locale: Locale, strand: WikiStrandId, slug: string): WikiPage {
@@ -160,3 +165,36 @@ export const getWikiPrevNext = cache((strand: WikiStrandId, slug: string, locale
   const group = getWikiStrandTree(locale).find((candidate) => candidate.strand === strand);
   return group ? computePrevNext(group.pages, slug) : {};
 });
+
+const SEE_ALSO_PATTERN = /^\/wiki\/([a-z0-9-]+)\/([a-z0-9-]+)(?:#([a-z0-9-]+))?$/;
+
+/** Parses a glossary `seeAlso` route like "/wiki/chess-match/strategie-ofensiva". */
+export function parseSeeAlso(
+  seeAlso: string,
+): { strand: string; slug: string; id?: string } | undefined {
+  const match = SEE_ALSO_PATTERN.exec(seeAlso);
+  return match ? { strand: match[1], slug: match[2], id: match[3] || undefined } : undefined;
+}
+
+/** Fails the build if a glossary `seeAlso` points at a wiki page/section that doesn't exist — the only place a dangling link is caught. */
+export function validateSeeAlso(seeAlso: string, locale: Locale, filePath: string): void {
+  const parsed = parseSeeAlso(seeAlso);
+
+  if (!parsed || !isWikiStrandId(parsed.strand)) {
+    throw new Error(`${filePath}: seeAlso "${seeAlso}" is not a valid internal route`);
+  }
+
+  const page = getWikiPage(parsed.strand, parsed.slug, locale);
+
+  if (!page) {
+    throw new Error(
+      `${filePath}: seeAlso "${seeAlso}" points at wiki page "${parsed.strand}/${parsed.slug}", which has no "${locale}" content`,
+    );
+  }
+
+  if (parsed.id && !page.sections.some((section) => section.id === parsed.id)) {
+    throw new Error(
+      `${filePath}: seeAlso "${seeAlso}" points at section "#${parsed.id}" on "${parsed.strand}/${parsed.slug}", which doesn't exist`,
+    );
+  }
+}

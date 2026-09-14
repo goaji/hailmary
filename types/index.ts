@@ -100,22 +100,6 @@ export type TimelineEntry = {
   era: string;
 };
 
-export type ReferencePageFrontmatter = {
-  title: string;
-  description: string;
-  sections: ReferenceSection[];
-  /** Present only on the timeline shape (istorie); absent on sectioned-MDX pages (regulament). */
-  entries?: TimelineEntry[];
-};
-
-export type ReferencePage = {
-  frontmatter: ReferencePageFrontmatter;
-  content: string;
-  /** Same data as frontmatter.sections, exposed directly for the TOC. */
-  sections: ReferenceSection[];
-};
-
-// Romanian display names are provisional — see messages' wikiStrands namespace.
 export const WIKI_STRAND_IDS = [
   "the-game",
   "chess-match",

@@ -2,74 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   extractH2Headings,
   groupEntriesByEra,
-  parseReferenceFrontmatter,
-  parseSeeAlso,
   splitSectionContent,
   validateEntryEras,
   validateSectionHeadings,
 } from "./reference";
-
-const validFrontmatter = {
-  title: "Regulamentul fotbalului american",
-  description: "Bazele jocului, explicate pentru un începător.",
-  sections: [
-    { id: "obiectiv", title: "Obiectivul jocului" },
-    { id: "teren", title: "Terenul și dimensiunile" },
-  ],
-};
-
-describe("parseReferenceFrontmatter", () => {
-  it("accepts a valid file and defaults section level to 2", () => {
-    const result = parseReferenceFrontmatter(validFrontmatter, "test.mdx");
-
-    expect(result.title).toBe(validFrontmatter.title);
-    expect(result.sections).toEqual([
-      { id: "obiectiv", title: "Obiectivul jocului", level: 2 },
-      { id: "teren", title: "Terenul și dimensiunile", level: 2 },
-    ]);
-  });
-
-  it("accepts an explicit section level", () => {
-    const result = parseReferenceFrontmatter(
-      {
-        ...validFrontmatter,
-        sections: [{ id: "sub", title: "Un subtitlu", level: 3 }],
-      },
-      "test.mdx",
-    );
-
-    expect(result.sections[0].level).toBe(3);
-  });
-
-  it("accepts optional timeline entries", () => {
-    const result = parseReferenceFrontmatter(
-      {
-        title: "Istoria fotbalului american",
-        description: "O cronologie.",
-        sections: [{ id: "origini", title: "Origini" }],
-        entries: [{ year: "1920", title: "Se înființează liga", body: "Text.", era: "origini" }],
-      },
-      "test.mdx",
-    );
-
-    expect(result.entries).toHaveLength(1);
-  });
-
-  it("rejects a file missing a required field, naming the file and the field", () => {
-    const { title, ...missingTitle } = validFrontmatter;
-    void title;
-
-    expect(() =>
-      parseReferenceFrontmatter(missingTitle, "content/reference/ro/x.mdx"),
-    ).toThrow('content/reference/ro/x.mdx: field "title"');
-  });
-
-  it("rejects an empty sections array", () => {
-    expect(() =>
-      parseReferenceFrontmatter({ ...validFrontmatter, sections: [] }, "test.mdx"),
-    ).toThrow(/"sections"/);
-  });
-});
 
 describe("extractH2Headings", () => {
   it("collects every top-level heading in document order", () => {
@@ -205,20 +141,5 @@ describe("groupEntriesByEra", () => {
 
     expect(groups[0].entries).toEqual([]);
     expect(groups[1].startOrdinal).toBe(1);
-  });
-});
-
-describe("parseSeeAlso", () => {
-  it("parses a route with a section anchor", () => {
-    expect(parseSeeAlso("/regulament#pase")).toEqual({ slug: "regulament", id: "pase" });
-  });
-
-  it("parses a route with no anchor", () => {
-    expect(parseSeeAlso("/istorie")).toEqual({ slug: "istorie", id: undefined });
-  });
-
-  it("returns undefined for an external or malformed route", () => {
-    expect(parseSeeAlso("https://example.com")).toBeUndefined();
-    expect(parseSeeAlso("regulament#pase")).toBeUndefined();
   });
 });

@@ -3,18 +3,17 @@ import path from "node:path";
 import { getLanguageAlternates, routing, type Locale } from "@/i18n";
 import { getAllArticles, getAvailableLocales } from "@/utils/articles";
 import { getAllTerms, termFilePath } from "@/utils/glossary";
-import { getReferenceLastModified, getReferenceLocales } from "@/utils/reference";
 import { getSchedule } from "@/utils/schedule";
 import { latestMtime, resolveLastModified } from "@/utils/sitemap";
 import { SITE_URL } from "@/utils/site";
 import { TEAMS } from "@/utils/teams";
+import { getAllWikiPages, getWikiLastModified, getWikiPageLocales } from "@/utils/wiki";
 
 // Same freshness window as the article page's fallback revalidate — the
 // score store (backing /program's lastModified) changes far more often
 // than a rebuild, but a sitemap doesn't need to be request-fresh.
 export const revalidate = 3600;
 
-const REFERENCE_SLUGS = ["istorie", "regulament"] as const;
 // teams.ts is imported directly by client components (TeamColorProvider,
 // TeamPicker), so it can't itself take a node:fs import — latestMtime (the
 // sitemap's own freshness helper) stats it from out here instead.
@@ -67,12 +66,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     );
   }
 
-  // Reference pages: only locales with a real file resolve.
-  for (const slug of REFERENCE_SLUGS) {
-    const locales = getReferenceLocales(slug);
+  // Wiki hub + category pages: only locales with real content resolve.
+  const wikiHubLocales = routing.locales.filter((locale) => getAllWikiPages(locale).length > 0);
+  for (const locale of wikiHubLocales) {
+    entries.push(entry("/wiki", locale, wikiHubLocales, homeLastModified));
+  }
+
+  for (const page of getAllWikiPages("ro")) {
+    const strand = page.frontmatter.strand;
+    const locales = getWikiPageLocales(strand, page.slug);
     for (const locale of locales) {
-      const lastModified = getReferenceLastModified(locale, slug);
-      entries.push(entry(`/${slug}`, locale, locales, lastModified));
+      const lastModified = getWikiLastModified(locale, strand, page.slug);
+      entries.push(entry(`/wiki/${strand}/${page.slug}`, locale, locales, lastModified));
     }
   }
 

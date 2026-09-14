@@ -1,21 +1,7 @@
 import "server-only";
 
-import fs from "node:fs";
-import path from "node:path";
-import { cache } from "react";
-import matter from "gray-matter";
 import { z } from "zod";
-import { routing } from "@/routing";
-import type {
-  Locale,
-  ReferencePage,
-  ReferencePageFrontmatter,
-  ReferenceSection,
-  TimelineEntry,
-} from "@/types";
-import { contentFilePath, parseFrontmatter } from "@/utils/content";
-
-const CONTENT_DIR = path.join(process.cwd(), "content", "reference");
+import type { ReferenceSection, TimelineEntry } from "@/types";
 
 // Exported so utils/wiki.ts can reuse this validation instead of a second copy.
 export const referenceSectionSchema = z.object({
@@ -30,20 +16,6 @@ export const timelineEntrySchema = z.object({
   body: z.string(),
   era: z.string(),
 });
-
-const referenceFrontmatterSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  sections: z.array(referenceSectionSchema).min(1),
-  entries: z.array(timelineEntrySchema).optional(),
-});
-
-export function parseReferenceFrontmatter(
-  data: unknown,
-  filePath: string,
-): ReferencePageFrontmatter {
-  return parseFrontmatter(referenceFrontmatterSchema, data, filePath);
-}
 
 const H2_PATTERN = /^##\s+(.+?)\s*$/gm;
 
@@ -126,77 +98,4 @@ export function groupEntriesByEra(
     ordinal += group.length;
     return { section, entries: group, startOrdinal };
   });
-}
-
-const SEE_ALSO_PATTERN = /^\/([a-z0-9-]+)(?:#([a-z0-9-]+))?$/;
-
-/** Parses a glossary `seeAlso` route like "/regulament#pase". */
-export function parseSeeAlso(
-  seeAlso: string,
-): { slug: string; id?: string } | undefined {
-  const match = SEE_ALSO_PATTERN.exec(seeAlso);
-  return match ? { slug: match[1], id: match[2] || undefined } : undefined;
-}
-
-/** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
-export function referenceFilePath(locale: Locale, slug: string): string {
-  return contentFilePath(CONTENT_DIR, locale, slug);
-}
-
-/** mtime of the reference MDX file backing `slug`/`locale` — the sitemap's freshness signal for a page with no frontmatter "last changed" date of its own. */
-export function getReferenceLastModified(locale: Locale, slug: string): Date {
-  return fs.statSync(referenceFilePath(locale, slug)).mtime;
-}
-
-function readReferenceFile(locale: Locale, slug: string): ReferencePage {
-  const filePath = referenceFilePath(locale, slug);
-  const raw = fs.readFileSync(filePath, "utf8");
-  const { data, content } = matter(raw);
-  const frontmatter = parseReferenceFrontmatter(data, filePath);
-
-  if (frontmatter.entries) {
-    validateEntryEras(frontmatter.entries, frontmatter.sections, filePath);
-  } else {
-    validateSectionHeadings(content, frontmatter.sections, filePath);
-  }
-
-  return { frontmatter, content, sections: frontmatter.sections };
-}
-
-/** No locale fallback, unlike articles/glossary — a missing `en` file must 404, not silently serve `ro`. */
-export const getReferencePage = cache(
-  (slug: string, locale: Locale): ReferencePage | undefined => {
-    const filePath = referenceFilePath(locale, slug);
-    return fs.existsSync(filePath) ? readReferenceFile(locale, slug) : undefined;
-  },
-);
-
-/** Which locales have a real file for this reference slug — for hreflang and generateStaticParams. */
-export const getReferenceLocales = cache((slug: string): Locale[] => {
-  return routing.locales.filter((candidate) =>
-    fs.existsSync(referenceFilePath(candidate, slug)),
-  );
-});
-
-/** Fails the build if a glossary `seeAlso` points at a page/section that doesn't exist — the only place a dangling link is caught. */
-export function validateSeeAlso(seeAlso: string, locale: Locale, filePath: string): void {
-  const parsed = parseSeeAlso(seeAlso);
-
-  if (!parsed) {
-    throw new Error(`${filePath}: seeAlso "${seeAlso}" is not a valid internal route`);
-  }
-
-  const page = getReferencePage(parsed.slug, locale);
-
-  if (!page) {
-    throw new Error(
-      `${filePath}: seeAlso "${seeAlso}" points at reference page "${parsed.slug}", which has no "${locale}" content`,
-    );
-  }
-
-  if (parsed.id && !page.sections.some((section) => section.id === parsed.id)) {
-    throw new Error(
-      `${filePath}: seeAlso "${seeAlso}" points at section "#${parsed.id}" on "${parsed.slug}", which doesn't exist`,
-    );
-  }
 }

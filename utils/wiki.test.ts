@@ -4,6 +4,7 @@ import {
   computePrevNext,
   groupPagesByStrand,
   isWikiStrandId,
+  parseSeeAlso,
   parseWikiFrontmatter,
   validateUniqueOrder,
   wikiFilePath,
@@ -154,5 +155,29 @@ describe("computePrevNext", () => {
 
   it("returns an empty object for a slug not in the list", () => {
     expect(computePrevNext(strandPages, "missing")).toEqual({});
+  });
+});
+
+describe("parseSeeAlso", () => {
+  it("parses a route with a section anchor", () => {
+    expect(parseSeeAlso("/wiki/chess-match/strategie-ofensiva#play-action")).toEqual({
+      strand: "chess-match",
+      slug: "strategie-ofensiva",
+      id: "play-action",
+    });
+  });
+
+  it("parses a route with no anchor", () => {
+    expect(parseSeeAlso("/wiki/istorie/originile-si-cresterea-nfl")).toEqual({
+      strand: "istorie",
+      slug: "originile-si-cresterea-nfl",
+      id: undefined,
+    });
+  });
+
+  it("returns undefined for an external, malformed, or non-wiki route", () => {
+    expect(parseSeeAlso("https://example.com")).toBeUndefined();
+    expect(parseSeeAlso("wiki/chess-match/strategie-ofensiva")).toBeUndefined();
+    expect(parseSeeAlso("/glosar")).toBeUndefined();
   });
 });
