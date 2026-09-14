@@ -39,6 +39,25 @@
   }
 }
 
+// At md+, .matchup is a table-cell (see below) and TeamBadge/.separator become
+// plain inline siblings inside it — align-items:center no longer applies there,
+// so without an explicit vertical-align they fall back to baseline. TeamBadge is
+// itself inline-flex, whose baseline is effectively its bottom edge, not a text
+// baseline, so it and this plain-text span end up on two different lines.
+// vertical-align: middle on both puts them on the same one.
+.separator {
+  font-size: v.$fs-ui;
+  line-height: 1;
+  vertical-align: middle;
+
+  // Below md, .matchup is flex with its own gap already spacing every child —
+  // adding margin here too would double it up. From md, .matchup is a table-cell
+  // (gap doesn't apply there), so this is the only thing spacing it from the badges.
+  @include mix.mq(md) {
+    margin: 0 v.space(4);
+  }
+}
+
 .kickoff {
   color: v.$c-text-dim;
   font-size: v.$fs-meta;

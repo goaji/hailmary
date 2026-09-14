@@ -23,7 +23,7 @@ export async function GameRow({ game, locale }: GameRowProps) {
     <tr className={styles.row}>
       <td className={styles.matchup}>
         <TeamBadge team={away} size="sm" />
-        <span aria-hidden="true">@</span>
+        <span aria-hidden="true" className={styles.separator}>@</span>
         <TeamBadge team={home} size="sm" />
       </td>
       <td className={styles.kickoff}>{formatKickoff(game.kickoff, locale)}</td>

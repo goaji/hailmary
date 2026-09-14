@@ -3,8 +3,11 @@
 
 .tableWrapper {
   max-width: 100%;
-  margin-top: v.space(22);
 
+  // No margin-top here on purpose — this can be the first thing in .content
+  // (when there's no live-status notice above it) or not, depending on page
+  // state. Spacing between stacked siblings is ScheduleWeekSwitcher's job
+  // (its .content > * + * rule), not something this component should assume.
   @include mix.mq(md) {
     overflow-x: auto;
   }
@@ -40,6 +43,13 @@
     text-align: left;
     text-transform: uppercase;
     letter-spacing: 0.4px;
+  }
+
+  // The header row is always the table's own first visible content — its cells'
+  // usual top padding would otherwise push it below wherever .content actually
+  // starts flush (see ScheduleWeekSwitcher's rail/content alignment).
+  thead th {
+    padding-top: 0;
   }
 }
 

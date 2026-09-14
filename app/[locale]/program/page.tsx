@@ -3,13 +3,13 @@ import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
-import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ScheduleTable } from "@/components/schedule/ScheduleTable/ScheduleTable";
 import { ScheduleWeekSwitcher } from "@/components/schedule/ScheduleWeekSwitcher/ScheduleWeekSwitcher";
 import { LiveScoreStatus } from "@/components/schedule/LiveScoreStatus/LiveScoreStatus";
 import { getAvailableWeeks, getCurrentWeek, getSchedule } from "@/utils/schedule";
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
 import { hasLiveGame } from "@/utils/liveGames";
+import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import styles from "./page.module.scss";
 
 // No searchParams here — reading them server-side forces per-request dynamic
@@ -64,32 +64,38 @@ export default async function SchedulePage({ params }: PageProps<"/[locale]/prog
       />,
     ]),
   );
-  const weekLabels = Object.fromEntries(weeks.map((week) => [week, t("week", { week })]));
+  // Full "Săptămâna N" phrasing moves to aria-label; the visible link is just the number.
+  const weekLabels = Object.fromEntries(weeks.map((week) => [week, String(week)]));
+  const weekAriaLabels = Object.fromEntries(weeks.map((week) => [week, t("week", { week })]));
+  // Per-week so the h1 (rendered client-side) can track whichever week is selected.
+  const titleLabels = Object.fromEntries(weeks.map((week) => [week, t("titleWithWeek", { week })]));
 
   return (
     <div className={styles.page}>
-      <SectionHeading as="h1">{t("title")}</SectionHeading>
-
       {games.length > 0 ? (
-        <>
-          <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />
-
-          <ScheduleWeekSwitcher
-            weeks={weeks}
-            defaultWeek={defaultWeek}
-            weekNavLabel={t("weekNavLabel")}
-            weekLabels={weekLabels}
-            tables={tables}
-          />
-
-          {updatedAt && (
-            <p className={styles.updatedAt}>
-              {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
-            </p>
-          )}
-        </>
+        <ScheduleWeekSwitcher
+          weeks={weeks}
+          defaultWeek={defaultWeek}
+          weekNavLabel={t("weekNavLabel")}
+          weeksHeading={t("weeksHeading")}
+          weekLabels={weekLabels}
+          weekAriaLabels={weekAriaLabels}
+          titleLabels={titleLabels}
+          tables={tables}
+          liveStatus={<LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(games)} />}
+          updatedAtNote={
+            updatedAt && (
+              <p className={styles.updatedAt}>
+                {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
+              </p>
+            )
+          }
+        />
       ) : (
-        <p className={styles.empty}>{t("empty")}</p>
+        <>
+          <SectionHeading as="h1">{t("title")}</SectionHeading>
+          <p className={styles.empty}>{t("empty")}</p>
+        </>
       )}
     </div>
   );

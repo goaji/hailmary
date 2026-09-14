@@ -5,6 +5,8 @@
   align-items: center;
   gap: v.space(8);
   min-width: 0;
+  // Inline-flex baseline defaults to the bottom edge, misaligning inline siblings like GameRow's "@".
+  vertical-align: middle;
 }
 
 .logo {

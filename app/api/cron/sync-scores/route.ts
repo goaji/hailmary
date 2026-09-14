@@ -1,6 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
-import { fetchLatestGames } from "@/utils/scores";
+import { CURRENT_SEASON, fetchSeasonGames } from "@/utils/scores";
 import { readScores, writeScores } from "@/utils/store";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ status: "error", reason: "not configured" });
   }
 
-  const result = await fetchLatestGames(apiKey);
+  const result = await fetchSeasonGames(apiKey, CURRENT_SEASON);
 
   if (!result.ok) {
     // Store left untouched. 200, not 500 — the site is fine, only the sync failed, and a 500 would make hPanel's cron report a false outage.

@@ -12,7 +12,9 @@
 }
 
 .updatedAt {
-  margin: v.space(16) 0 0;
+  // No margin-top here — ScheduleWeekSwitcher's .content > * + * rule owns
+  // spacing between stacked siblings, so this stays correct whether or not
+  // something renders above it.
   color: v.$c-text-muted;
   font-size: v.$fs-meta;
 }

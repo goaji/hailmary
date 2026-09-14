@@ -123,48 +123,61 @@ export function normalizeGames(rawGames: RawGame[]): Game[] {
 
 const GAMES_URL = "https://api.balldontlie.io/nfl/v1/games";
 const FETCH_TIMEOUT_MS = 8_000;
+const MAX_PAGES = 10; // regular season is ~272 games / 100 per page — a generous ceiling against an API misbehaving into an infinite cursor loop
+
+// Bump this before the next season kicks off — no calendar logic to derive it, it changes once a year.
+export const CURRENT_SEASON = 2026;
 
 export type FetchGamesOutcome = { ok: true; games: Game[] } | { ok: false; reason: string };
 
-function utcDateString(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
+// Regular season only (season_types[]=2) — postseason has its own week numbering that
+// would collide with regular-season week numbers in the UI; add it later as its own change.
+export async function fetchSeasonGames(apiKey: string, season: number): Promise<FetchGamesOutcome> {
+  const rawGames: RawGame[] = [];
+  let cursor: number | null = null;
 
-// Today+yesterday (UTC) in one call, not a "current week" call — no season calendar to compute that from, and this covers a late US kickoff crossing UTC midnight.
-export async function fetchLatestGames(
-  apiKey: string,
-  now: Date = new Date(),
-): Promise<FetchGamesOutcome> {
-  const url = new URL(GAMES_URL);
-  url.searchParams.append("dates[]", utcDateString(new Date(now.getTime() - 86_400_000)));
-  url.searchParams.append("dates[]", utcDateString(now));
-  url.searchParams.set("per_page", "100");
+  for (let page = 0; page < MAX_PAGES; page++) {
+    const url = new URL(GAMES_URL);
+    url.searchParams.append("seasons[]", String(season));
+    url.searchParams.append("season_types[]", "2");
+    url.searchParams.set("per_page", "100");
+    if (cursor !== null) {
+      url.searchParams.set("cursor", String(cursor));
+    }
 
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      headers: { Authorization: apiKey },
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
-    });
-  } catch (error) {
-    return { ok: false, reason: `network error: ${(error as Error).message}` };
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        headers: { Authorization: apiKey },
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      });
+    } catch (error) {
+      return { ok: false, reason: `network error: ${(error as Error).message}` };
+    }
+
+    if (!response.ok) {
+      return { ok: false, reason: `provider responded ${response.status}` };
+    }
+
+    let body: unknown;
+    try {
+      body = await response.json();
+    } catch {
+      return { ok: false, reason: "provider returned invalid JSON" };
+    }
+
+    const pageGames = (body as { data?: unknown } | null)?.data;
+    if (!Array.isArray(pageGames)) {
+      return { ok: false, reason: "provider response missing a data array" };
+    }
+    rawGames.push(...(pageGames as RawGame[]));
+
+    const nextCursor = (body as { meta?: { next_cursor?: unknown } } | null)?.meta?.next_cursor;
+    if (typeof nextCursor !== "number") {
+      break;
+    }
+    cursor = nextCursor;
   }
 
-  if (!response.ok) {
-    return { ok: false, reason: `provider responded ${response.status}` };
-  }
-
-  let body: unknown;
-  try {
-    body = await response.json();
-  } catch {
-    return { ok: false, reason: "provider returned invalid JSON" };
-  }
-
-  const rawGames = (body as { data?: unknown } | null)?.data;
-  if (!Array.isArray(rawGames)) {
-    return { ok: false, reason: "provider response missing a data array" };
-  }
-
-  return { ok: true, games: normalizeGames(rawGames as RawGame[]) };
+  return { ok: true, games: normalizeGames(rawGames) };
 }

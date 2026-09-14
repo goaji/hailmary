@@ -11,8 +11,8 @@ export type ScheduleResult = {
 };
 
 /** Reads the live score store. Empty until the cron route has synced at least once. */
-export function getSchedule(): ScheduleResult {
-  const store = readScores();
+export function getSchedule(storePath?: string): ScheduleResult {
+  const store = readScores(storePath);
   if (store.games.length === 0) {
     return { games: [], isLive: false, updatedAt: null };
   }

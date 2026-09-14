@@ -7,7 +7,7 @@ import {
   POSTPONED_GAME,
   SCHEDULED_GAME,
 } from "./__fixtures__/balldontlie-games";
-import { fetchLatestGames, normalizeGame, normalizeGames } from "./scores";
+import { fetchSeasonGames, normalizeGame, normalizeGames } from "./scores";
 
 describe("normalizeGame", () => {
   const cases: Array<[string, typeof SCHEDULED_GAME, Partial<ReturnType<typeof normalizeGame>>]> = [
@@ -66,61 +66,87 @@ describe("normalizeGames", () => {
   });
 });
 
-describe("fetchLatestGames", () => {
+describe("fetchSeasonGames", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
   });
 
-  it("normalizes the data array from a successful response", async () => {
+  it("normalizes the data array from a successful single-page response", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
-        new Response(JSON.stringify({ data: [SCHEDULED_GAME, LIVE_GAME] }), { status: 200 }),
+        new Response(
+          JSON.stringify({ data: [SCHEDULED_GAME, LIVE_GAME], meta: { next_cursor: null } }),
+          { status: 200 },
+        ),
       ),
     );
 
-    const result = await fetchLatestGames("test-key");
+    const result = await fetchSeasonGames("test-key", 2026);
     expect(result).toEqual({ ok: true, games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)] });
   });
 
-  it("sends the API key and queries both today and yesterday in one call", async () => {
-    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: [] }), { status: 200 }));
+  it("sends the API key and scopes the request to the season's regular-season games", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({ data: [], meta: { next_cursor: null } }), { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
-    await fetchLatestGames("test-key", new Date("2026-09-14T10:00:00Z"));
+    await fetchSeasonGames("test-key", 2026);
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0];
-    expect(String(url)).toContain("dates%5B%5D=2026-09-13");
-    expect(String(url)).toContain("dates%5B%5D=2026-09-14");
+    expect(String(url)).toContain("seasons%5B%5D=2026");
+    expect(String(url)).toContain("season_types%5B%5D=2");
     expect((init as RequestInit).headers).toMatchObject({ Authorization: "test-key" });
+  });
+
+  it("follows meta.next_cursor across pages and combines the results", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ data: [SCHEDULED_GAME], meta: { next_cursor: 42 } }), { status: 200 }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ data: [LIVE_GAME], meta: { next_cursor: null } }), { status: 200 }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await fetchSeasonGames("test-key", 2026);
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(String(fetchMock.mock.calls[1][0])).toContain("cursor=42");
+    expect(result).toEqual({ ok: true, games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)] });
   });
 
   it("returns a failure reason on a non-2xx response, without throwing", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("", { status: 500 })));
 
-    const result = await fetchLatestGames("test-key");
+    const result = await fetchSeasonGames("test-key", 2026);
     expect(result).toEqual({ ok: false, reason: "provider responded 500" });
   });
 
   it("returns a failure reason on a network error, without throwing", async () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("boom")));
 
-    const result = await fetchLatestGames("test-key");
+    const result = await fetchSeasonGames("test-key", 2026);
     expect(result).toEqual({ ok: false, reason: "network error: boom" });
   });
 
   it("returns a failure reason when the response body has no data array", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ oops: true }), { status: 200 })));
 
-    const result = await fetchLatestGames("test-key");
+    const result = await fetchSeasonGames("test-key", 2026);
     expect(result).toEqual({ ok: false, reason: "provider response missing a data array" });
   });
 
   it("succeeds with an empty games array when the provider has nothing to report", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: [] }), { status: 200 })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: [], meta: { next_cursor: null } }), { status: 200 })),
+    );
 
-    const result = await fetchLatestGames("test-key");
+    const result = await fetchSeasonGames("test-key", 2026);
     expect(result).toEqual({ ok: true, games: [] });
   });
 });
