@@ -124,6 +124,11 @@ export function normalizeGames(rawGames: RawGame[]): Game[] {
 const GAMES_URL = "https://api.balldontlie.io/nfl/v1/games";
 const FETCH_TIMEOUT_MS = 8_000;
 const MAX_PAGES = 10; // regular season is ~272 games / 100 per page — a generous ceiling against an API misbehaving into an infinite cursor loop
+const PAGE_DELAY_MS = 1_500; // balldontlie's free tier caps at 5 req/min — spread pages out so one sync attempt can't blow that budget by itself
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 // Bump this before the next season kicks off — no calendar logic to derive it, it changes once a year.
 export const CURRENT_SEASON = 2026;
@@ -137,6 +142,10 @@ export async function fetchSeasonGames(apiKey: string, season: number): Promise<
   let cursor: number | null = null;
 
   for (let page = 0; page < MAX_PAGES; page++) {
+    if (page > 0) {
+      await sleep(PAGE_DELAY_MS);
+    }
+
     const url = new URL(GAMES_URL);
     url.searchParams.append("seasons[]", String(season));
     url.searchParams.append("season_types[]", "2");

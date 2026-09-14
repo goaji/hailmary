@@ -69,6 +69,7 @@ describe("normalizeGames", () => {
 describe("fetchSeasonGames", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   it("normalizes the data array from a successful single-page response", async () => {
@@ -102,6 +103,7 @@ describe("fetchSeasonGames", () => {
   });
 
   it("follows meta.next_cursor across pages and combines the results", async () => {
+    vi.useFakeTimers();
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
@@ -112,11 +114,34 @@ describe("fetchSeasonGames", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    const result = await fetchSeasonGames("test-key", 2026);
+    const resultPromise = fetchSeasonGames("test-key", 2026);
+    await vi.advanceTimersByTimeAsync(2_000); // clears the inter-page delay between the two pages
+    const result = await resultPromise;
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(String(fetchMock.mock.calls[1][0])).toContain("cursor=42");
     expect(result).toEqual({ ok: true, games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)] });
+  });
+
+  it("waits between page requests so a multi-page sync can't exceed the provider's per-minute limit", async () => {
+    vi.useFakeTimers();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ data: [SCHEDULED_GAME], meta: { next_cursor: 42 } }), { status: 200 }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ data: [LIVE_GAME], meta: { next_cursor: null } }), { status: 200 }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const resultPromise = fetchSeasonGames("test-key", 2026);
+    await vi.advanceTimersByTimeAsync(0);
+    expect(fetchMock).toHaveBeenCalledTimes(1); // second page hasn't fired yet — still waiting out the delay
+
+    await vi.advanceTimersByTimeAsync(2_000);
+    await resultPromise;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it("returns a failure reason on a non-2xx response, without throwing", async () => {

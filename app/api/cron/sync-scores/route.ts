@@ -1,5 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
+import { routing } from "@/routing";
 import { CURRENT_SEASON, fetchSeasonGames } from "@/utils/scores";
 import { readScores, shouldSkipSync, writeScores } from "@/utils/store";
 
@@ -56,6 +58,12 @@ export async function GET(request: Request) {
   }
 
   writeScores(result.games, { updatedAt: now, source: "balldontlie", lastAttemptAt: now, lastAttemptOk: true });
+
+  // Time-based revalidate isn't reliably landing on this host, so tell Next.js explicitly rather than waiting on it.
+  for (const locale of routing.locales) {
+    revalidatePath(`/${locale}`);
+    revalidatePath(`/${locale}/program`);
+  }
 
   return NextResponse.json({ status: "synced", count: result.games.length });
 }
