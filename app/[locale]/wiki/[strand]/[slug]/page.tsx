@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
@@ -8,7 +7,6 @@ import rehypeUnwrapImages from "rehype-unwrap-images";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { RuleSection } from "@/components/reference/RuleSection/RuleSection";
-import { ReferenceLinks } from "@/components/reference/ReferenceLinks/ReferenceLinks";
 import { TimelineEntry } from "@/components/reference/TimelineEntry/TimelineEntry";
 import { articleComponents } from "@/components/articles/ArticleBody/articleComponents";
 import { WikiBreadcrumbs } from "@/components/wiki/WikiBreadcrumbs/WikiBreadcrumbs";
@@ -73,11 +71,8 @@ export default async function WikiCategoryPage({
     notFound();
   }
 
-  const tNav = await getTranslations({ locale, namespace: "nav" });
   const strandTree = getWikiStrandTree(locale);
   const prevNext = getWikiPrevNext(strand, slug, locale);
-
-  const crossLinks = [{ label: tNav("glossary"), href: "/glosar" }];
 
   const EraHeading = articleComponents.h2;
 
@@ -136,7 +131,6 @@ export default async function WikiCategoryPage({
           )}
 
           <WikiPrevNext prevNext={prevNext} locale={locale} />
-          <ReferenceLinks items={crossLinks} />
         </div>
       </div>
     </div>
