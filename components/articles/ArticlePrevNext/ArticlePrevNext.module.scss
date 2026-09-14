@@ -7,9 +7,9 @@
   gap: v.space(16);
   max-width: 960px; // matches the article column, so it lines up with RelatedArticles' edges
   margin: v.space(48) auto 0 auto;
-  @include mix.panel-shift-align;
   padding: v.space(32) 32px v.space(48) 32px;
   border-top: 1px solid v.$c-border;
+  @include mix.panel-open-flush-left;
 
   @include mix.mq(md) {
     grid-template-columns: 1fr 1fr;
@@ -33,8 +33,7 @@
 }
 
 .next {
-  // Explicit placement, not DOM order: keeps "next" right-aligned even
-  // when "previous" is absent, with no empty spacer element needed.
+  // Explicit placement keeps "next" right-aligned even without "previous".
   grid-column: 1;
   text-align: left;
 

@@ -7,6 +7,7 @@ import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
 import { ArticleTeams } from "@/components/articles/ArticleTeams/ArticleTeams";
+import { ArticleRail } from "@/components/articles/ArticleRail/ArticleRail";
 import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
 import { ArticlePrevNext } from "@/components/articles/ArticlePrevNext/ArticlePrevNext";
 import { ScrollProgress } from "@/components/articles/ScrollProgress/ScrollProgress";
@@ -15,8 +16,10 @@ import {
   getArticleBySlug,
   getAvailableLocales,
   selectAdjacentArticles,
+  selectRecentArticles,
   selectRelatedArticles,
 } from "@/utils/articles";
+import styles from "./page.module.scss";
 import { SITE_URL } from "@/utils/site";
 import {
   bcp47Locale,
@@ -94,6 +97,8 @@ export default async function ArticlePage({
   const siblingArticles = getAllArticles(article.servedLocale);
   const related = selectRelatedArticles(siblingArticles, article);
   const { previous, next } = selectAdjacentArticles(siblingArticles, article.slug);
+  // Newest-first; current article always included even if outside the window.
+  const recentArticles = selectRecentArticles(siblingArticles, article, 15);
 
   // Same URL as generateMetadata's own canonical — the fallback view keeps
   // its own /en URL as the entity id, it never aliases to the /ro one.
@@ -124,20 +129,24 @@ export default async function ArticlePage({
         dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
       />
       <ScrollProgress />
-      {/* lang always matches the served content, not the URL — a no-op
-          value equal to `locale` outside the fallback case, and the fix
-          for the /en-serves-ro case otherwise (WCAG 3.1.2 "Language of
-          Parts"): the fallback notice below stays in the requested
-          locale, only the actual article content is Romanian. */}
-      <article lang={article.servedLocale}>
-        {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
+      <div className={styles.page}>
+        <div className={styles.layout}>
+          <div className={styles.rail}>
+            <ArticleRail articles={recentArticles} currentSlug={article.slug} locale={locale} />
+          </div>
 
-        <ArticleHeader article={article} />
-        <ArticleBody content={article.content} tags={article.tags} />
-        <ArticleTeams teams={article.teams} />
-        <RelatedArticles articles={related} />
-        <ArticlePrevNext previous={previous} next={next} />
-      </article>
+          {/* lang matches the served content, not the URL — WCAG 3.1.2 for the /en-serves-ro fallback case. */}
+          <article lang={article.servedLocale} className={styles.content}>
+            {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
+
+            <ArticleHeader article={article} />
+            <ArticleBody content={article.content} tags={article.tags} />
+            <ArticleTeams teams={article.teams} />
+            <RelatedArticles articles={related} />
+            <ArticlePrevNext previous={previous} next={next} />
+          </article>
+        </div>
+      </div>
     </>
   );
 }

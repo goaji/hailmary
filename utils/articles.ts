@@ -126,6 +126,19 @@ export function selectRelatedArticles<
   return [...sameCategory, ...rest].slice(0, limit);
 }
 
+/** Newest-first up to `limit`, always including `current` even if it would otherwise fall outside the window. */
+export function selectRecentArticles<T extends { slug: string }>(
+  articles: T[],
+  current: T,
+  limit = 15,
+): T[] {
+  const top = articles.slice(0, limit);
+  if (top.some((article) => article.slug === current.slug)) {
+    return top;
+  }
+  return [...top.slice(0, limit - 1), current];
+}
+
 /**
  * The chronological neighbours of `currentSlug` — older (`previous`) and
  * newer (`next`) — for a prev/next footer nav. `sortedArticles` must

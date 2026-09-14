@@ -1,6 +1,13 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
+// Registers --scrollbar-width as a <length> so it resolves once here, not re-resolved against each descendant's own containing block.
+@property --scrollbar-width {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 html {
   height: 100%;
   box-sizing: border-box;
@@ -51,6 +58,7 @@ body {
   font-family: v.$font-body;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --scrollbar-width: calc(100vw - 100%); // the gap between 100vw and body's rendered width
 }
 
 a {

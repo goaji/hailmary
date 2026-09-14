@@ -7,6 +7,7 @@ import {
   resolveArticlesLocale,
   selectAdjacentArticles,
   selectFeatured,
+  selectRecentArticles,
   selectRelatedArticles,
   sortByPublishedAtDesc,
   validateTeamSlugs,
@@ -233,6 +234,39 @@ describe("selectRelatedArticles", () => {
     ];
 
     expect(selectRelatedArticles(articles, current, 1).map((a) => a.slug)).toEqual(["a"]);
+  });
+});
+
+describe("selectRecentArticles", () => {
+  const current = { slug: "current" };
+
+  it("returns the newest articles, up to the limit", () => {
+    const articles = [current, { slug: "a" }, { slug: "b" }, { slug: "c" }];
+
+    expect(selectRecentArticles(articles, current, 3).map((a) => a.slug)).toEqual([
+      "current",
+      "a",
+      "b",
+    ]);
+  });
+
+  it("keeps the current article even when it falls outside the window", () => {
+    const articles = [{ slug: "a" }, { slug: "b" }, { slug: "c" }, current];
+
+    expect(selectRecentArticles(articles, current, 2).map((a) => a.slug)).toEqual([
+      "a",
+      "current",
+    ]);
+  });
+
+  it("doesn't duplicate the current article when it's already within the window", () => {
+    const articles = [{ slug: "a" }, current, { slug: "b" }];
+
+    expect(selectRecentArticles(articles, current, 3).map((a) => a.slug)).toEqual([
+      "a",
+      "current",
+      "b",
+    ]);
   });
 });
 

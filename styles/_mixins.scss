@@ -39,12 +39,22 @@ $breakpoints: (
   border: 0;
 }
 
-// Keeps the reading column's left edge pinned to the header's, instead of drifting past it as <main> narrows for the open panel.
+// Pins the reading column's left edge to the header's as <main> narrows for the open panel.
 @mixin panel-shift-align {
   @include mq(panel) {
     :global([data-panel-open]) & {
-      margin-left: max(0px, calc((100vw - 1200px) / 2));
+      margin-left: max(0px, calc((100vw - var(--scrollbar-width, 0px) - 1200px) / 2));
       margin-right: 0;
+    }
+  }
+}
+
+// Cancels margin:auto centering while the panel is open, for a component nested inside a panel-shift-align container.
+@mixin panel-open-flush-left {
+  @include mq(panel) {
+    :global([data-panel-open]) & {
+      margin-left: 0;
+      margin-right: auto;
     }
   }
 }

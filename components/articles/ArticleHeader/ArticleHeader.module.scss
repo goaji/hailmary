@@ -1,15 +1,12 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-// Shared column width for the whole article — ArticleBody and
-// ArticlePrevNext reuse this same max-width/padding, and it matches
-// RelatedArticles' width so the "Citește și" row lines up with the
-// column above it instead of reading as a wider, separate block.
+// Shared column width for the article; matches ArticleBody/ArticlePrevNext/RelatedArticles.
 .header {
   max-width: 960px;
   margin: 0 auto;
-  padding: 40px 32px; // bespoke to the reading column, not the spacing scale
-  @include mix.panel-shift-align;
+  padding: 0 32px 40px 32px; // bespoke to the reading column, not the spacing scale
+  @include mix.panel-open-flush-left;
 }
 
 .title {

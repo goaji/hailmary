@@ -5,8 +5,8 @@
 .body {
   max-width: 960px;
   margin: 0 auto;
-  @include mix.panel-shift-align;
   padding: 0 32px 40px 32px; // bespoke to the reading column, not the spacing scale
+  @include mix.panel-open-flush-left;
 }
 
 .p {
@@ -19,9 +19,7 @@
 
 .h2 {
   margin: 28px 0 v.space(12) 0; // bespoke top value — not in the spacing scale
-  // RuleSection reuses this component for its anchor-scroll targets
-  // (regulament TOC links, seeAlso deep links) — without this, the sticky
-  // header covers the heading on arrival.
+  // Keeps the sticky header from covering the heading when RuleSection's anchor-scroll links land here.
   scroll-margin-top: calc(var(--header-height, 71px) + #{v.space(16)});
   font-family: v.$font-body;
   font-weight: 700;
@@ -52,13 +50,11 @@
 .blockquote {
   margin: 0 0 v.space(20) 0;
   padding-left: v.space(20);
-  // The one left-accent-border pattern the design allows — see AGENTS.md.
-  border-left: 3px solid var(--accent-1);
+  border-left: 3px solid var(--accent-1); // the one left-accent-border pattern the design allows
   font-style: italic;
   color: v.$c-text-dim;
 
-  // The nested <p> the markdown parser wraps blockquote content in
-  // shouldn't add its own bottom margin inside an already-spaced block.
+  // The markdown parser's nested <p> shouldn't add its own bottom margin inside an already-spaced block.
   p {
     margin-bottom: 0;
   }

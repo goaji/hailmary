@@ -1,0 +1,57 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Same content-width cap/padding as the Wiki page.
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+  @include mix.panel-shift-align;
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+
+  // Panel open: drop side padding so ArticleHeader/ArticleBody's own padding sets the gutter.
+  @include mix.mq(panel) {
+    :global([data-panel-open]) & {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
+// Same grid shape as Wiki; switches to side-by-side at `panel`, the explainer panel's own breakpoint (not Wiki's `lg`).
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "rail" "content";
+  gap: v.space(32);
+
+  @include mix.mq(panel) {
+    grid-template-columns: 220px 1fr;
+    grid-template-areas: "rail content";
+    column-gap: v.space(48);
+
+    // No room beside the panel, so the rail hides and .content reclaims the column.
+    :global([data-panel-open]) & {
+      grid-template-columns: 1fr;
+      grid-template-areas: "content";
+    }
+  }
+}
+
+.rail {
+  grid-area: rail;
+
+  @include mix.mq(panel) {
+    :global([data-panel-open]) & {
+      display: none;
+    }
+  }
+}
+
+.content {
+  grid-area: content;
+  min-width: 0;
+}
