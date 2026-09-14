@@ -1,0 +1,211 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.diagram {
+  @include mix.diagram-card;
+}
+
+.mock {
+  margin-bottom: v.space(16);
+}
+
+.region {
+  transition: outline-color 200ms ease;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+// outline, not box-shadow — several regions (the field lines, the play clock) already
+// use box-shadow for their own permanent glow, and box-shadow can't stack two independent
+// declarations without one silently overriding the other.
+.regionActive {
+  outline-color: var(--accent-1);
+}
+
+.scoreBug {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.space(16);
+  padding: v.space(8) v.space(12);
+  margin-bottom: v.space(12);
+  background: v.$c-header;
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+  font-family: v.$font-display;
+  letter-spacing: 1px;
+}
+
+.teamColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.space(4);
+}
+
+.teamRow {
+  display: flex;
+  align-items: center;
+  gap: v.space(8);
+  border-radius: 2px;
+}
+
+.teamPill {
+  padding: v.space(4) v.space(8);
+  background: v.$c-surface-raised;
+  border-radius: 2px;
+  font-size: v.$fs-meta;
+}
+
+.score {
+  font-size: v.$fs-h3;
+  color: v.$c-text;
+}
+
+.dash {
+  color: v.$c-text-muted;
+}
+
+.timeoutStars {
+  display: flex;
+  gap: v.space(4);
+  border-radius: 2px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.starFilled {
+  color: var(--accent-1);
+}
+
+.starEmpty {
+  color: v.$c-border;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: v.space(8);
+  margin-bottom: v.space(12);
+}
+
+.chip {
+  display: inline-block;
+  padding: v.space(4) v.space(12);
+  background: v.$c-surface-raised;
+  color: v.$c-text;
+  font-family: v.$font-display;
+  font-size: v.$fs-body-lg;
+  letter-spacing: 1px;
+  border-radius: 2px;
+  border: 1px solid v.$c-border;
+}
+
+@keyframes playClockPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-1) 55%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent-1) 0%, transparent);
+  }
+}
+
+.playClockCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid v.$c-border;
+  font-family: v.$font-display;
+  font-size: v.$fs-body-lg;
+  animation: playClockPulse 1s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.strip {
+  position: relative;
+  height: 28px;
+  margin-bottom: v.space(12);
+  background: linear-gradient(90deg, v.$c-field-dark, v.$c-field 50%, v.$c-field-dark);
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+}
+
+.firstDownLine {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  background: v.$c-first-down-line;
+  box-shadow: 0 0 6px color-mix(in srgb, v.$c-first-down-line 80%, transparent);
+}
+
+// The line of scrimmage — dark like a real broadcast overlay, with a light halo so it still reads against the turf.
+.lineOfScrimmage {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  background: v.$c-header;
+  box-shadow: 0 0 4px color-mix(in srgb, v.$c-yard-line 70%, transparent);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin-top: v.space(16);
+}
+
+.legendItem,
+.legendItemActive {
+  padding: v.space(8) v.space(12);
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border;
+  color: v.$c-text;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: v.$fs-meta;
+
+  &:hover {
+    border-color: var(--accent-1);
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.legendItemActive {
+  border-color: var(--accent-1);
+  // Text, not border/UI chrome — 14px bold on $c-surface-raised needs the panel-calibrated accent2 bar (≥4.5), not accent1's ≥3.0.
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.hint {
+  margin: v.space(16) 0 0;
+  color: v.$c-text-muted;
+}
+
+.detailTitle {
+  margin: v.space(16) 0 0;
+  font-family: v.$font-display;
+  font-size: v.$fs-h3;
+  letter-spacing: 1px;
+  color: var(--accent-1);
+}
+
+.detailBlurb {
+  margin: v.space(8) 0 0;
+  color: v.$c-text-dim;
+}
