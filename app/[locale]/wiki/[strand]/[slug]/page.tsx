@@ -84,16 +84,21 @@ export default async function WikiCategoryPage({
   return (
     <div className={styles.page}>
       <WikiBreadcrumbs strand={strand} pageTitle={page.frontmatter.title} locale={locale} />
-      <SectionHeading as="h1">{page.frontmatter.title}</SectionHeading>
 
       <div className={styles.layout}>
-        <WikiRail
-          tree={strandTree}
-          currentStrand={strand}
-          currentSlug={slug}
-          currentPageSections={page.sections}
-          locale={locale}
-        />
+        <div className={styles.heading}>
+          <SectionHeading as="h1">{page.frontmatter.title}</SectionHeading>
+        </div>
+
+        <div className={styles.rail}>
+          <WikiRail
+            tree={strandTree}
+            currentStrand={strand}
+            currentSlug={slug}
+            currentPageSections={page.sections}
+            locale={locale}
+          />
+        </div>
 
         <div className={styles.content}>
           {page.frontmatter.entries ? (

@@ -11,22 +11,41 @@
   }
 }
 
+// Grid so the heading can sit beside the rail on desktop while rail spans both rows; source order is unchanged.
 .layout {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "heading" "rail" "content";
   gap: v.space(32);
   margin-top: v.space(32);
 
   @include mix.mq(lg) {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: v.space(48);
+    grid-template-columns: 220px 1fr;
+    grid-template-areas:
+      "rail heading"
+      "rail content";
+    column-gap: v.space(48);
+    row-gap: v.space(32);
   }
 }
 
+.heading {
+  grid-area: heading;
+}
+
+.rail {
+  grid-area: rail;
+}
+
 .content {
+  grid-area: content;
   min-width: 0;
   width: 100%;
+
+  // First h2's own top margin is redundant next to .layout's row-gap above.
+  > section:first-child > h2:first-child {
+    margin-top: 0;
+  }
 }
 
 .intro {
