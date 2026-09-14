@@ -133,7 +133,7 @@ The reference mockup is a prototype: its controls are `<div>`s and `<span>`s. **
 - Origin strip close — `<button aria-label="Ascunde">`
 - Explainer panel — `role="dialog"` with `aria-modal`, labelled by the term heading
 
-Explicit `role` is right only where no element expresses the thing: `dialog`, `alert`, `tablist`/`tab`/`tabpanel`, `radiogroup`. That's the whole list.
+Explicit `role` is right only where no element expresses the thing: `dialog`, `alert`, `status`, `tablist`/`tab`/`tabpanel`, `radiogroup`. That's the whole list.
 
 The test for whether markup is good enough: if `getByRole(role, { name })` can't find a control, a screen reader user can't either.
 

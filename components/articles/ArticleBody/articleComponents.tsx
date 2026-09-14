@@ -7,6 +7,7 @@ import { DownSystemDiagram } from "@/components/wiki/DownSystemDiagram/DownSyste
 import { FieldDiagram } from "@/components/wiki/FieldDiagram/FieldDiagram";
 import { OffensivePositionsDiagram } from "@/components/wiki/OffensivePositionsDiagram/OffensivePositionsDiagram";
 import { DefensivePositionsDiagram } from "@/components/wiki/DefensivePositionsDiagram/DefensivePositionsDiagram";
+import { RouteTreeDiagram } from "@/components/wiki/RouteTreeDiagram/RouteTreeDiagram";
 import styles from "./ArticleBody.module.scss";
 
 function MdxLink({ href = "", children, ...rest }: ComponentPropsWithoutRef<"a">) {
@@ -90,4 +91,5 @@ export const articleComponents = {
   FieldDiagram,
   OffensivePositionsDiagram,
   DefensivePositionsDiagram,
+  RouteTreeDiagram,
 };

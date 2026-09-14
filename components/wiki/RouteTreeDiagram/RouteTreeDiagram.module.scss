@@ -1,0 +1,92 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.diagram {
+  @include mix.diagram-card;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  // Matches the viewBox's own 200×100 ratio exactly, so the default (non-"none") preserveAspectRatio never has to letterbox.
+  aspect-ratio: 2 / 1;
+  background: linear-gradient(180deg, v.$c-field-dark, v.$c-field 60%, v.$c-field-dark);
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+}
+
+.route,
+.routeActive {
+  fill: none;
+  stroke: v.$c-yard-line;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.45;
+  transition:
+    stroke 200ms ease,
+    stroke-width 200ms ease,
+    opacity 200ms ease;
+}
+
+.routeActive {
+  stroke: var(--accent-1);
+  stroke-width: 2.8;
+  opacity: 1;
+}
+
+.origin {
+  fill: v.$c-yard-line;
+}
+
+.yardLine {
+  stroke: v.$c-yard-line;
+  stroke-width: 0.3;
+  stroke-dasharray: 2 2;
+  opacity: 0.35;
+}
+
+.yardLabel {
+  fill: v.$c-yard-line;
+  opacity: 0.6;
+  font-size: 5px;
+}
+
+.numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin-top: v.space(16);
+}
+
+.number,
+.numberActive {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid v.$c-yard-line;
+  background: v.$c-surface-raised;
+  color: v.$c-text;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.numberActive {
+  border-color: var(--accent-1);
+  background: var(--accent-1);
+  color: v.$c-header;
+}
+
+.detail {
+  margin-top: v.space(16);
+  min-height: 60px;
+}
+
+.hint {
+  margin: 0;
+  color: v.$c-text-muted;
+}
