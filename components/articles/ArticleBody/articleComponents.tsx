@@ -6,6 +6,7 @@ import { TermLink } from "@/components/explainer/TermLink/TermLink";
 import { DownSystemDiagram } from "@/components/wiki/DownSystemDiagram/DownSystemDiagram";
 import { FieldDiagram } from "@/components/wiki/FieldDiagram/FieldDiagram";
 import { OffensivePositionsDiagram } from "@/components/wiki/OffensivePositionsDiagram/OffensivePositionsDiagram";
+import { DefensivePositionsDiagram } from "@/components/wiki/DefensivePositionsDiagram/DefensivePositionsDiagram";
 import styles from "./ArticleBody.module.scss";
 
 function MdxLink({ href = "", children, ...rest }: ComponentPropsWithoutRef<"a">) {
@@ -88,4 +89,5 @@ export const articleComponents = {
   DownSystemDiagram,
   FieldDiagram,
   OffensivePositionsDiagram,
+  DefensivePositionsDiagram,
 };

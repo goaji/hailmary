@@ -13,7 +13,7 @@
     "test:unit": "vitest run"
   },
   "dependencies": {
-    "@hailmary/shared": "github:goaji/hailmary-shared#v1.1.4",
+    "@hailmary/shared": "github:goaji/hailmary-shared#v1.6.0",
     "gray-matter": "^4.0.3",
     "next": "16.3.2",
     "next-intl": "^4.13.7",
