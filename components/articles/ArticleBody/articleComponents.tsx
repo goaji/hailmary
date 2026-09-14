@@ -10,6 +10,7 @@ import { DefensivePositionsDiagram } from "@/components/wiki/DefensivePositionsD
 import { RouteTreeDiagram } from "@/components/wiki/RouteTreeDiagram/RouteTreeDiagram";
 import { SituationalFootballDiagram } from "@/components/wiki/SituationalFootballDiagram/SituationalFootballDiagram";
 import { BoxScoreDiagram } from "@/components/wiki/BoxScoreDiagram/BoxScoreDiagram";
+import { StatLinesDiagram } from "@/components/wiki/StatLinesDiagram/StatLinesDiagram";
 import styles from "./ArticleBody.module.scss";
 
 function MdxLink({ href = "", children, ...rest }: ComponentPropsWithoutRef<"a">) {
@@ -96,4 +97,5 @@ export const articleComponents = {
   RouteTreeDiagram,
   SituationalFootballDiagram,
   BoxScoreDiagram,
+  StatLinesDiagram,
 };

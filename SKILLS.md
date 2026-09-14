@@ -37,7 +37,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 2. Server Component unless it needs state, effects, or event handlers — then `'use client'` on line one with a one-line comment saying why.
 3. No literal UI text in the JSX. Add the key to `messages/ro.json` *and* `messages/en.json`, read it with `useTranslations` (client) or `getTranslations` (server).
 4. Props interface named `<Name>Props`, declared above the component, exported only if another module needs it.
-5. SCSS: one root block class matching the component name in camelCase (`.newsCard`), children nested one level. Colors from `_variables.scss` or `var(--accent-1)` — never a literal hex.
+5. SCSS: one root block class matching the component name in camelCase (`.newsCard`), children nested one level. Colors from `_variables.scss` or `var(--accent-1)` — never a literal hex. Exception: the `components/wiki/*Diagram` family roots on `.diagram` instead of the per-component name — an established convention across all of them (`BoxScoreDiagram`, `RouteTreeDiagram`, `SituationalFootballDiagram`, `FormationDiagram`, `StatLinesDiagram`), kept so shared diagram layout/spacing rules stay in one selector. Follow `.diagram` for a new diagram component; use the component-name class everywhere else.
 6. Named export. Barrel files are not used; import from the full path.
 
 ## Add a new route

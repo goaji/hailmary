@@ -1,0 +1,103 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.diagram {
+  @include mix.diagram-card;
+}
+
+.mock {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(12);
+  margin-bottom: v.space(16);
+
+  @include mix.mq(md) {
+    flex-direction: row;
+  }
+}
+
+.table {
+  flex: 1;
+  border-collapse: collapse;
+  border: 1px solid v.$c-border;
+  border-radius: 2px;
+  transition: opacity 200ms ease;
+  width: 100%;
+
+  th,
+  td {
+    padding: v.space(8) v.space(12);
+    text-align: center;
+    border-bottom: 1px solid v.$c-border;
+    font-size: v.$fs-meta;
+  }
+
+  th {
+    background: v.$c-surface-raised;
+    color: v.$c-text-muted;
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+
+  td {
+    color: v.$c-text;
+    font-family: v.$font-display;
+    font-size: v.$fs-body-lg;
+    letter-spacing: 1px;
+    border-bottom: none;
+  }
+}
+
+.tableDim {
+  opacity: 0.35;
+}
+
+.tableCaption {
+  caption-side: top;
+  padding: v.space(4) v.space(8);
+  text-align: left;
+  color: var(--accent-1);
+  font-family: v.$font-display;
+  letter-spacing: 1px;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+}
+
+.legendItem,
+.legendItemActive {
+  padding: v.space(8) v.space(12);
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border;
+  color: v.$c-text;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: v.$fs-meta;
+
+  &:hover {
+    border-color: var(--accent-1);
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}
+
+.legendItemActive {
+  border-color: var(--accent-1);
+  color: var(--accent-2);
+  font-weight: 700;
+}
+
+.hint,
+.detailBlurb {
+  margin: v.space(16) 0 0;
+  color: v.$c-text-muted;
+}
+
+.detailBlurb {
+  color: v.$c-text-dim;
+}
