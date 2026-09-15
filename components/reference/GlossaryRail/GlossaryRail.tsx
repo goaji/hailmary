@@ -1,6 +1,6 @@
 "use client"; // local search filter state
 
-import { useId, useState } from "react";
+import { useId, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n";
 import styles from "./GlossaryRail.module.scss";
@@ -24,9 +24,20 @@ function matchesQuery(term: GlossaryRailTerm, query: string): boolean {
   return term.term.toLowerCase().includes(query.trim().toLowerCase());
 }
 
+function subscribeToHash(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  return () => window.removeEventListener("hashchange", onChange);
+}
+
 // Search filters this rail only — the page underneath stays unfiltered.
 function RailBody({ letters, currentLetter, allTerms }: GlossaryRailProps) {
   const t = useTranslations("glossary");
+  // Mirrors the term TargetRefresh highlights in the page, so rail and content agree.
+  const targetSlug = useSyncExternalStore(
+    subscribeToHash,
+    () => window.location.hash.slice(1),
+    () => "",
+  );
   const [query, setQuery] = useState("");
   const filterId = useId();
   const isSearching = query.trim().length > 0;
@@ -84,7 +95,11 @@ function RailBody({ letters, currentLetter, allTerms }: GlossaryRailProps) {
                       .filter((term) => term.letter === letter)
                       .map((term) => (
                         <li key={term.slug}>
-                          <a href={`#${term.slug}`} className={styles.termLink}>
+                          <a
+                            href={`#${term.slug}`}
+                            aria-current={term.slug === targetSlug ? "location" : undefined}
+                            className={styles.termLink}
+                          >
                             {term.term}
                           </a>
                         </li>

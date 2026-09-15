@@ -1,6 +1,6 @@
 @use "variables" as v;
 
-// Same seeAlso-arrival treatment as GlossaryList's .details:has(.detailsContent:target) — reserved transparent border so landing doesn't shift layout.
+// Same arrival highlight as GlossaryTerm — reserved transparent border so landing doesn't shift layout.
 .section {
   margin-bottom: v.space(48);
   padding-left: v.space(16);

@@ -8,6 +8,7 @@ import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { RuleSection } from "@/components/reference/RuleSection/RuleSection";
 import { TimelineEntry } from "@/components/reference/TimelineEntry/TimelineEntry";
+import { TargetRefresh } from "@/components/reference/TargetRefresh/TargetRefresh";
 import { articleComponents } from "@/components/articles/ArticleBody/articleComponents";
 import { WikiBreadcrumbs } from "@/components/wiki/WikiBreadcrumbs/WikiBreadcrumbs";
 import { WikiRail } from "@/components/wiki/WikiRail/WikiRail";
@@ -78,6 +79,7 @@ export default async function WikiCategoryPage({
 
   return (
     <div className={styles.page}>
+      <TargetRefresh />
       <WikiBreadcrumbs strand={strand} pageTitle={page.frontmatter.title} locale={locale} />
 
       <div className={styles.layout}>

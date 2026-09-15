@@ -1,10 +1,17 @@
 @use "variables" as v;
 
 .term {
-  padding: v.space(20) 0;
+  padding: v.space(20) 0 v.space(20) v.space(16);
   border-bottom: 1px solid v.$c-border;
+  // Reserved transparent border so the arrival highlight doesn't shift layout.
+  border-left: 3px solid transparent;
   // So a #slug jump doesn't tuck the term under the sticky header.
   scroll-margin-top: calc(var(--header-height, 71px) + #{v.space(20)});
+
+  &[data-target] {
+    border-left-color: var(--accent-1);
+    background: v.$c-surface-raised;
+  }
 
   &:last-child {
     border-bottom: none;

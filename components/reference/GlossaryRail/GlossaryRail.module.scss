@@ -152,6 +152,11 @@
   &:focus-visible {
     @include mix.focus-ring;
   }
+
+  &[aria-current="location"] {
+    color: var(--accent-1);
+    font-weight: 700;
+  }
 }
 
 // Search-result links aren't nested in .termSubList — drop its padding.

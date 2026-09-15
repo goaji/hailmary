@@ -7,7 +7,7 @@ function markTarget() {
   document.getElementById(window.location.hash.slice(1))?.setAttribute("data-target", "");
 }
 
-// CSS :target never fires after a pushState-based arrival (what next-intl's Link uses) — RuleSection keys its highlight off this attribute instead, which this keeps in sync on mount and on every hashchange.
+// CSS :target never fires after a pushState-based arrival (what next-intl's Link uses) — RuleSection and GlossaryTerm key their highlight off this attribute instead, which this keeps in sync on mount and on every hashchange.
 export function TargetRefresh() {
   useEffect(() => {
     markTarget();
