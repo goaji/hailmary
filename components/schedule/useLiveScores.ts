@@ -23,6 +23,11 @@ async function fetcher(url: string): Promise<ScoresResponse> {
 // Polls our own /api/scores, never the third-party API. `enabled` gates whether polling starts at all; refreshInterval then stops it once the latest payload has no live game left.
 export function useLiveScores(enabled: boolean) {
   return useSWR<ScoresResponse>(enabled ? "/api/scores" : null, fetcher, {
-    refreshInterval: (latestData) => (hasLiveGame(latestData?.games) ? POLL_INTERVAL_MS : 0),
+    refreshInterval: (latestData) => {
+      if (!latestData || latestData.games.length === 0 || hasLiveGame(latestData.games)) {
+        return POLL_INTERVAL_MS;
+      }
+      return 0;
+    },
   });
 }
