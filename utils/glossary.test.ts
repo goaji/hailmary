@@ -3,6 +3,7 @@ import {
   extractTermLinkSlugs,
   groupTermsByLetter,
   parseGlossaryFrontmatter,
+  resolveLetter,
   sortByTerm,
   validateTermLinks,
 } from "./glossary";
@@ -76,6 +77,16 @@ describe("groupTermsByLetter", () => {
 
   it("returns an empty array for no entries", () => {
     expect(groupTermsByLetter([])).toEqual([]);
+  });
+});
+
+describe("resolveLetter", () => {
+  it("uppercases a lowercase route param that has entries", () => {
+    expect(resolveLetter("b", ["B", "D", "T"])).toBe("B");
+  });
+
+  it("returns undefined for a letter with no entries", () => {
+    expect(resolveLetter("z", ["B", "D", "T"])).toBeUndefined();
   });
 });
 

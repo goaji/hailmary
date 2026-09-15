@@ -114,6 +114,12 @@ export const getGlossaryLetters = cache((locale: Locale): string[] => {
   return groupTermsByLetter(getAllTerms(locale)).map((group) => group.letter);
 });
 
+/** Uppercased letter if it has entries, else undefined so the caller can 404. */
+export function resolveLetter(param: string, letters: string[]): string | undefined {
+  const upper = param.toUpperCase();
+  return letters.includes(upper) ? upper : undefined;
+}
+
 /** Terms for one letter, already alphabetized. */
 export function getTermsByLetter(locale: Locale, letter: string): GlossaryEntry[] {
   const target = letter.toUpperCase();

@@ -4,7 +4,7 @@ import { hasLocale } from "next-intl";
 import { routing } from "@/i18n";
 import { OG_CONTENT_TYPE, OG_FONTS, OG_SIZE, ReferenceOgCard } from "@/utils/og";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
-import { resolveLetter } from "./page";
+import { getGlossaryLetters, resolveLetter } from "@/utils/glossary";
 
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
@@ -16,7 +16,7 @@ export default async function Image({
 }) {
   const { locale: requested, letter: letterParam } = await params;
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
-  const letter = resolveLetter(letterParam, locale);
+  const letter = resolveLetter(letterParam, getGlossaryLetters(locale));
 
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tGlossary = await getTranslations({ locale, namespace: "glossary" });

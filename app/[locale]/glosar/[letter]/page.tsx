@@ -8,15 +8,8 @@ import { GlossaryRail } from "@/components/reference/GlossaryRail/GlossaryRail";
 import { GlossaryTerm } from "@/components/reference/GlossaryTerm/GlossaryTerm";
 import { TargetRefresh } from "@/components/reference/TargetRefresh/TargetRefresh";
 import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
-import { getAllTerms, getGlossaryLetters } from "@/utils/glossary";
-import type { Locale } from "@/types";
+import { getAllTerms, getGlossaryLetters, resolveLetter } from "@/utils/glossary";
 import styles from "./page.module.scss";
-
-/** Undefined for a letter with no entries, so the caller can 404. */
-export function resolveLetter(param: string, locale: Locale): string | undefined {
-  const upper = param.toUpperCase();
-  return getGlossaryLetters(locale).includes(upper) ? upper : undefined;
-}
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -32,7 +25,7 @@ export async function generateMetadata({
     notFound();
   }
 
-  const letter = resolveLetter(letterParam, locale);
+  const letter = resolveLetter(letterParam, getGlossaryLetters(locale));
   if (!letter) {
     notFound();
   }
@@ -58,14 +51,14 @@ export default async function GlossaryLetterPage({
     notFound();
   }
 
-  const letter = resolveLetter(letterParam, locale);
+  const letters = getGlossaryLetters(locale);
+  const letter = resolveLetter(letterParam, letters);
   if (!letter) {
     notFound();
   }
 
   const t = await getTranslations({ locale, namespace: "glossary" });
   const entries = getAllTerms(locale);
-  const letters = getGlossaryLetters(locale);
   const currentTerms = entries.filter((entry) => entry.term.charAt(0).toUpperCase() === letter);
   const allTerms = entries.map((entry) => ({
     slug: entry.slug,
