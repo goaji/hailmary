@@ -16,9 +16,8 @@ export function resolveLastModified(
 
 /**
  * The most recently modified file among `filePaths` — for a page like
- * /glosar that aggregates many content files and has no single
- * frontmatter date of its own. Returns the epoch for an empty list, which
- * callers should treat as "no real signal available."
+ * /glosar/[letter] that aggregates several content files and has no single
+ * frontmatter date of its own. Returns the epoch for an empty list.
  */
 export function latestMtime(filePaths: string[]): Date {
   return filePaths.reduce((latest, filePath) => {

@@ -1,0 +1,32 @@
+@use "variables" as v;
+
+.term {
+  padding: v.space(20) 0;
+  border-bottom: 1px solid v.$c-border;
+  // So a #slug jump doesn't tuck the term under the sticky header.
+  scroll-margin-top: calc(var(--header-height, 71px) + #{v.space(20)});
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.heading {
+  margin: 0 0 v.space(12) 0;
+  font-family: v.$font-display;
+  font-size: v.$fs-h3;
+  letter-spacing: 0.4px;
+}
+
+.short {
+  margin: 0 0 v.space(12) 0;
+  font-size: v.$fs-body-lg;
+  color: v.$c-text;
+}
+
+.seeAlso {
+  display: inline-block;
+  margin-top: v.space(12);
+  font-size: v.$fs-ui;
+  font-weight: 600;
+}

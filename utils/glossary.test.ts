@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   extractTermLinkSlugs,
+  groupTermsByLetter,
   parseGlossaryFrontmatter,
   sortByTerm,
   validateTermLinks,
@@ -54,6 +55,27 @@ describe("sortByTerm", () => {
       "Întoarcere",
       "Touchdown",
     ]);
+  });
+});
+
+describe("groupTermsByLetter", () => {
+  it("buckets entries by first letter and sorts the letters", () => {
+    const groups = groupTermsByLetter([
+      { term: "Touchdown" },
+      { term: "Blitz" },
+      { term: "Down" },
+      { term: "Down and distance" },
+    ]);
+
+    expect(groups.map((g) => g.letter)).toEqual(["B", "D", "T"]);
+    expect(groups.find((g) => g.letter === "D")?.entries.map((e) => e.term)).toEqual([
+      "Down",
+      "Down and distance",
+    ]);
+  });
+
+  it("returns an empty array for no entries", () => {
+    expect(groupTermsByLetter([])).toEqual([]);
   });
 });
 

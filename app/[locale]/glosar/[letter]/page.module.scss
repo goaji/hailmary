@@ -1,0 +1,39 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mix.mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+// No separate "heading" area — the h1 sits full-width above, not beside the rail like the wiki pages.
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(32);
+  margin-top: v.space(32);
+
+  @include mix.mq(lg) {
+    grid-template-columns: 220px 1fr;
+    column-gap: v.space(48);
+  }
+}
+
+.rail {
+  min-width: 0;
+}
+
+.content {
+  min-width: 0;
+  width: 100%;
+
+  // Zero the first term's own top padding so it aligns with the rail.
+  > article:first-child {
+    padding-top: 0;
+  }
+}

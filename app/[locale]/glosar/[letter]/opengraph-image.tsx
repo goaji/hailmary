@@ -4,6 +4,7 @@ import { hasLocale } from "next-intl";
 import { routing } from "@/i18n";
 import { OG_CONTENT_TYPE, OG_FONTS, OG_SIZE, ReferenceOgCard } from "@/utils/og";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
+import { resolveLetter } from "./page";
 
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
@@ -11,10 +12,12 @@ export const contentType = OG_CONTENT_TYPE;
 export default async function Image({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string; letter: string }>;
 }) {
-  const { locale: requested } = await params;
+  const { locale: requested, letter: letterParam } = await params;
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+  const letter = resolveLetter(letterParam, locale);
+
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tGlossary = await getTranslations({ locale, namespace: "glossary" });
   const team = TEAMS_BY_SLUG[DEFAULT_TEAM];
@@ -23,7 +26,7 @@ export default async function Image({
     (
       <ReferenceOgCard
         kicker={tNav("glossary")}
-        title={tGlossary("title")}
+        title={letter ? tGlossary("pageTitle", { letter }) : tGlossary("title")}
         accentBar={team.accent1}
         accentText={team.accent2}
       />

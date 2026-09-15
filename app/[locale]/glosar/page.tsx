@@ -1,39 +1,14 @@
-import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { getLanguageAlternates, routing } from "@/i18n";
-import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
-import { GlossaryList } from "@/components/reference/GlossaryList/GlossaryList";
-import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
-import { getAllTerms } from "@/utils/glossary";
-import styles from "./page.module.scss";
+import { redirect, routing } from "@/i18n";
+import { getGlossaryLetters } from "@/utils/glossary";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[locale]/glosar">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
-
-  const t = await getTranslations({ locale, namespace: "glossary" });
-
-  return {
-    title: t("title"),
-    description: t("metaDescription"),
-    alternates: {
-      canonical: getLanguageAlternates("/glosar", [locale])[locale],
-      languages: getLanguageAlternates("/glosar"),
-    },
-  };
-}
-
-export default async function GlossaryPage({
+// No content of its own — always redirects to the first letter, e.g. /glosar/b.
+export default async function GlossaryIndexPage({
   params,
 }: PageProps<"/[locale]/glosar">) {
   const { locale } = await params;
@@ -41,22 +16,10 @@ export default async function GlossaryPage({
     notFound();
   }
 
-  const t = await getTranslations("glossary");
-  const entries = getAllTerms(locale);
+  const [firstLetter] = getGlossaryLetters(locale);
+  if (!firstLetter) {
+    notFound();
+  }
 
-  const items = entries.map((entry) => ({
-    slug: entry.slug,
-    term: entry.term,
-    short: entry.short,
-    seeAlso: entry.seeAlso,
-    isFallback: entry.servedLocale !== locale,
-    extended: <ExplainerContent key={entry.slug} content={entry.extended} />,
-  }));
-
-  return (
-    <div className={styles.page}>
-      <SectionHeading as="h1">{t("title")}</SectionHeading>
-      <GlossaryList items={items} />
-    </div>
-  );
+  redirect({ href: `/glosar/${firstLetter.toLowerCase()}`, locale });
 }

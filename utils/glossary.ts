@@ -35,6 +35,22 @@ export function sortByTerm<T extends { term: string }>(entries: T[]): T[] {
   return [...entries].sort((a, b) => a.term.localeCompare(b.term, "ro"));
 }
 
+/** Buckets entries by first letter. */
+export function groupTermsByLetter<T extends { term: string }>(
+  entries: T[],
+): { letter: string; entries: T[] }[] {
+  const groups = new Map<string, T[]>();
+  for (const entry of entries) {
+    const letter = entry.term.charAt(0).toUpperCase();
+    const bucket = groups.get(letter) ?? [];
+    bucket.push(entry);
+    groups.set(letter, bucket);
+  }
+  return [...groups.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([letter, letterEntries]) => ({ letter, entries: letterEntries }));
+}
+
 /** Exported so callers outside this module (e.g. the sitemap) can stat the file without re-deriving the content-path convention. */
 export function termFilePath(locale: Locale, slug: string): string {
   return contentFilePath(CONTENT_DIR, locale, slug);
@@ -92,6 +108,17 @@ export const getAllTerms = cache((locale: Locale): GlossaryEntry[] => {
 export const getTermSlugs = cache((locale: Locale): string[] => {
   return listMdxSlugs(CONTENT_DIR, locale);
 });
+
+/** Letters with at least one term, sorted. */
+export const getGlossaryLetters = cache((locale: Locale): string[] => {
+  return groupTermsByLetter(getAllTerms(locale)).map((group) => group.letter);
+});
+
+/** Terms for one letter, already alphabetized. */
+export function getTermsByLetter(locale: Locale, letter: string): GlossaryEntry[] {
+  const target = letter.toUpperCase();
+  return getAllTerms(locale).filter((entry) => entry.term.charAt(0).toUpperCase() === target);
+}
 
 const TERM_LINK_PATTERN = /<TermLink\b[^>]*\bterm=(["'])(.*?)\1/g;
 

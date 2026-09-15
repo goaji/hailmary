@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import path from "node:path";
 import { getLanguageAlternates, routing, type Locale } from "@/i18n";
 import { getAllArticles, getAvailableLocales } from "@/utils/articles";
-import { getAllTerms, termFilePath } from "@/utils/glossary";
+import { getGlossaryLetters, getTermsByLetter, termFilePath } from "@/utils/glossary";
 import { getSchedule } from "@/utils/schedule";
 import { latestMtime, resolveLastModified } from "@/utils/sitemap";
 import { SITE_URL } from "@/utils/site";
@@ -81,10 +81,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  // Glossary: one page per locale, dated by its newest backing term file.
+  // Glossary: one page per letter per locale, dated by that letter's newest backing term file.
   for (const locale of routing.locales) {
-    const files = getAllTerms(locale).map((term) => termFilePath(locale, term.slug));
-    entries.push(entry("/glosar", locale, routing.locales, latestMtime(files)));
+    for (const letter of getGlossaryLetters(locale)) {
+      const files = getTermsByLetter(locale, letter).map((term) => termFilePath(locale, term.slug));
+      entries.push(entry(`/glosar/${letter.toLowerCase()}`, locale, routing.locales, latestMtime(files)));
+    }
   }
 
   // Team pages share one freshness signal: the single source-of-truth file.

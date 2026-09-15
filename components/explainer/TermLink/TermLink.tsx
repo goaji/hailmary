@@ -55,8 +55,12 @@ export function TermLink({ term, children }: TermLinkProps) {
   ) : null;
 
   if (!isHydrated) {
+    // Glossary pages are bucketed by the display term's first letter
+    // (groupTermsByLetter), which can differ from the slug's — fall back to
+    // the slug only if the entry isn't loaded, matching prior behavior.
+    const letter = (entry?.term ?? term).charAt(0).toLowerCase();
     return (
-      <Link href={`/glosar#${term}`} className={className}>
+      <Link href={`/glosar/${letter}#${term}`} className={className}>
         {children}
         {tooltip}
       </Link>
