@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  // Bundle it: as a runtime ESM external its node:process import reads process.stdin, which throws EEXIST on Hostinger.
+  transpilePackages: ["next-mdx-remote"],
   images: {
     // next/image's optimizer 400s on any .svg src unless this is set. All
     // SVGs served here are our own (logos, placeholders) — none are
