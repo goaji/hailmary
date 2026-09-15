@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "node server.cjs",
     "lint": "eslint",
     "test:unit": "vitest run"
   },
