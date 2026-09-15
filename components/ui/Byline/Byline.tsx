@@ -15,7 +15,10 @@ export async function Byline({ author, publishedAt, readingTimeMinutes }: Byline
 
   return (
     <p className={styles.byline}>
-      {author} · {formatPublishedAt(publishedAt, locale)}
+      {author} ·{" "}
+      <time dateTime={publishedAt} data-testid="published-date">
+        {formatPublishedAt(publishedAt, locale)}
+      </time>
       {readingTimeMinutes !== undefined
         ? ` · ${t("readingTime", { minutes: readingTimeMinutes })}`
         : null}

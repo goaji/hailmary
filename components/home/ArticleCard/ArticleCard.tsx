@@ -53,7 +53,12 @@ export async function ArticleCard({ article, priority, headingLevel = "h3" }: Ar
         </Link>
       </Heading>
 
-      <p className={styles.time}>{formatPublishedAt(article.publishedAt, locale)}</p>
+      <p className={styles.time}>
+        {/* data-testid: screenshot-mask hook, the relative time has no accessible handle and changes every run */}
+        <time dateTime={article.publishedAt} data-testid="published-date">
+          {formatPublishedAt(article.publishedAt, locale)}
+        </time>
+      </p>
     </div>
   );
 }

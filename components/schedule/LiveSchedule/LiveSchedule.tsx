@@ -129,7 +129,7 @@ export function LiveSchedule({ locale, initialGames, initialIsLive, initialUpdat
             liveStatus={isLive ? null : undefined}
             updatedAtNote={
                 updatedAt && (
-                    <p className={styles.updatedAt}>
+                    <p className={styles.updatedAt} data-testid="schedule-updated-at">
                         {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
                     </p>
                 )
