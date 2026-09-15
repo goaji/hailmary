@@ -12,7 +12,9 @@
   // grid rather than adding list-only markup to ArticleCard itself.
   :global([data-view="list"]) & {
     display: grid;
-    grid-template-columns: 160px 1fr;
+    // minmax(0, …): a plain 1fr can't shrink below its content's min-content
+    // width, which pushed cards past a 375px viewport.
+    grid-template-columns: 160px minmax(0, 1fr);
     grid-template-rows: auto auto 1fr;
     column-gap: v.space(12);
     row-gap: v.space(4);
@@ -48,6 +50,7 @@
   gap: v.space(10);
 
   :global([data-view="list"]) & {
+    flex-wrap: wrap; // team badge drops under the category tag when the column is narrow
     grid-column: 2;
     grid-row: 1;
   }
