@@ -32,7 +32,7 @@ export async function ArticleCard({ article, priority, headingLevel = "h3" }: Ar
   const Heading = headingLevel;
 
   return (
-    <div className={styles.card}>
+    <article className={styles.card}>
       <div className={styles.imageWrap}>
         <ArticleImage
           image={article.image}
@@ -59,6 +59,6 @@ export async function ArticleCard({ article, priority, headingLevel = "h3" }: Ar
           {formatPublishedAt(article.publishedAt, locale)}
         </time>
       </p>
-    </div>
+    </article>
   );
 }
