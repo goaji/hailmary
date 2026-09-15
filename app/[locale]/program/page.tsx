@@ -12,14 +12,11 @@ import { hasLiveGame } from "@/utils/liveGames";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import styles from "./page.module.scss";
 
-// No searchParams here — reading them server-side forces per-request dynamic
-// rendering, which crashes under Hostinger's Node runtime (see DEPLOY.md).
-// Every week's table is pre-rendered below; ScheduleWeekSwitcher picks one client-side.
-export const revalidate = 60;
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
+// Rendered fresh on every request — static+ISR left this page stuck serving
+// build-time (empty) content indefinitely on this host, since regeneration
+// never reliably landed. getSchedule() is a cheap local file read, so
+// per-request rendering costs nothing meaningful here.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

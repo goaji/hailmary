@@ -9,11 +9,9 @@ import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
 import { Sidebar } from "@/components/home/Sidebar/Sidebar";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { excludeArticleBySlug, getAllArticlesWithFallback, selectFeatured } from "@/utils/articles";
-import { getSchedule, selectUpcomingGames } from "@/utils/schedule";
 import styles from "./page.module.scss";
 
 const GRID_SIZE = 4;
-const SIDEBAR_GAME_COUNT = 3;
 
 export async function generateMetadata({
   params,
@@ -44,21 +42,18 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
     notFound();
   }
 
-  // getAllArticlesWithFallback/getSchedule are synchronous
-  // (fs.readFileSync-backed, React-cache-memoized) — there's no real async
-  // work to parallelize here, so no Promise.all.
+  // getAllArticlesWithFallback is synchronous (fs.readFileSync-backed,
+  // React-cache-memoized) — there's no real async work here, so no Promise.all.
   const { articles: allArticles, servedLocale } = getAllArticlesWithFallback(locale);
   const isFallback = servedLocale !== locale;
   const featured = selectFeatured(allArticles);
-  const { games: allGames, isLive } = getSchedule();
-  const games = selectUpcomingGames(allGames, SIDEBAR_GAME_COUNT);
 
   const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(
     0,
     GRID_SIZE,
   );
 
-  const t = await getTranslations("newsIndex");
+  const t = await getTranslations({ locale, namespace: "newsIndex" });
 
   return (
     <>
@@ -71,7 +66,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
           <NewsGrid articles={gridArticles} lang={isFallback ? servedLocale : undefined} />
         </div>
         <div className={styles.sidebarColumn}>
-          <Sidebar games={games} isLive={isLive} />
+          <Sidebar locale={locale} />
         </div>
       </div>
     </>

@@ -35,10 +35,3 @@ export function getCurrentWeek(games: Game[]): number {
   }
   return Math.max(...games.map((game) => game.week));
 }
-
-// Soonest-kickoff-first, capped to `count` — for compact surfaces (homepage panel) that only have room for a handful of rows. Live/just-started games sort first since their kickoff has already passed.
-export function selectUpcomingGames(games: Game[], count: number): Game[] {
-  return [...games]
-    .sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime())
-    .slice(0, count);
-}
