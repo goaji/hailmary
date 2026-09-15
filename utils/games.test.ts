@@ -26,6 +26,14 @@ describe("selectUpcomingGames", () => {
     expect(selectUpcomingGames(games, 3)).toHaveLength(1);
   });
 
+  it("excludes games that have already been played", () => {
+    const games = [
+      game({ id: "played", week: 2, status: "final", kickoff: "2026-09-13T17:00:00Z" }),
+      game({ id: "next", week: 2, status: "scheduled", kickoff: "2026-09-15T00:15:00Z" }),
+    ];
+    expect(selectUpcomingGames(games, 1).map((g) => g.id)).toEqual(["next"]);
+  });
+
   it("does not mutate the input array", () => {
     const games = [
       game({ id: "b", week: 2, status: "scheduled", kickoff: "2026-09-15T00:15:00Z" }),

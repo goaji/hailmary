@@ -53,7 +53,6 @@ function GameRow({ game, locale }: { game: Game; locale: string }) {
             </td>
             <td className={rowStyles.kickoff}>{formatKickoff(game.kickoff, locale)}</td>
             <td className={rowStyles.scoreCell}>
-                {isLive && <LiveScoreBadgeView quarter={game.quarter} clock={game.clock} t={liveT} />}
                 {hasScore ? (
                     <span className={rowStyles.score} role={isLive ? undefined : "status"}>
                         {game.awayScore}–{game.homeScore}
@@ -66,6 +65,7 @@ function GameRow({ game, locale }: { game: Game; locale: string }) {
                         <span className={rowStyles.visuallyHidden}>{t("notStarted")}</span>
                     </span>
                 ) : null}
+                {isLive && <LiveScoreBadgeView quarter={game.quarter} clock={game.clock} t={liveT} />}
             </td>
         </tr>
     );
