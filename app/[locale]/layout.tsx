@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Bebas_Neue, Work_Sans } from "next/font/google";
+import { Sofia_Sans_Condensed, Work_Sans } from "next/font/google";
 import Script from "next/script";
 import { routing } from "@/i18n";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
@@ -18,9 +18,10 @@ import { DISMISS_KEY, STRIP_ID } from "@/components/home/OriginStrip/originStrip
 import "../../styles/globals.scss";
 
 // "latin" alone silently drops ă/â/î/ș/ț — latin-ext is required too, alongside it (its own range excludes plain ASCII).
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  variable: "--font-bebas-neue",
+// Only 700 is loaded, so every display element renders bold whatever font-weight it asks for.
+const sofiaSansCondensed = Sofia_Sans_Condensed({
+  weight: "700",
+  variable: "--font-sofia-sans-condensed",
   subsets: ["latin", "latin-ext"],
   display: "swap",
   preload: true,
@@ -71,7 +72,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   }));
 
   return (
-    <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
+    <html lang={locale} className={`${sofiaSansCondensed.variable} ${workSans.variable}`}>
       <body>
         {/* Lives here, not in OriginStrip, so it runs before hydration and the dismissed strip never flashes. */}
         <Script

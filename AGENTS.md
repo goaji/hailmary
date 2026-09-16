@@ -71,7 +71,7 @@ If a feature seems to need one of these, stop and ask rather than scaffolding it
 
 ## Design direction — "Night Lights"
 
-Dark stadium-at-night feel. Dark base (`#0d0e12` header, `#14151a` page), off-white text (`#f5f4f2`), muted grey secondary text (`#9a9ba3`), and a team-driven accent pair. Bold condensed display type (Bebas Neue) for headlines and the logo; Work Sans for body and UI. Sharp corners, thin borders, minimal shadow — editorial, not app-like.
+Dark stadium-at-night feel. Dark base (`#0d0e12` header, `#14151a` page), off-white text (`#f5f4f2`), muted grey secondary text (`#9a9ba3`), and a team-driven accent pair. Bold condensed display type (Sofia Sans Condensed 700) for headlines and the logo; Work Sans for body and UI. Sharp corners, thin borders, minimal shadow — editorial, not app-like.
 
 Reference mockup: `Homepage.dc.html` in the design project. Match its layout and spacing, not its markup (it's a prototype, not production code).
 

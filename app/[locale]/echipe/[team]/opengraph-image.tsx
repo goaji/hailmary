@@ -1,5 +1,12 @@
 import { ImageResponse } from "next/og";
-import { OG_CONTENT_TYPE, OG_FONTS, OG_SIZE, OgWordmark, svgDataUri } from "@/utils/og";
+import {
+  OG_CONTENT_TYPE,
+  OG_DISPLAY_FONT,
+  OG_FONTS,
+  OG_SIZE,
+  OgWordmark,
+  svgDataUri,
+} from "@/utils/og";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG, onBrandColor } from "@/utils/teams";
 
 export const size = OG_SIZE;
@@ -29,8 +36,9 @@ export default async function Image({ params }: { params: Promise<{ team: string
           <span
             style={{
               display: "flex",
-              fontFamily: "Bebas Neue",
+              ...OG_DISPLAY_FONT,
               fontSize: 88,
+              textTransform: "uppercase",
               lineHeight: 1,
               color: foreground,
             }}

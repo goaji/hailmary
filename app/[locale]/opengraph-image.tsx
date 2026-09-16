@@ -1,6 +1,13 @@
 import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
-import { OG_CONTENT_TYPE, OG_FONTS, OG_PAGE_BG, OG_SIZE, OG_TEXT_MUTED } from "@/utils/og";
+import {
+  OG_CONTENT_TYPE,
+  OG_DISPLAY_FONT,
+  OG_FONTS,
+  OG_PAGE_BG,
+  OG_SIZE,
+  OG_TEXT_MUTED,
+} from "@/utils/og";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
 import { resolveLocale } from "@/utils/locale";
 
@@ -29,7 +36,7 @@ export default async function Image({ params }: { params: Promise<{ locale: stri
         padding: 80,
       }}
     >
-      <div style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 96, letterSpacing: 2 }}>
+      <div style={{ display: "flex", ...OG_DISPLAY_FONT, fontSize: 96, letterSpacing: 2 }}>
         <span style={{ color: OG_TEXT_MUTED }}>HAIL</span>
         <span style={{ color: team.accent1 }}>MARY</span>
         <span style={{ color: OG_TEXT_MUTED, fontSize: 64, marginLeft: 8 }}>.RO</span>

@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { OG_FONTS } from "@/utils/og";
+import { OG_DISPLAY_FONT, OG_FONTS } from "@/utils/og";
 import { HEADER_BG } from "@/utils/theme";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
 
@@ -20,9 +20,7 @@ export default function Icon() {
         backgroundColor: HEADER_BG,
       }}
     >
-      <span style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 26, color: accent }}>
-        H
-      </span>
+      <span style={{ display: "flex", ...OG_DISPLAY_FONT, fontSize: 26, color: accent }}>H</span>
     </div>,
     { ...size, fonts: [OG_FONTS[0]] },
   );

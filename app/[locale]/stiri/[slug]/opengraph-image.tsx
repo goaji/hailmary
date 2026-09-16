@@ -5,6 +5,7 @@ import { CATEGORIES } from "@/utils/categories";
 import { resolveLocale } from "@/utils/locale";
 import {
   OG_CONTENT_TYPE,
+  OG_DISPLAY_FONT,
   OG_FONTS,
   OG_PAGE_BG,
   OG_SIZE,
@@ -67,7 +68,7 @@ export default async function Image({
         <span
           style={{
             display: "flex",
-            fontFamily: "Bebas Neue",
+            ...OG_DISPLAY_FONT,
             fontSize: 72,
             lineHeight: 1.05,
             color: OG_TEXT,

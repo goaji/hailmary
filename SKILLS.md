@@ -56,7 +56,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 2. `TeamColorProvider` reads the selected team from context (persisted to `localStorage`) and sets `--accent-1` / `--accent-2` from the *accent* pair as inline custom properties on its wrapper element.
 3. Components consume `var(--accent-1)` / `var(--accent-2)` in SCSS. No component reads `accent1` / `accent2` off a team record except `TeamColorProvider` — one that does won't re-skin when the user switches teams. The exception is generated images (`icon.tsx`, `opengraph-image.tsx`), which render outside the page and have no custom properties to read. Importing `utils/teams.ts` for team *identity* is fine: resolving a slug or ID from frontmatter or a `Game` into a name, badge, or link (`getTeam`), or listing teams by division. `brand1` / `brand2` are read directly only where the true brand color is the point (picker swatches, `TeamCard`, `TeamIdentityBand`), never as a UI accent.
 4. Adding or changing a team means clearing both contrast bars, which differ because the two accents have different jobs:
-   - `accent1` ≥ **3.0** against the page `#14151a` — large Bebas headings and UI
+   - `accent1` ≥ **3.0** against the page `#14151a` — large display headings and UI
    - `accent2` ≥ **4.5** against the panel `#1e2027` — small 10-11px bold category chips
    Lighten the accent until it clears; never darken the surface, and never touch `brand1`/`brand2` to fix a contrast problem.
 5. `Team Colors.dc.html` in the design project renders all 32 with both ratios computed. Use it to eyeball a change before committing it.

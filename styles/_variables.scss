@@ -51,7 +51,7 @@ $content-width: 1200px;
 // Reading-column width — article sections, plus FallbackNotice on glosar/istorie/regulament.
 $reading-width: 960px;
 
-// Type scale, UI chrome through section headings. Bebas display sizes
+// Type scale, UI chrome through section headings. Display-font sizes
 // (hero/headline) are separate tokens, added when those components land.
 $fs-chip: 11px; // category tags — the one size smaller than UI chrome
 $fs-ui: 12px; // nav labels, footer, badges
@@ -62,7 +62,7 @@ $fs-article-body: 18px; // article reading column — excerpt and MDX body parag
 $fs-h3: 22px; // subheadings
 $fs-h2: 30px; // large in-page headings (not the SectionHeading primitive — see $fs-section-heading)
 
-// Bebas display sizes, added as those components land — kept separate from
+// Display-font sizes, added as those components land — kept separate from
 // the UI type scale above since a display size and a body heading can
 // diverge even where their px values start out matching.
 $fs-logo: 28px;
@@ -72,5 +72,5 @@ $fs-team-name: 44px; // /echipe/[team] identity band h1
 // Font stacks. The CSS variables come from next/font/google in
 // app/[locale]/layout.tsx; the literal names are the fallback before
 // those load.
-$font-display: var(--font-bebas-neue), "Bebas Neue", sans-serif;
+$font-display: var(--font-sofia-sans-condensed), "Sofia Sans Condensed", sans-serif;
 $font-body: var(--font-work-sans), "Work Sans", sans-serif;
