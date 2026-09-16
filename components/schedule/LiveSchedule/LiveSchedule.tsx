@@ -77,12 +77,7 @@ function ScheduleTable({ games, week, locale }: { games: Game[]; week: number; l
   const t = useTranslations("scheduleTable");
 
   return (
-    <div
-      role="region"
-      aria-label={t("scrollLabel")}
-      tabIndex={0}
-      className={tableStyles.scheduleTable}
-    >
+    <section aria-label={t("scrollLabel")} tabIndex={0} className={tableStyles.scheduleTable}>
       <table className={tableStyles.table}>
         <caption className={tableStyles.caption}>{t("caption", { week })}</caption>
         <thead>
@@ -98,7 +93,7 @@ function ScheduleTable({ games, week, locale }: { games: Game[]; week: number; l
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }
 

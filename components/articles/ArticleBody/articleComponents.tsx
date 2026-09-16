@@ -56,18 +56,11 @@ function MdxImage({ src, alt }: { src?: string; alt?: string }) {
 async function MdxTable({ children }: { children?: ReactNode }) {
   const t = await getTranslations("articleBody");
 
-  // A generic <div> has no accessible-name mechanism on its own — role
-  // "region" is what lets aria-label apply, and there's no plain-HTML
-  // element for "scrollable region with a name."
+  // A named <section> maps to role "region", giving the focusable scroll container an announceable name.
   return (
-    <div
-      role="region"
-      aria-label={t("tableScrollLabel")}
-      tabIndex={0}
-      className={styles.tableWrapper}
-    >
+    <section aria-label={t("tableScrollLabel")} tabIndex={0} className={styles.tableWrapper}>
       <table className={styles.table}>{children}</table>
-    </div>
+    </section>
   );
 }
 

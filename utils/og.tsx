@@ -73,6 +73,7 @@ export function OgWordmark({ accent }: { accent: string }): ReactElement {
     <div style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 30, letterSpacing: 1 }}>
       <span style={{ color: OG_TEXT }}>HAIL</span>
       <span style={{ color: accent }}>MARY</span>
+      {/* Unlike the header, a small gap before .RO on purpose: it reads better at image size. */}
       <span style={{ color: OG_TEXT_MUTED, fontSize: 20, marginLeft: 6 }}>.RO</span>
     </div>
   );
