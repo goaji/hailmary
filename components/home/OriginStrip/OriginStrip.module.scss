@@ -55,12 +55,8 @@
 }
 
 .phrase {
-  opacity: 0;
-  animation: hm-phrase 0.5s ease-out both;
-
-  @media (prefers-reduced-motion: reduce) {
-    opacity: 1;
-    animation: none;
+  @include mix.motion-safe {
+    animation: hm-phrase 0.5s ease-out both;
   }
 }
 

@@ -21,7 +21,7 @@ html {
 }
 
 // Anchor scrolling (TOC links, seeAlso deep links) — smooth unless the reader prefers reduced motion.
-@media (prefers-reduced-motion: no-preference) {
+@include mix.motion-safe {
   html {
     scroll-behavior: smooth;
   }

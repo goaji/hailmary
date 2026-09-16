@@ -2,7 +2,7 @@
 
 .pageShift {
   main {
-    @media (prefers-reduced-motion: no-preference) {
+    @include mix.motion-safe {
       transition: margin-right 250ms ease;
     }
   }

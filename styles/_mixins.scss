@@ -2,7 +2,7 @@
 @use "variables" as v;
 
 // Mobile-first breakpoints. Every media query in the codebase goes through
-// mq() — a raw @media is a review failure.
+// a mixin here (mq, motion-safe, fine-pointer) — a raw @media is a review failure.
 $breakpoints: (
   sm: 375px,
   md: 768px,
@@ -16,6 +16,20 @@ $breakpoints: (
   }
 
   @media (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Motion is opt-in: animations and transitions go inside this, never undone later under `reduce`.
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Hover-capable mouse/trackpad only — keeps touch and hybrid devices from getting stuck hover states.
+@mixin fine-pointer {
+  @media (hover: hover) and (pointer: fine) {
     @content;
   }
 }

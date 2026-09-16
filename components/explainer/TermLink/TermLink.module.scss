@@ -71,7 +71,7 @@
 // tier at all (a tap goes straight to the sheet), and this keeps a
 // touch-capable desktop/hybrid device from getting a stuck tooltip on tap.
 // mq(panel) matches the same desktop threshold the panel itself uses.
-@media (hover: hover) and (pointer: fine) {
+@include mix.fine-pointer {
   @include mix.mq(panel) {
     .termLink:hover .tooltip {
       opacity: 1;

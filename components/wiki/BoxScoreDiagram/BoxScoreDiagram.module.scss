@@ -124,10 +124,9 @@
   border: 2px solid v.$c-border;
   font-family: v.$font-display;
   font-size: v.$fs-body-lg;
-  animation: playClockPulse 1s ease-in-out infinite;
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+  @include mix.motion-safe {
+    animation: playClockPulse 1s ease-in-out infinite;
   }
 }
 
