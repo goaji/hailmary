@@ -143,3 +143,16 @@
   font-size: v.$fs-ui;
   color: v.$c-text-muted;
 }
+
+.tagLink {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+}

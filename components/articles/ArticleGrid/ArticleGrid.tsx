@@ -13,8 +13,8 @@ type ArticleGridProps = {
   lang?: string;
   /** Leading cards that render with next/image `priority` — above-the-fold grids only. */
   priorityCount?: number;
-  /** "news" caps at 2 columns (homepage); "team" grows to 4 (team page). */
-  variant: "news" | "team";
+  /** "news" caps at 2 columns (homepage); "three" uses 3 columns; "team" grows to 4. */
+  variant: "news" | "three" | "team";
 };
 
 export function ArticleGrid({
@@ -27,7 +27,8 @@ export function ArticleGrid({
   variant,
 }: ArticleGridProps) {
   const sectionClass = variant === "news" ? styles.newsSection : styles.teamSection;
-  const gridClass = variant === "news" ? styles.newsGrid : styles.teamGrid;
+  const gridClass =
+    variant === "news" ? styles.newsGrid : variant === "three" ? styles.threeGrid : styles.teamGrid;
 
   return (
     <section className={sectionClass} aria-labelledby={headingId} lang={lang}>
@@ -36,7 +37,7 @@ export function ArticleGrid({
         <div
           className={gridClass}
           // Read by ArticleCard.module.scss to hide the cover image below md.
-          data-hide-image-mobile={variant === "news" ? "" : undefined}
+          data-hide-image-mobile={variant === "news" || variant === "three" ? "" : undefined}
         >
           {articles.map((article, index) => (
             <ArticleCard key={article.slug} article={article} priority={index < priorityCount} />

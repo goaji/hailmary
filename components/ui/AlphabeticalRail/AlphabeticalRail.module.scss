@@ -1,10 +1,10 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.desktopRail {
-  display: none;
+.desktopRail { display: none; }
 
-  @include mix.mq(lg) {
+@include mix.mq(lg) {
+  .desktopRail {
     display: block;
     position: sticky;
     top: calc(var(--header-height, 71px) + #{v.space(32)});
@@ -17,10 +17,10 @@
   border: 1px solid v.$c-border;
   border-radius: 3px;
   padding: v.space(16);
+}
 
-  @include mix.mq(lg) {
-    display: none;
-  }
+@include mix.mq(lg) {
+  .mobileRail { display: none; }
 }
 
 .summary {
@@ -32,17 +32,10 @@
   list-style: none;
   margin-bottom: v.space(12);
 
-  &::-webkit-details-marker {
-    display: none;
-  }
+  &::-webkit-details-marker,
+  &::marker { display: none; content: ""; }
 
-  &::marker {
-    content: "";
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
+  &:focus-visible { @include mix.focus-ring; }
 }
 
 .chevron {
@@ -56,9 +49,7 @@
   transition: transform 150ms ease;
 }
 
-.mobileRail[open] .chevron {
-  transform: rotate(-135deg);
-}
+.mobileRail[open] .chevron { transform: rotate(-135deg); }
 
 .filterRow {
   display: flex;
@@ -67,11 +58,7 @@
   margin-bottom: v.space(16);
 }
 
-.filterLabel {
-  font-size: v.$fs-ui;
-  font-weight: 600;
-  color: v.$c-text-dim;
-}
+.filterLabel { font-size: v.$fs-ui; font-weight: 600; color: v.$c-text-dim; }
 
 .filterInput {
   width: 100%;
@@ -81,30 +68,22 @@
   color: v.$c-text;
   font-size: v.$fs-body;
 
-  &::placeholder {
-    color: v.$c-text-muted;
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
+  &::placeholder { color: v.$c-text-muted; }
+  &:focus-visible { @include mix.focus-ring; }
 }
 
-.empty {
-  font-size: v.$fs-meta;
-  color: v.$c-text-muted;
-}
+.empty { font-size: v.$fs-meta; color: v.$c-text-muted; }
 
 .list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: v.space(8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.letterLink {
+.groupLabel {
   display: block;
   padding: v.space(4) 0;
   font-family: v.$font-display;
@@ -112,54 +91,32 @@
   letter-spacing: 0.4px;
   color: v.$c-text-dim;
 
-  &:hover {
-    color: v.$c-text;
-    text-decoration: none;
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
-
-  &[aria-current="page"] {
-    color: var(--accent-1);
-  }
+  &:hover { color: v.$c-text; text-decoration: none; }
+  &:focus-visible { @include mix.focus-ring; }
 }
 
-// Nested one level, like WikiRail's .sectionList.
-.termSubList {
-  list-style: none;
-  margin: v.space(4) 0 0 0;
-  padding: 0 0 0 v.space(12);
+.currentGroup { color: var(--accent-1); }
+
+.subList {
   display: flex;
   flex-direction: column;
   gap: v.space(4);
+  list-style: none;
+  margin: v.space(4) 0 0 0;
+  padding: 0 0 0 v.space(12);
   border-left: 1px solid v.$c-border;
 }
 
-.termLink {
+.itemLink {
   display: block;
   padding: v.space(4) 0 v.space(4) v.space(12);
   overflow-wrap: break-word;
   font-size: v.$fs-meta;
   color: v.$c-text-muted;
 
-  &:hover {
-    color: v.$c-text;
-    text-decoration: none;
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
-
-  &[aria-current="location"] {
-    color: var(--accent-1);
-    font-weight: 700;
-  }
+  &:hover { color: v.$c-text; text-decoration: none; }
+  &:focus-visible { @include mix.focus-ring; }
+  &[aria-current="page"], &[aria-current="location"] { color: var(--accent-1); font-weight: 700; }
 }
 
-// Search-result links aren't nested in .termSubList — drop its padding.
-.list > li > .termLink {
-  padding-left: 0;
-}
+.list > li > .itemLink { padding-left: 0; }
