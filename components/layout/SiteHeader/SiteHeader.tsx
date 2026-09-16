@@ -2,11 +2,12 @@ import { Link } from "@/i18n";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher/LanguageSwitcher";
 import { TeamPicker } from "@/components/layout/TeamPicker/TeamPicker";
 import { SiteNav } from "@/components/layout/SiteNav/SiteNav";
+import { SITE_HEADER_ID } from "./siteHeaderConstants";
 import styles from "./SiteHeader.module.scss";
 
 export function SiteHeader() {
   return (
-    <header data-testid="site-header" className={styles.siteHeader}>
+    <header id={SITE_HEADER_ID} className={styles.siteHeader}>
       <div className={styles.inner}>
         {/* Flex items get spaces between them in the accessible name; the label keeps it one word. */}
         <Link href="/" className={styles.logo} aria-label="HAILMARY.RO">
