@@ -10,3 +10,4 @@ tsconfig.tsbuildinfo
 content/
 design/
 public/
+*.md
