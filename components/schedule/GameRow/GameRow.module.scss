@@ -68,6 +68,16 @@
   font-weight: 700;
 }
 
+.score {
+  display: block;
+  font-family: v.$font-display;
+  font-size: v.$fs-body-lg;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+}
+
 .postponed {
   color: v.$c-text-muted;
   font-weight: 600;
