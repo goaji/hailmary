@@ -7,8 +7,11 @@ import {
   type ScheduleWeek,
 } from "@/components/schedule/ScheduleWeekSwitcher/ScheduleWeekSwitcher";
 import { ScheduleTable } from "@/components/schedule/ScheduleTable/ScheduleTable";
+import { LiveScoreStatus } from "@/components/schedule/LiveScoreStatus/LiveScoreStatus";
+import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { useLiveScores } from "@/components/schedule/useLiveScores";
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
+import { hasLiveGame } from "@/utils/liveGames";
 import styles from "./LiveSchedule.module.scss";
 
 type LiveScheduleProps = {
@@ -41,7 +44,6 @@ export function LiveSchedule({
   const t = useTranslations("schedulePage");
   const { data } = useLiveScores(true);
   const games = data?.games ?? initialGames;
-  const isLive = data?.isLive ?? initialIsLive;
   const updatedAt = data?.updatedAt ?? initialUpdatedAt;
   const weeks = getAvailableWeeks(games);
   const defaultWeek = getCurrentWeek(games);
@@ -49,6 +51,7 @@ export function LiveSchedule({
   if (games.length === 0) {
     return (
       <div className={styles.liveSchedule}>
+        <SectionHeading as="h1">{t("title")}</SectionHeading>
         <p className={styles.empty}>{t("empty")}</p>
       </div>
     );
@@ -75,7 +78,9 @@ export function LiveSchedule({
         defaultWeek={defaultWeek}
         weekNavLabel={t("weekNavLabel")}
         weeksHeading={t("weeksHeading")}
-        liveStatus={isLive ? null : undefined}
+        liveStatus={
+          <LiveScoreStatus initialIsLive={initialIsLive} hasLiveGames={hasLiveGame(games)} />
+        }
         updatedAtNote={
           updatedAt && (
             <p className={styles.updatedAt} data-testid="schedule-updated-at">
