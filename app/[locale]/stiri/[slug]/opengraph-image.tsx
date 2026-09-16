@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
 import { getArticleBySlug } from "@/utils/articles";
 import { CATEGORIES } from "@/utils/categories";
+import { resolveLocale } from "@/utils/locale";
 import {
   OG_CONTENT_TYPE,
   OG_FONTS,
@@ -21,8 +22,8 @@ export default async function Image({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
-  const article = getArticleBySlug(slug, locale as "ro" | "en");
+  const { locale: localeParam, slug } = await params;
+  const article = getArticleBySlug(slug, resolveLocale(localeParam));
 
   // The tagged team's colors when there is one — Tag.tsx's chip always
   // renders in accent2 regardless of the category's declared accent slot
