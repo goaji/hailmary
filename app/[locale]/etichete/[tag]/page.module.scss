@@ -2,13 +2,7 @@
 @use "mixins" as mix;
 
 .page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: v.space(32) v.space(20) v.space(64);
-
-  @include mix.mq(md) {
-    padding: v.space(48) v.space(32) v.space(64);
-  }
+  @include mix.page-shell;
 }
 
 .layout {

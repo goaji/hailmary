@@ -6,10 +6,8 @@
   flex-wrap: wrap;
   align-items: center;
   gap: v.space(12);
-  max-width: 960px; // matches ArticleBody/RelatedArticles/ArticlePrevNext's column width
-  margin: 0 auto;
-  padding: v.space(20) 32px 0 32px;
-  @include mix.panel-open-flush-left;
+  padding-top: v.space(20);
+  @include mix.reading-column;
 }
 
 .label {

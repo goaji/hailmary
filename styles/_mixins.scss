@@ -58,7 +58,7 @@ $breakpoints: (
 @mixin panel-shift-align {
   @include mq(panel) {
     :global([data-panel-open]) & {
-      margin-left: max(0px, calc((100vw - var(--scrollbar-width, 0px) - 1200px) / 2));
+      margin-left: max(0px, calc((100vw - var(--scrollbar-width, 0px) - #{v.$content-width}) / 2));
       margin-right: 0;
     }
   }
@@ -72,6 +72,25 @@ $breakpoints: (
       margin-right: auto;
     }
   }
+}
+
+// The standard page container: content-width cap plus the site's page gutters.
+@mixin page-shell {
+  max-width: v.$content-width;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+// The article reading column: every article section owns its width independently, so they all go through this to line up.
+@mixin reading-column {
+  max-width: v.$reading-width;
+  margin-inline: auto;
+  padding-inline: 32px; // bespoke to the reading column, not the spacing scale
+  @include panel-open-flush-left;
 }
 
 // The boxed-card treatment shared by every Wiki hero diagram (DownSystemDiagram, FieldDiagram, and future ones).

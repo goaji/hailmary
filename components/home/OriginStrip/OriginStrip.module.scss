@@ -22,7 +22,7 @@
   // the header above it. min-height keeps the 76px band at rest while
   // letting it grow with wrapped content instead of overflowing.
   min-height: 76px;
-  max-width: 1200px; // same content-width cap as the header/hero/page body
+  max-width: v.$content-width;
   margin: 0 auto;
   padding: v.space(12) v.space(32);
   background: v.$c-surface;

@@ -1,12 +1,9 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-// Same column width as ArticleHeader — each section owns it independently.
 .articleBody {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 32px 40px 32px; // bespoke to the reading column, not the spacing scale
-  @include mix.panel-open-flush-left;
+  padding-bottom: 40px; // bespoke to the reading column, not the spacing scale
+  @include mix.reading-column;
 }
 
 .p {

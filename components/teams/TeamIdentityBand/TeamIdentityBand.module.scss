@@ -9,13 +9,13 @@
   color: var(--band-fg);
 }
 
-// Same max-width/padding as .sections in page.module.scss, so the logo and
+// Same max-width and similar padding as .sections in page.module.scss, so the logo and
 // name line up with the content below instead of sitting flush left.
 .inner {
   display: flex;
   align-items: center;
   gap: v.space(20);
-  max-width: 1200px;
+  max-width: v.$content-width;
   margin: 0 auto;
   padding: v.space(32) v.space(20);
 

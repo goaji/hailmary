@@ -45,6 +45,12 @@ $space: (
   @return map.get($space, $step);
 }
 
+// Page content-width cap — header, footer, and every page body line up on it.
+$content-width: 1200px;
+
+// Reading-column width — article sections, plus FallbackNotice on glosar/istorie/regulament.
+$reading-width: 960px;
+
 // Type scale, UI chrome through section headings. Bebas display sizes
 // (hero/headline) are separate tokens, added when those components land.
 $fs-chip: 11px; // category tags — the one size smaller than UI chrome
