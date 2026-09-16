@@ -8,7 +8,8 @@ export function SiteHeader() {
   return (
     <header data-testid="site-header" className={styles.header}>
       <div className={styles.inner}>
-        <Link href="/" className={styles.logo}>
+        {/* Flex items get spaces between them in the accessible name; the label keeps it one word. */}
+        <Link href="/" className={styles.logo} aria-label="HAILMARY.RO">
           <span className={styles.logoHail}>HAIL</span>
           <span className={styles.logoMary}>MARY</span>
           <span className={styles.logoRo}>.RO</span>
