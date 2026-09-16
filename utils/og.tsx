@@ -67,7 +67,7 @@ export function svgDataUri(publicPath: string): string {
   return `data:image/svg+xml;base64,${base64}`;
 }
 
-/** The header's "HAIL MARY.RO" wordmark, reproduced with inline styles for Satori. `accent` is the one color that varies by context (a team's accent/brand color, or the default team's when no team applies). */
+/** The header's "HAILMARY.RO" wordmark, reproduced with inline styles for Satori. `accent` is the one color that varies by context (a team's accent/brand color, or the default team's when no team applies). */
 export function OgWordmark({ accent }: { accent: string }): ReactElement {
   return (
     <div style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 30, letterSpacing: 1 }}>

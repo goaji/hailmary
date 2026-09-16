@@ -4,7 +4,7 @@ import { HEADER_BG, PAGE_BG } from "@/utils/theme";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "hailmary.ro — Fotbal american NFL, în română",
-    short_name: "Hail Mary",
+    short_name: "HailMary",
     description: "Fotbal american NFL, în română.",
     start_url: "/",
     display: "standalone",
