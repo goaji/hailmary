@@ -4,8 +4,9 @@ import { hasLocale } from "next-intl";
 import { routing } from "@/routing";
 
 // Separate from i18n.ts because next/root-params is Server-Component-only and would break client bundling if mixed with i18n.ts's `Link` export.
-export default getRequestConfig(async () => {
-  const requested = await rootParamLocale();
+// An explicit locale skips root-params, which throws inside route handlers (opengraph-image).
+export default getRequestConfig(async ({ locale: explicitLocale }) => {
+  const requested = explicitLocale ?? (await rootParamLocale());
   const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
 
   return {
