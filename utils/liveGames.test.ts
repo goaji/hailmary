@@ -8,6 +8,7 @@ function game(status: Game["status"]): Game {
     homeTeamId: "kc",
     awayTeamId: "buf",
     kickoff: "2026-09-13T20:25:00Z",
+    season: 2026,
     week: 2,
     status,
   };
