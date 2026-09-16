@@ -5,36 +5,38 @@ import { Link } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import styles from "./ScheduleWeekSwitcher.module.scss";
 
+export type ScheduleWeek = {
+  week: number;
+  label: string;
+  ariaLabel: string;
+  title: string;
+  table: ReactNode;
+};
+
 type ScheduleWeekSwitcherProps = {
-  weeks: number[];
+  weeks: ScheduleWeek[];
   defaultWeek: number;
   weekNavLabel: string;
   weeksHeading: string;
-  weekLabels: Record<number, string>;
-  weekAriaLabels: Record<number, string>;
-  titleLabels: Record<number, string>;
-  tables: Record<number, ReactNode>;
   liveStatus?: ReactNode;
   updatedAtNote?: ReactNode;
 };
 
 type WeekListProps = {
-  weeks: number[];
-  weekLabels: Record<number, string>;
-  weekAriaLabels: Record<number, string>;
+  weeks: ScheduleWeek[];
   selectedWeek: number;
   onSelect: (week: number) => void;
 };
 
-function WeekList({ weeks, weekLabels, weekAriaLabels, selectedWeek, onSelect }: WeekListProps) {
+function WeekList({ weeks, selectedWeek, onSelect }: WeekListProps) {
   return (
     <ul className={styles.list}>
-      {weeks.map((week) => (
+      {weeks.map(({ week, label, ariaLabel }) => (
         <li key={week}>
           <Link
             href={`/program?etapa=${week}`}
             aria-current={week === selectedWeek ? "page" : undefined}
-            aria-label={weekAriaLabels[week]}
+            aria-label={ariaLabel}
             className={week === selectedWeek ? styles.linkActive : styles.link}
             onClick={(event) => {
               event.preventDefault();
@@ -42,7 +44,7 @@ function WeekList({ weeks, weekLabels, weekAriaLabels, selectedWeek, onSelect }:
               onSelect(week);
             }}
           >
-            {weekLabels[week]}
+            {label}
           </Link>
         </li>
       ))}
@@ -50,7 +52,7 @@ function WeekList({ weeks, weekLabels, weekAriaLabels, selectedWeek, onSelect }:
   );
 }
 
-// Every week's table is pre-rendered server-side and passed in via `tables`;
+// Every week's table is pre-rendered and passed in via `weeks`;
 // this only ever mounts one of them. Navigation updates the URL with
 // history.pushState instead of next-intl's router so switching weeks never
 // asks the server for a fresh render.
@@ -59,14 +61,11 @@ export function ScheduleWeekSwitcher({
   defaultWeek,
   weekNavLabel,
   weeksHeading,
-  weekLabels,
-  weekAriaLabels,
-  titleLabels,
-  tables,
   liveStatus,
   updatedAtNote,
 }: ScheduleWeekSwitcherProps) {
   const [selectedWeek, setSelectedWeek] = useState(defaultWeek);
+  const selected = weeks.find(({ week }) => week === selectedWeek);
 
   useEffect(() => {
     function syncFromUrl() {
@@ -75,7 +74,9 @@ export function ScheduleWeekSwitcher({
         10,
       );
       setSelectedWeek(
-        Number.isInteger(requested) && weeks.includes(requested) ? requested : defaultWeek,
+        Number.isInteger(requested) && weeks.some(({ week }) => week === requested)
+          ? requested
+          : defaultWeek,
       );
     }
     syncFromUrl();
@@ -86,12 +87,12 @@ export function ScheduleWeekSwitcher({
   const content = (
     <div className={styles.content}>
       {liveStatus}
-      {tables[selectedWeek]}
+      {selected?.table}
       {updatedAtNote}
     </div>
   );
 
-  const heading = <SectionHeading as="h1">{titleLabels[selectedWeek]}</SectionHeading>;
+  const heading = <SectionHeading as="h1">{selected?.title}</SectionHeading>;
 
   if (weeks.length <= 1) {
     return (
@@ -109,26 +110,14 @@ export function ScheduleWeekSwitcher({
         <div className={styles.rail}>
           <nav aria-label={weekNavLabel} className={styles.desktopRail}>
             <h2 className={styles.heading}>{weeksHeading}</h2>
-            <WeekList
-              weeks={weeks}
-              weekLabels={weekLabels}
-              weekAriaLabels={weekAriaLabels}
-              selectedWeek={selectedWeek}
-              onSelect={setSelectedWeek}
-            />
+            <WeekList weeks={weeks} selectedWeek={selectedWeek} onSelect={setSelectedWeek} />
           </nav>
           <details className={styles.mobileRail}>
             <summary className={styles.summary}>
               {weeksHeading}
               <span className={styles.chevron} aria-hidden="true" />
             </summary>
-            <WeekList
-              weeks={weeks}
-              weekLabels={weekLabels}
-              weekAriaLabels={weekAriaLabels}
-              selectedWeek={selectedWeek}
-              onSelect={setSelectedWeek}
-            />
+            <WeekList weeks={weeks} selectedWeek={selectedWeek} onSelect={setSelectedWeek} />
           </details>
         </div>
         {content}

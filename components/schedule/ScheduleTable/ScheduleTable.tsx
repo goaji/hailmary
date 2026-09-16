@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import type { Game } from "@/types";
 import { GameRow } from "@/components/schedule/GameRow/GameRow";
 import styles from "./ScheduleTable.module.scss";
@@ -9,8 +9,8 @@ type ScheduleTableProps = {
   locale: string;
 };
 
-export async function ScheduleTable({ games, week, locale }: ScheduleTableProps) {
-  const t = await getTranslations({ locale, namespace: "scheduleTable" });
+export function ScheduleTable({ games, week, locale }: ScheduleTableProps) {
+  const t = useTranslations("scheduleTable");
 
   return (
     // A named <section> maps to role "region" — same pattern as ArticleBody's MdxTable.

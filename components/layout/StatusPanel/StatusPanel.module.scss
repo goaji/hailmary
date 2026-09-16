@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.wrapper {
+.statusPanel {
   max-width: 480px;
   margin: 0 auto;
   padding: v.space(64) v.space(32);
@@ -18,6 +18,13 @@
   color: v.$c-text-dim;
   font-size: v.$fs-body-lg;
   margin-bottom: v.space(20);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.space(20);
 }
 
 .backLink {

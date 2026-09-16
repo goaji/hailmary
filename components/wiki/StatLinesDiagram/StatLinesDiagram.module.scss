@@ -62,34 +62,16 @@
 }
 
 .legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: v.space(8);
+  @include mix.diagram-legend;
 }
 
 .legendItem,
 .legendItemActive {
-  padding: v.space(8) v.space(12);
-  background: v.$c-surface-raised;
-  border: 1px solid v.$c-border;
-  color: v.$c-text;
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: v.$fs-meta;
-
-  &:hover {
-    border-color: var(--accent-1);
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
+  @include mix.diagram-legend-item;
 }
 
 .legendItemActive {
-  border-color: var(--accent-1);
-  color: var(--accent-2);
-  font-weight: 700;
+  @include mix.diagram-legend-item-active;
 }
 
 .hint,

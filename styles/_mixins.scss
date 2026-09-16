@@ -115,3 +115,35 @@ $breakpoints: (
     overflow: hidden;
   }
 }
+
+// The toggleable legend row shared by the interactive Wiki diagrams.
+@mixin diagram-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+}
+
+@mixin diagram-legend-item {
+  padding: v.space(8) v.space(12);
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border;
+  color: v.$c-text;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: v.$fs-meta;
+
+  &:hover {
+    border-color: var(--accent-1);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+@mixin diagram-legend-item-active {
+  border-color: var(--accent-1);
+  // Text, not border/UI chrome — 14px bold on $c-surface-raised needs the panel-calibrated accent2 bar (≥4.5), not accent1's ≥3.0.
+  color: var(--accent-2);
+  font-weight: 700;
+}
