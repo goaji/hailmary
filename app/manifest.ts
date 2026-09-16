@@ -1,7 +1,5 @@
 import type { MetadataRoute } from "next";
-import { HEADER_BG } from "@/utils/theme";
-
-const PAGE_BG = "#14151a"; // $c-page
+import { HEADER_BG, PAGE_BG } from "@/utils/theme";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
