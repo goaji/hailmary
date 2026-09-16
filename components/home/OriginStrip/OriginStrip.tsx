@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n";
+import { DISMISS_KEY, STRIP_ID } from "./originStripConstants";
 import styles from "./OriginStrip.module.scss";
-
-// Must match the literal hardcoded in the root layout's hide-script.
-const DISMISS_KEY = "hm.strip";
 
 export function OriginStrip() {
   const t = useTranslations("originStrip");
@@ -32,7 +30,7 @@ export function OriginStrip() {
 
   return (
     // suppressHydrationWarning: the layout's script sets style.display first, which never matches server markup.
-    <div className={styles.originStrip} id="origin-strip" suppressHydrationWarning>
+    <div className={styles.originStrip} id={STRIP_ID} suppressHydrationWarning>
       <div className={styles.copy}>
         <p className={styles.kicker}>{t("kicker")}</p>
         <p className={styles.story}>

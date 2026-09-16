@@ -14,6 +14,7 @@ import { getAllTerms } from "@/utils/glossary";
 import { SITE_URL } from "@/utils/site";
 import { HEADER_BG } from "@/utils/theme";
 import { requireLocale } from "@/utils/locale";
+import { DISMISS_KEY, STRIP_ID } from "@/components/home/OriginStrip/originStripConstants";
 import "../../styles/globals.scss";
 
 // "latin" alone silently drops ă/â/î/ș/ț — latin-ext is required too, alongside it (its own range excludes plain ASCII).
@@ -72,12 +73,12 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   return (
     <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
       <body>
-        {/* Lives here, not in OriginStrip, so it survives client-side nav — "hm.strip" must match its DISMISS_KEY. */}
+        {/* Lives here, not in OriginStrip, so it runs before hydration and the dismissed strip never flashes. */}
         <Script
           id="origin-strip-hide"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `if(localStorage.getItem("hm.strip")==="true"){var el=document.getElementById("origin-strip");if(el)el.style.display="none"}`,
+            __html: `if(localStorage.getItem(${JSON.stringify(DISMISS_KEY)})==="true"){var el=document.getElementById(${JSON.stringify(STRIP_ID)});if(el)el.style.display="none"}`,
           }}
         />
         <NextIntlClientProvider messages={messages}>
