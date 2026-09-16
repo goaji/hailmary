@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { writeScores } from "@/utils/store";
-import { isTestRequestAuthorized } from "@/utils/testAuth";
+import { isTestEnvironmentEnabled, isTestRequestAuthorized } from "@/utils/testAuth";
 
 // Only for hailmary-e2e. Never set E2E_TEST_SECRET
 // on the Hostinger production env; this route can overwrite the live score
@@ -25,7 +25,7 @@ const gameSchema = z.object({
 const seedBodySchema = z.object({ games: z.array(gameSchema) });
 
 export async function POST(request: Request) {
-  if (!isTestRequestAuthorized(request)) {
+  if (!isTestEnvironmentEnabled() || !isTestRequestAuthorized(request)) {
     return new NextResponse(null, { status: 401 });
   }
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  if (!isTestRequestAuthorized(request)) {
+  if (!isTestEnvironmentEnabled() || !isTestRequestAuthorized(request)) {
     return new NextResponse(null, { status: 401 });
   }
 

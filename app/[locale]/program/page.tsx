@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { LiveSchedule } from "@/components/schedule/LiveSchedule/LiveSchedule";
-import { getAvailableWeeks, getCurrentWeek, getSchedule } from "@/utils/schedule";
+import { getSchedule } from "@/utils/schedule";
 import styles from "./page.module.scss";
 
 // Keep this route out of Hostinger's request-time Node path. The week switcher
@@ -42,7 +42,6 @@ export default async function SchedulePage({ params }: PageProps<"/[locale]/prog
     notFound();
   }
 
-  const t = await getTranslations({ locale, namespace: "schedulePage" });
   const { games, isLive, updatedAt } = getSchedule();
 
   return (

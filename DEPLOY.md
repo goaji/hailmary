@@ -21,7 +21,8 @@ Set in hPanel (production) or `.env.local` (dev). Never commit real values — s
 | `SPORTS_API_KEY` | yes | balldontlie NFL API key |
 | `CRON_SECRET` | yes | Shared secret the cron job sends as the `X-Cron-Secret` header |
 | `SITE_URL` | Hostinger: no · Vercel previews: yes | Defaults to `https://hailmary.ro`. Vercel preview deploys must set this to the actual preview URL or canonicals/sitemap/OG images will silently point at production |
-| `E2E_TEST_SECRET` | Only on whatever target `hailmary-e2e`'s `E2E_BASE_URL` points at | **Never set on Hostinger production.** Enables `/api/test/article-count` and `/api/test/seed-scores`, which `hailmary-e2e` needs since it has no local filesystem to read `content/` or seed `.data/scores.json` from — `seed-scores` can overwrite the live score store |
+| `E2E_TEST_MODE` | `true` only on whatever target `hailmary-e2e`'s `E2E_BASE_URL` points at | **Never set on Hostinger production.** Explicitly enables the test-only routes; it must be paired with `E2E_TEST_SECRET` |
+| `E2E_TEST_SECRET` | Only on whatever target `hailmary-e2e`'s `E2E_BASE_URL` points at | **Never set on Hostinger production.** Authenticates `/api/test/article-count` and `/api/test/seed-scores`, which `hailmary-e2e` needs since it has no local filesystem to read `content/` or seed `.data/scores.json` from |
 
 ## hPanel cron
 

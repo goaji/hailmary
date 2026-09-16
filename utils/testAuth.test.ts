@@ -1,15 +1,27 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { isTestRequestAuthorized } from "./testAuth";
+import { isTestEnvironmentEnabled, isTestRequestAuthorized } from "./testAuth";
 
 const ORIGINAL_SECRET = process.env.E2E_TEST_SECRET;
+const ORIGINAL_MODE = process.env.E2E_TEST_MODE;
 
 afterEach(() => {
   process.env.E2E_TEST_SECRET = ORIGINAL_SECRET;
+  process.env.E2E_TEST_MODE = ORIGINAL_MODE;
 });
 
 function request(headers: Record<string, string> = {}) {
   return new Request("http://localhost/api/test/article-count", { headers });
 }
+
+describe("isTestEnvironmentEnabled", () => {
+  it("requires explicit opt-in", () => {
+    delete process.env.E2E_TEST_MODE;
+    expect(isTestEnvironmentEnabled()).toBe(false);
+
+    process.env.E2E_TEST_MODE = "true";
+    expect(isTestEnvironmentEnabled()).toBe(true);
+  });
+});
 
 describe("isTestRequestAuthorized", () => {
   it("rejects when E2E_TEST_SECRET is unset, regardless of header", () => {

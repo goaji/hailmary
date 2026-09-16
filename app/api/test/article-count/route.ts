@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { hasLocale } from "next-intl";
 import { routing } from "@/routing";
 import { getAllArticlesWithFallback } from "@/utils/articles";
-import { isTestRequestAuthorized } from "@/utils/testAuth";
+import { isTestEnvironmentEnabled, isTestRequestAuthorized } from "@/utils/testAuth";
 
 // Only for hailmary-e2e — Never set E2E_TEST_SECRET
 // on the Hostinger production env; this is only meant to be reachable on
@@ -10,7 +10,7 @@ import { isTestRequestAuthorized } from "@/utils/testAuth";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  if (!isTestRequestAuthorized(request)) {
+  if (!isTestEnvironmentEnabled() || !isTestRequestAuthorized(request)) {
     return new NextResponse(null, { status: 401 });
   }
 
