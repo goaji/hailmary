@@ -1,4 +1,4 @@
-"use client";
+"use client"; // live-updates the schedule table via useLiveScores
 
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";

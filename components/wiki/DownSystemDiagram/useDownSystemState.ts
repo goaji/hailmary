@@ -1,4 +1,4 @@
-"use client";
+"use client"; // interactive down/distance state for the diagram
 
 import { useCallback, useState } from "react";
 

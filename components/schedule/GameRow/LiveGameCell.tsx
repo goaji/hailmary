@@ -1,4 +1,4 @@
-"use client";
+"use client"; // swaps in the live score for one row inside the server-rendered GameRow
 
 import { useTranslations } from "next-intl";
 import type { Game } from "@/types";

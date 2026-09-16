@@ -1,4 +1,4 @@
-"use client";
+"use client"; // SWR polling for live scores
 
 import useSWR from "swr";
 import type { Game } from "@/types";

@@ -1,4 +1,4 @@
-"use client";
+"use client"; // live polling plus a ticking "updated X ago" clock
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
