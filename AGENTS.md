@@ -119,7 +119,7 @@ Defined once in `types/index.ts`, imported everywhere. `ArticleFrontmatter`, `Te
 - Dates formatted with `Intl.DateTimeFormat(locale)` — locale from `next-intl`, never hardcoded, never a hand-rolled formatter
 - Internal links use `next-intl`'s locale-aware `Link`, never a bare `next/link` with a hand-built `/ro/...` path
 - Images via `next/image` with explicit dimensions; placeholder images live in `public/placeholder/`
-- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `utils/teams.ts`, never the component and never the surface
+- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `src/teams.ts` in `@hailmary/shared` (then bump the pinned tag in `package.json`), never the component and never the surface
 
 ## Semantic markup
 

@@ -50,11 +50,11 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 
 ## Wire up a team accent color
 
-1. Team colors live in `utils/teams.ts` — the single source of truth, all 32 teams. Each record carries four colors with two distinct jobs:
+1. Team data for all 32 teams is defined in `@hailmary/shared` (so `hailmary-e2e` reads the same source) and re-exported by `utils/teams.ts`. App code imports from `utils/teams.ts`, never from the package directly. Each record carries four colors with two distinct jobs:
    - `brand1` / `brand2` — the team's **true** brand colors. Badges, swatches, logo lockups: anything that must be correct rather than legible.
    - `accent1` / `accent2` — **UI-safe** derivatives for the dark base. Most NFL primaries are near-black navies that are unreadable as text there, so those are lightened. Where the brand color already passes, accent equals brand.
 2. `TeamColorProvider` reads the selected team from context (persisted to `localStorage`) and sets `--accent-1` / `--accent-2` from the *accent* pair as inline custom properties on its wrapper element.
-3. Components consume `var(--accent-1)` in SCSS. Never import `utils/teams.ts` into a presentational component just to read a color — the only legitimate imports are the picker and the teams pages, which need names and logos.
+3. Components consume `var(--accent-1)` / `var(--accent-2)` in SCSS. No component reads `accent1` / `accent2` off a team record except `TeamColorProvider` — one that does won't re-skin when the user switches teams. The exception is generated images (`icon.tsx`, `opengraph-image.tsx`), which render outside the page and have no custom properties to read. Importing `utils/teams.ts` for team *identity* is fine: resolving a slug or ID from frontmatter or a `Game` into a name, badge, or link (`getTeam`), or listing teams by division. `brand1` / `brand2` are read directly only where the true brand color is the point (picker swatches, `TeamCard`, `TeamIdentityBand`), never as a UI accent.
 4. Adding or changing a team means clearing both contrast bars, which differ because the two accents have different jobs:
    - `accent1` ≥ **3.0** against the page `#14151a` — large Bebas headings and UI
    - `accent2` ≥ **4.5** against the panel `#1e2027` — small 10-11px bold category chips
@@ -115,7 +115,7 @@ Step-by-step recipes for the things this project asks for repeatedly. Follow the
 ## Before opening a PR
 
 - `tsc --noEmit` and lint clean, no `any`, no unused exports
-- No hardcoded hex outside `_variables.scss` and `utils/teams.ts`
+- No hardcoded hex outside `_variables.scss` and `src/teams.ts` in `@hailmary/shared`
 - All new copy in Romanian with correct diacritics, and every string pulled from `messages/`, not inlined
 - `ro.json` and `en.json` have identical key sets
 - Every interactive element is a real `<button>` / `<a>`, reachable by `getByRole` with an accessible name
