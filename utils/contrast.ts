@@ -19,7 +19,8 @@ function relativeLuminance([r, g, b]: [number, number, number]): number {
 export function contrastRatio(hexA: string, hexB: string): number {
   const luminanceA = relativeLuminance(hexToRgb(hexA));
   const luminanceB = relativeLuminance(hexToRgb(hexB));
-  const [lighter, darker] = luminanceA > luminanceB ? [luminanceA, luminanceB] : [luminanceB, luminanceA];
+  const [lighter, darker] =
+    luminanceA > luminanceB ? [luminanceA, luminanceB] : [luminanceB, luminanceA];
   return (lighter + 0.05) / (darker + 0.05);
 }
 

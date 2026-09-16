@@ -26,26 +26,21 @@ const validFrontmatter = {
 
 describe("parseArticleFrontmatter", () => {
   it("accepts a valid file", () => {
-    expect(parseArticleFrontmatter(validFrontmatter, "test.mdx")).toEqual(
-      validFrontmatter,
-    );
+    expect(parseArticleFrontmatter(validFrontmatter, "test.mdx")).toEqual(validFrontmatter);
   });
 
   it("rejects a file missing a required field, naming the file and the field", () => {
     const { title, ...missingTitle } = validFrontmatter;
     void title;
 
-    expect(() =>
-      parseArticleFrontmatter(missingTitle, "content/articles/ro/x.mdx"),
-    ).toThrow('content/articles/ro/x.mdx: field "title"');
+    expect(() => parseArticleFrontmatter(missingTitle, "content/articles/ro/x.mdx")).toThrow(
+      'content/articles/ro/x.mdx: field "title"',
+    );
   });
 
   it("rejects a file with an unknown category", () => {
     expect(() =>
-      parseArticleFrontmatter(
-        { ...validFrontmatter, category: "not-a-real-category" },
-        "test.mdx",
-      ),
+      parseArticleFrontmatter({ ...validFrontmatter, category: "not-a-real-category" }, "test.mdx"),
     ).toThrow(/"category"/);
   });
 
@@ -63,10 +58,7 @@ describe("parseArticleFrontmatter", () => {
 
   it("rejects a file with an unknown tag", () => {
     expect(() =>
-      parseArticleFrontmatter(
-        { ...validFrontmatter, tags: ["not-a-real-tag"] },
-        "test.mdx",
-      ),
+      parseArticleFrontmatter({ ...validFrontmatter, tags: ["not-a-real-tag"] }, "test.mdx"),
     ).toThrow(/"tags/);
   });
 
@@ -84,9 +76,9 @@ describe("validateTeamSlugs", () => {
   });
 
   it("rejects an unknown team slug, naming the file and the slug", () => {
-    expect(() =>
-      validateTeamSlugs(["not-a-real-team"], "content/articles/ro/x.mdx"),
-    ).toThrow('content/articles/ro/x.mdx: teams "not-a-real-team"');
+    expect(() => validateTeamSlugs(["not-a-real-team"], "content/articles/ro/x.mdx")).toThrow(
+      'content/articles/ro/x.mdx: teams "not-a-real-team"',
+    );
   });
 });
 
@@ -132,11 +124,7 @@ describe("sortByPublishedAtDesc", () => {
       { publishedAt: "2026-03-01" },
     ]);
 
-    expect(sorted.map((a) => a.publishedAt)).toEqual([
-      "2026-06-01",
-      "2026-03-01",
-      "2026-01-01",
-    ]);
+    expect(sorted.map((a) => a.publishedAt)).toEqual(["2026-06-01", "2026-03-01", "2026-01-01"]);
   });
 });
 
@@ -169,10 +157,7 @@ describe("excludeArticleBySlug", () => {
   const articles = [{ slug: "a" }, { slug: "b" }, { slug: "c" }];
 
   it("removes the article matching the given slug", () => {
-    expect(excludeArticleBySlug(articles, "b").map((a) => a.slug)).toEqual([
-      "a",
-      "c",
-    ]);
+    expect(excludeArticleBySlug(articles, "b").map((a) => a.slug)).toEqual(["a", "c"]);
   });
 
   it("returns the list unchanged when slug is undefined", () => {
@@ -195,11 +180,7 @@ describe("selectRelatedArticles", () => {
       { slug: "c", category: "analiza" },
     ];
 
-    expect(selectRelatedArticles(articles, current).map((a) => a.slug)).toEqual([
-      "a",
-      "c",
-      "b",
-    ]);
+    expect(selectRelatedArticles(articles, current).map((a) => a.slug)).toEqual(["a", "c", "b"]);
   });
 
   it("tops up with the newest overall when fewer than the limit share the category", () => {
@@ -211,19 +192,13 @@ describe("selectRelatedArticles", () => {
       { slug: "d", category: "transferuri" },
     ];
 
-    expect(selectRelatedArticles(articles, current).map((a) => a.slug)).toEqual([
-      "a",
-      "b",
-      "c",
-    ]);
+    expect(selectRelatedArticles(articles, current).map((a) => a.slug)).toEqual(["a", "b", "c"]);
   });
 
   it("excludes the current article even if it's in the input list", () => {
     const articles = [current, { slug: "a", category: "analiza" }];
 
-    expect(selectRelatedArticles(articles, current).some((a) => a.slug === "current")).toBe(
-      false,
-    );
+    expect(selectRelatedArticles(articles, current).some((a) => a.slug === "current")).toBe(false);
   });
 
   it("respects a custom limit", () => {
@@ -253,10 +228,7 @@ describe("selectRecentArticles", () => {
   it("keeps the current article even when it falls outside the window", () => {
     const articles = [{ slug: "a" }, { slug: "b" }, { slug: "c" }, current];
 
-    expect(selectRecentArticles(articles, current, 2).map((a) => a.slug)).toEqual([
-      "a",
-      "current",
-    ]);
+    expect(selectRecentArticles(articles, current, 2).map((a) => a.slug)).toEqual(["a", "current"]);
   });
 
   it("doesn't duplicate the current article when it's already within the window", () => {

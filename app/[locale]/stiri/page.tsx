@@ -34,9 +34,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function NewsIndexPage({
-  params,
-}: PageProps<"/[locale]/stiri">) {
+export default async function NewsIndexPage({ params }: PageProps<"/[locale]/stiri">) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();

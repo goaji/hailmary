@@ -19,9 +19,7 @@ export function generateStaticParams() {
   return availableLocales().map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[locale]/wiki">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/[locale]/wiki">): Promise<Metadata> {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale) || !availableLocales().includes(locale)) {
     notFound();
@@ -39,9 +37,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function WikiHubPage({
-  params,
-}: PageProps<"/[locale]/wiki">) {
+export default async function WikiHubPage({ params }: PageProps<"/[locale]/wiki">) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale) || !availableLocales().includes(locale)) {
     notFound();

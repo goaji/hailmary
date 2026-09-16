@@ -72,8 +72,10 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
     }
   }
 
-  const byCategory = category === "all" ? items : items.filter((item) => item.category === category);
-  const filtered = team === "all" ? byCategory : byCategory.filter((item) => item.teams?.includes(team));
+  const byCategory =
+    category === "all" ? items : items.filter((item) => item.category === category);
+  const filtered =
+    team === "all" ? byCategory : byCategory.filter((item) => item.teams?.includes(team));
 
   return (
     <div>

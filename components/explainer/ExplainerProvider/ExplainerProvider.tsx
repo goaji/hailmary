@@ -1,6 +1,15 @@
 "use client"; // owns open/close state shared by every TermLink and the panel
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { ExplainerPanel } from "@/components/explainer/ExplainerPanel/ExplainerPanel";
 import styles from "./ExplainerProvider.module.scss";
 
@@ -90,7 +99,8 @@ export function ExplainerProvider({ entries, children }: ExplainerProviderProps)
 
   function open(slug: string) {
     if (activeTerm === undefined) {
-      triggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      triggerRef.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
     }
     setActiveTerm(slug);
   }

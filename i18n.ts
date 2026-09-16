@@ -5,8 +5,7 @@ import type { Locale } from "@/routing";
 export { routing };
 export type { Locale };
 
-export const { Link, redirect, usePathname, useRouter, getPathname } =
-  createNavigation(routing);
+export const { Link, redirect, usePathname, useRouter, getPathname } = createNavigation(routing);
 
 /**
  * Builds the `alternates.languages` map for a page's `generateMetadata`.

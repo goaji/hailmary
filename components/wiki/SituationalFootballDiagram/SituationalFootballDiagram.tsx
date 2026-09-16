@@ -45,7 +45,12 @@ export function SituationalFootballDiagram() {
         ))}
       </div>
 
-      <div id={panelId} role="tabpanel" aria-labelledby={tabId(activeId)} className={styles.dashboard}>
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={tabId(activeId)}
+        className={styles.dashboard}
+      >
         <p className={styles.chip}>
           {t(`${activeId}DownDistance`)} · {t(`${activeId}Clock`)}
         </p>

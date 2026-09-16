@@ -75,22 +75,29 @@ describe("fetchSeasonGames", () => {
   it("normalizes the data array from a successful single-page response", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(
-          JSON.stringify({ data: [SCHEDULED_GAME, LIVE_GAME], meta: { next_cursor: null } }),
-          { status: 200 },
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(
+            JSON.stringify({ data: [SCHEDULED_GAME, LIVE_GAME], meta: { next_cursor: null } }),
+            { status: 200 },
+          ),
         ),
-      ),
     );
 
     const result = await fetchSeasonGames("test-key", 2026);
-    expect(result).toEqual({ ok: true, games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)] });
+    expect(result).toEqual({
+      ok: true,
+      games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)],
+    });
   });
 
   it("sends the API key and scopes the request to the season's regular-season games", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValue(new Response(JSON.stringify({ data: [], meta: { next_cursor: null } }), { status: 200 }));
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [], meta: { next_cursor: null } }), { status: 200 }),
+      );
     vi.stubGlobal("fetch", fetchMock);
 
     await fetchSeasonGames("test-key", 2026);
@@ -107,10 +114,14 @@ describe("fetchSeasonGames", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ data: [SCHEDULED_GAME], meta: { next_cursor: 42 } }), { status: 200 }),
+        new Response(JSON.stringify({ data: [SCHEDULED_GAME], meta: { next_cursor: 42 } }), {
+          status: 200,
+        }),
       )
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ data: [LIVE_GAME], meta: { next_cursor: null } }), { status: 200 }),
+        new Response(JSON.stringify({ data: [LIVE_GAME], meta: { next_cursor: null } }), {
+          status: 200,
+        }),
       );
     vi.stubGlobal("fetch", fetchMock);
 
@@ -120,7 +131,10 @@ describe("fetchSeasonGames", () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(String(fetchMock.mock.calls[1][0])).toContain("cursor=42");
-    expect(result).toEqual({ ok: true, games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)] });
+    expect(result).toEqual({
+      ok: true,
+      games: [normalizeGame(SCHEDULED_GAME), normalizeGame(LIVE_GAME)],
+    });
   });
 
   it("waits between page requests so a multi-page sync can't exceed the provider's per-minute limit", async () => {
@@ -128,10 +142,14 @@ describe("fetchSeasonGames", () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ data: [SCHEDULED_GAME], meta: { next_cursor: 42 } }), { status: 200 }),
+        new Response(JSON.stringify({ data: [SCHEDULED_GAME], meta: { next_cursor: 42 } }), {
+          status: 200,
+        }),
       )
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ data: [LIVE_GAME], meta: { next_cursor: null } }), { status: 200 }),
+        new Response(JSON.stringify({ data: [LIVE_GAME], meta: { next_cursor: null } }), {
+          status: 200,
+        }),
       );
     vi.stubGlobal("fetch", fetchMock);
 
@@ -159,7 +177,10 @@ describe("fetchSeasonGames", () => {
   });
 
   it("returns a failure reason when the response body has no data array", async () => {
-    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ oops: true }), { status: 200 })));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(new Response(JSON.stringify({ oops: true }), { status: 200 })),
+    );
 
     const result = await fetchSeasonGames("test-key", 2026);
     expect(result).toEqual({ ok: false, reason: "provider response missing a data array" });
@@ -168,7 +189,11 @@ describe("fetchSeasonGames", () => {
   it("succeeds with an empty games array when the provider has nothing to report", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: [], meta: { next_cursor: null } }), { status: 200 })),
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ data: [], meta: { next_cursor: null } }), { status: 200 }),
+        ),
     );
 
     const result = await fetchSeasonGames("test-key", 2026);

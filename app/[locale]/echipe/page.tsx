@@ -32,9 +32,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function TeamsPage({
-  params,
-}: PageProps<"/[locale]/echipe">) {
+export default async function TeamsPage({ params }: PageProps<"/[locale]/echipe">) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();

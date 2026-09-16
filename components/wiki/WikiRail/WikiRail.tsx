@@ -13,7 +13,13 @@ type WikiRailProps = {
 };
 
 // Translations only resolve server-side, so this stays a server component; the interactive expand/collapse state lives in the client WikiRailTree below it.
-export async function WikiRail({ tree, currentStrand, currentSlug, currentPageSections, locale }: WikiRailProps) {
+export async function WikiRail({
+  tree,
+  currentStrand,
+  currentSlug,
+  currentPageSections,
+  locale,
+}: WikiRailProps) {
   const t = await getTranslations({ locale, namespace: "wikiRail" });
   const tStrands = await getTranslations({ locale, namespace: "wikiStrands" });
 

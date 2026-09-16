@@ -48,11 +48,12 @@ export function TermLink({ term, children }: TermLinkProps) {
   // omitted entirely while any panel is open — once you're looking at the
   // full explanation, a hover preview of it (for this term or any other)
   // is redundant, not an enhancement.
-  const tooltip = entry && activeTerm === undefined ? (
-    <span className={styles.tooltip} aria-hidden="true">
-      {entry.short}
-    </span>
-  ) : null;
+  const tooltip =
+    entry && activeTerm === undefined ? (
+      <span className={styles.tooltip} aria-hidden="true">
+        {entry.short}
+      </span>
+    ) : null;
 
   if (!isHydrated) {
     // Glossary pages are bucketed by the display term's first letter

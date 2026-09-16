@@ -8,7 +8,12 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { CATEGORY_IDS } from "@hailmary/shared";
 import type { Article, ArticleFrontmatter, ArticleImage, Locale } from "@/types";
-import { findMdxFilePath, listMdxSlugsRecursive, parseFrontmatter, resolveServedLocale } from "@/utils/content";
+import {
+  findMdxFilePath,
+  listMdxSlugsRecursive,
+  parseFrontmatter,
+  resolveServedLocale,
+} from "@/utils/content";
 export { resolveServedLocale } from "@/utils/content";
 import { getTermSlugs, validateTermLinks } from "@/utils/glossary";
 import { TAG_IDS } from "@hailmary/shared";
@@ -67,16 +72,11 @@ const articleFrontmatterSchema = z.object({
   teams: z.array(z.string()).optional(),
 });
 
-export function parseArticleFrontmatter(
-  data: unknown,
-  filePath: string,
-): ArticleFrontmatter {
+export function parseArticleFrontmatter(data: unknown, filePath: string): ArticleFrontmatter {
   return parseFrontmatter(articleFrontmatterSchema, data, filePath);
 }
 
-export function sortByPublishedAtDesc<T extends { publishedAt: string }>(
-  articles: T[],
-): T[] {
+export function sortByPublishedAtDesc<T extends { publishedAt: string }>(articles: T[]): T[] {
   return [...articles].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   );
@@ -116,9 +116,11 @@ export function excludeArticleBySlug<T extends { slug: string }>(
  * `articles` must already be newest-first (see sortByPublishedAtDesc) and
  * may include `current` itself — it's excluded either way.
  */
-export function selectRelatedArticles<
-  T extends { slug: string; category: string },
->(articles: T[], current: T, limit = 3): T[] {
+export function selectRelatedArticles<T extends { slug: string; category: string }>(
+  articles: T[],
+  current: T,
+  limit = 3,
+): T[] {
   const others = articles.filter((article) => article.slug !== current.slug);
   const sameCategory = others.filter((article) => article.category === current.category);
   const rest = others.filter((article) => article.category !== current.category);
@@ -280,22 +282,18 @@ export const getAvailableLocales = cache((slug: string): Locale[] => {
   return routing.locales.filter((candidate) => articleFilePath(candidate, slug) !== undefined);
 });
 
-export const getArticleBySlug = cache(
-  (slug: string, locale: Locale): Article | undefined => {
-    const servedLocale = resolveServedLocale(locale, getAvailableLocales(slug));
+export const getArticleBySlug = cache((slug: string, locale: Locale): Article | undefined => {
+  const servedLocale = resolveServedLocale(locale, getAvailableLocales(slug));
 
-    return servedLocale ? readArticleFile(servedLocale, slug) : undefined;
-  },
-);
+  return servedLocale ? readArticleFile(servedLocale, slug) : undefined;
+});
 
 /**
  * Newest-first, up to `limit`. Empty for most of the 32 teams — render an
  * honest empty state, not a hidden section.
  */
-export const getArticlesByTeam = cache(
-  (teamSlug: string, locale: Locale, limit = 4): Article[] => {
-    return getAllArticles(locale)
-      .filter((article) => article.teams?.includes(teamSlug))
-      .slice(0, limit);
-  },
-);
+export const getArticlesByTeam = cache((teamSlug: string, locale: Locale, limit = 4): Article[] => {
+  return getAllArticles(locale)
+    .filter((article) => article.teams?.includes(teamSlug))
+    .slice(0, limit);
+});

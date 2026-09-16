@@ -28,7 +28,9 @@ export function LiveScoreStatus({ initialIsLive, hasLiveGames }: LiveScoreStatus
     return () => clearInterval(interval);
   }, []);
 
-  const isStale = data?.updatedAt ? now - new Date(data.updatedAt).getTime() > STALE_THRESHOLD_MS : false;
+  const isStale = data?.updatedAt
+    ? now - new Date(data.updatedAt).getTime() > STALE_THRESHOLD_MS
+    : false;
 
   if (initialIsLive && !error && !isStale) {
     return null;

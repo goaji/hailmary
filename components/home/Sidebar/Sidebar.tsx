@@ -28,8 +28,14 @@ export async function Sidebar({ locale }: SidebarProps) {
               { label: t("beginnerGuide.rules"), href: "/wiki/the-game/obiectiv-si-scor" },
               { label: t("beginnerGuide.positions"), href: "/wiki/chess-match/pozitii-ofensive" },
               { label: t("beginnerGuide.glossary"), href: "/glosar" },
-              { label: t("beginnerGuide.hailMaryOrigin"), href: "/wiki/istorie/meciuri-si-faze-legendare#hail-mary" },
-              { label: t("beginnerGuide.history"), href: "/wiki/istorie/originile-si-cresterea-nfl" },
+              {
+                label: t("beginnerGuide.hailMaryOrigin"),
+                href: "/wiki/istorie/meciuri-si-faze-legendare#hail-mary",
+              },
+              {
+                label: t("beginnerGuide.history"),
+                href: "/wiki/istorie/originile-si-cresterea-nfl",
+              },
             ]}
           />
         </Card>
@@ -40,7 +46,11 @@ export async function Sidebar({ locale }: SidebarProps) {
           <h2 id={SCHEDULE_HEADING_ID} className={styles.panelHeading}>
             {t("schedule.heading")}
           </h2>
-          <UpcomingGamesPanel locale={locale} emptyLabel={t("schedule.empty")} count={SIDEBAR_GAME_COUNT} />
+          <UpcomingGamesPanel
+            locale={locale}
+            emptyLabel={t("schedule.empty")}
+            count={SIDEBAR_GAME_COUNT}
+          />
         </Card>
       </section>
     </div>

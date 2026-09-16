@@ -20,9 +20,7 @@ import {
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
-  return routing.locales.flatMap((locale) =>
-    TEAMS.map((team) => ({ locale, team: team.slug })),
-  );
+  return routing.locales.flatMap((locale) => TEAMS.map((team) => ({ locale, team: team.slug })));
 }
 
 export async function generateMetadata({
@@ -55,9 +53,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function TeamDetailPage({
-  params,
-}: PageProps<"/[locale]/echipe/[team]">) {
+export default async function TeamDetailPage({ params }: PageProps<"/[locale]/echipe/[team]">) {
   const { locale, team: teamSlug } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();

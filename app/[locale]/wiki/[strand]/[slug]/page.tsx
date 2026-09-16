@@ -113,17 +113,21 @@ export default async function WikiCategoryPage({
                 />
               </div>
 
-              {groupEntriesByEra(page.frontmatter.entries, page.sections).map(({ section, entries, startOrdinal }) =>
-                entries.length > 0 ? (
-                  <section key={section.id} className={styles.era} aria-labelledby={section.id}>
-                    <EraHeading id={section.id}>{section.title}</EraHeading>
-                    <ol className={styles.list} start={startOrdinal}>
-                      {entries.map((entry) => (
-                        <TimelineEntry key={`${entry.era}-${entry.year}-${entry.title}`} entry={entry} />
-                      ))}
-                    </ol>
-                  </section>
-                ) : null,
+              {groupEntriesByEra(page.frontmatter.entries, page.sections).map(
+                ({ section, entries, startOrdinal }) =>
+                  entries.length > 0 ? (
+                    <section key={section.id} className={styles.era} aria-labelledby={section.id}>
+                      <EraHeading id={section.id}>{section.title}</EraHeading>
+                      <ol className={styles.list} start={startOrdinal}>
+                        {entries.map((entry) => (
+                          <TimelineEntry
+                            key={`${entry.era}-${entry.year}-${entry.title}`}
+                            entry={entry}
+                          />
+                        ))}
+                      </ol>
+                    </section>
+                  ) : null,
               )}
             </>
           ) : (

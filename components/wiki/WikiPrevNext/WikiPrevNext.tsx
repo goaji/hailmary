@@ -18,7 +18,10 @@ export async function WikiPrevNext({ prevNext, locale }: WikiPrevNextProps) {
   return (
     <nav aria-label={t("readingThreadNavLabel")} className={styles.nav}>
       {prevNext.prev ? (
-        <Link href={`/wiki/${prevNext.prev.strand}/${prevNext.prev.slug}`} className={styles.previous}>
+        <Link
+          href={`/wiki/${prevNext.prev.strand}/${prevNext.prev.slug}`}
+          className={styles.previous}
+        >
           <span className={styles.direction}>{t("prev")}</span>
           <span className={styles.title}>{prevNext.prev.title}</span>
         </Link>

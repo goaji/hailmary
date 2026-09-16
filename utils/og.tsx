@@ -88,7 +88,12 @@ type ReferenceOgCardProps = {
 };
 
 /** Shared "title + kicker" card for /glosar — same layout as other section OG images, differing only in kicker label and title. */
-export function ReferenceOgCard({ kicker, title, accentBar, accentText }: ReferenceOgCardProps): ReactElement {
+export function ReferenceOgCard({
+  kicker,
+  title,
+  accentBar,
+  accentText,
+}: ReferenceOgCardProps): ReactElement {
   return (
     <div
       style={{

@@ -10,22 +10,20 @@ export default function Icon() {
   const accent = TEAMS_BY_SLUG[DEFAULT_TEAM].accent1;
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: HEADER_BG,
-        }}
-      >
-        <span style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 26, color: accent }}>
-          H
-        </span>
-      </div>
-    ),
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: HEADER_BG,
+      }}
+    >
+      <span style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 26, color: accent }}>
+        H
+      </span>
+    </div>,
     { ...size, fonts: [OG_FONTS[0]] },
   );
 }

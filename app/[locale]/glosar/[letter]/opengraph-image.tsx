@@ -23,14 +23,12 @@ export default async function Image({
   const team = TEAMS_BY_SLUG[DEFAULT_TEAM];
 
   return new ImageResponse(
-    (
-      <ReferenceOgCard
-        kicker={tNav("glossary")}
-        title={letter ? tGlossary("pageTitle", { letter }) : tGlossary("title")}
-        accentBar={team.accent1}
-        accentText={team.accent2}
-      />
-    ),
+    <ReferenceOgCard
+      kicker={tNav("glossary")}
+      title={letter ? tGlossary("pageTitle", { letter }) : tGlossary("title")}
+      accentBar={team.accent1}
+      accentText={team.accent2}
+    />,
     { ...OG_SIZE, fonts: OG_FONTS },
   );
 }

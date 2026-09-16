@@ -8,9 +8,7 @@ export function generateStaticParams() {
 }
 
 // No content of its own — always redirects to the first letter, e.g. /glosar/b.
-export default async function GlossaryIndexPage({
-  params,
-}: PageProps<"/[locale]/glosar">) {
+export default async function GlossaryIndexPage({ params }: PageProps<"/[locale]/glosar">) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();

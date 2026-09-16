@@ -64,7 +64,9 @@
   visibility: hidden;
   // Never intercepts a click aimed at the word, even while visible.
   pointer-events: none;
-  transition: opacity 0s linear, visibility 0s linear;
+  transition:
+    opacity 0s linear,
+    visibility 0s linear;
 }
 
 // (hover: hover) + (pointer: fine) rules out touch — mobile has no hover

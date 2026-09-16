@@ -74,9 +74,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticlePage({
-  params,
-}: PageProps<"/[locale]/stiri/[slug]">) {
+export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri/[slug]">) {
   const { locale, slug } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
@@ -137,7 +135,9 @@ export default async function ArticlePage({
 
           {/* lang matches the served content, not the URL — WCAG 3.1.2 for the /en-serves-ro fallback case. */}
           <article lang={article.servedLocale} className={styles.content}>
-            {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
+            {isFallback ? (
+              <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+            ) : null}
 
             <ArticleHeader article={article} />
             <ArticleBody content={article.content} tags={article.tags} />

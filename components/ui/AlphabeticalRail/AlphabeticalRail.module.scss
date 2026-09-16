@@ -1,7 +1,9 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.desktopRail { display: none; }
+.desktopRail {
+  display: none;
+}
 
 @include mix.mq(lg) {
   .desktopRail {
@@ -20,7 +22,9 @@
 }
 
 @include mix.mq(lg) {
-  .mobileRail { display: none; }
+  .mobileRail {
+    display: none;
+  }
 }
 
 .summary {
@@ -33,9 +37,14 @@
   margin-bottom: v.space(12);
 
   &::-webkit-details-marker,
-  &::marker { display: none; content: ""; }
+  &::marker {
+    display: none;
+    content: "";
+  }
 
-  &:focus-visible { @include mix.focus-ring; }
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
 }
 
 .chevron {
@@ -49,7 +58,9 @@
   transition: transform 150ms ease;
 }
 
-.mobileRail[open] .chevron { transform: rotate(-135deg); }
+.mobileRail[open] .chevron {
+  transform: rotate(-135deg);
+}
 
 .filterRow {
   display: flex;
@@ -58,7 +69,11 @@
   margin-bottom: v.space(16);
 }
 
-.filterLabel { font-size: v.$fs-ui; font-weight: 600; color: v.$c-text-dim; }
+.filterLabel {
+  font-size: v.$fs-ui;
+  font-weight: 600;
+  color: v.$c-text-dim;
+}
 
 .filterInput {
   width: 100%;
@@ -68,11 +83,18 @@
   color: v.$c-text;
   font-size: v.$fs-body;
 
-  &::placeholder { color: v.$c-text-muted; }
-  &:focus-visible { @include mix.focus-ring; }
+  &::placeholder {
+    color: v.$c-text-muted;
+  }
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
 }
 
-.empty { font-size: v.$fs-meta; color: v.$c-text-muted; }
+.empty {
+  font-size: v.$fs-meta;
+  color: v.$c-text-muted;
+}
 
 .list {
   display: flex;
@@ -91,11 +113,18 @@
   letter-spacing: 0.4px;
   color: v.$c-text-dim;
 
-  &:hover { color: v.$c-text; text-decoration: none; }
-  &:focus-visible { @include mix.focus-ring; }
+  &:hover {
+    color: v.$c-text;
+    text-decoration: none;
+  }
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
 }
 
-.currentGroup { color: var(--accent-1); }
+.currentGroup {
+  color: var(--accent-1);
+}
 
 .subList {
   display: flex;
@@ -114,9 +143,20 @@
   font-size: v.$fs-meta;
   color: v.$c-text-muted;
 
-  &:hover { color: v.$c-text; text-decoration: none; }
-  &:focus-visible { @include mix.focus-ring; }
-  &[aria-current="page"], &[aria-current="location"] { color: var(--accent-1); font-weight: 700; }
+  &:hover {
+    color: v.$c-text;
+    text-decoration: none;
+  }
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+  &[aria-current="page"],
+  &[aria-current="location"] {
+    color: var(--accent-1);
+    font-weight: 700;
+  }
 }
 
-.list > li > .itemLink { padding-left: 0; }
+.list > li > .itemLink {
+  padding-left: 0;
+}

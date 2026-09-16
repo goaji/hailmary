@@ -74,7 +74,9 @@ export function ScheduleWeekSwitcher({
         new URLSearchParams(window.location.search).get("etapa") ?? "",
         10,
       );
-      setSelectedWeek(Number.isInteger(requested) && weeks.includes(requested) ? requested : defaultWeek);
+      setSelectedWeek(
+        Number.isInteger(requested) && weeks.includes(requested) ? requested : defaultWeek,
+      );
     }
     syncFromUrl();
     window.addEventListener("popstate", syncFromUrl);

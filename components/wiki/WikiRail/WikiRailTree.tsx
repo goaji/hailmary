@@ -21,7 +21,12 @@ type WikiRailTreeProps = {
 };
 
 // Accordion, decoupled from navigation: expanding a strand only reveals its pages, it never moves you off the page you're reading.
-export function WikiRailTree({ strands, currentStrand, currentSlug, currentPageSections }: WikiRailTreeProps) {
+export function WikiRailTree({
+  strands,
+  currentStrand,
+  currentSlug,
+  currentPageSections,
+}: WikiRailTreeProps) {
   // WikiRail mounts this component twice (desktop nav + mobile details) —
   // ids built from data alone would collide across both instances, which
   // is invalid HTML and breaks aria-controls. useId() is per-instance and
@@ -45,11 +50,15 @@ export function WikiRailTree({ strands, currentStrand, currentSlug, currentPageS
           <li key={strand.strand} className={styles.strandItem}>
             <button
               type="button"
-              className={isCurrentStrand ? `${styles.strandButton} ${styles.current}` : styles.strandButton}
+              className={
+                isCurrentStrand ? `${styles.strandButton} ${styles.current}` : styles.strandButton
+              }
               aria-expanded={isExpanded}
               aria-controls={pageListId}
               onClick={() =>
-                setExpandedStrand((previous) => (previous === strand.strand ? undefined : strand.strand))
+                setExpandedStrand((previous) =>
+                  previous === strand.strand ? undefined : strand.strand,
+                )
               }
             >
               {strand.name}
@@ -81,7 +90,10 @@ export function WikiRailTree({ strands, currentStrand, currentSlug, currentPageS
                           {page.title}
                         </span>
                       ) : (
-                        <Link href={`/wiki/${strand.strand}/${page.slug}`} className={styles.pageLink}>
+                        <Link
+                          href={`/wiki/${strand.strand}/${page.slug}`}
+                          className={styles.pageLink}
+                        >
                           {page.title}
                         </Link>
                       )}

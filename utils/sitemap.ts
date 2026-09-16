@@ -7,10 +7,7 @@ import fs from "node:fs";
  * ISO date/datetime string when present, otherwise a fallback `Date` —
  * never `new Date()`, which would claim a page changed on every build.
  */
-export function resolveLastModified(
-  iso: string | null | undefined,
-  fallback: Date,
-): Date {
+export function resolveLastModified(iso: string | null | undefined, fallback: Date): Date {
   return iso ? new Date(iso) : fallback;
 }
 

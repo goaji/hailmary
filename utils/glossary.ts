@@ -8,7 +8,12 @@ import { z } from "zod";
 import { routing } from "@/routing";
 import { GLOSSARY_CATEGORY_IDS } from "@/types";
 import type { GlossaryEntry, GlossaryEntryFrontmatter, Locale } from "@/types";
-import { contentFilePath, listMdxSlugs, parseFrontmatter, resolveServedLocale } from "@/utils/content";
+import {
+  contentFilePath,
+  listMdxSlugs,
+  parseFrontmatter,
+  resolveServedLocale,
+} from "@/utils/content";
 import { validateSeeAlso } from "@/utils/wiki";
 
 export { resolveServedLocale } from "@/utils/content";
@@ -80,16 +85,14 @@ function listAllSlugs(): string[] {
   return [...slugs];
 }
 
-export const getTermBySlug = cache(
-  (slug: string, locale: Locale): GlossaryEntry | undefined => {
-    const availableLocales = routing.locales.filter((candidate) =>
-      fs.existsSync(termFilePath(candidate, slug)),
-    );
-    const servedLocale = resolveServedLocale(locale, availableLocales);
+export const getTermBySlug = cache((slug: string, locale: Locale): GlossaryEntry | undefined => {
+  const availableLocales = routing.locales.filter((candidate) =>
+    fs.existsSync(termFilePath(candidate, slug)),
+  );
+  const servedLocale = resolveServedLocale(locale, availableLocales);
 
-    return servedLocale ? readTermFile(servedLocale, slug) : undefined;
-  },
-);
+  return servedLocale ? readTermFile(servedLocale, slug) : undefined;
+});
 
 /**
  * Every glossary entry available for `locale`, falling back per-slug to ro
@@ -140,11 +143,7 @@ export function extractTermLinkSlugs(content: string): string[] {
  * with that locale's `getTermSlugs()`, so it runs during
  * generateStaticParams, not on a request.
  */
-export function validateTermLinks(
-  content: string,
-  knownSlugs: string[],
-  filePath: string,
-): void {
+export function validateTermLinks(content: string, knownSlugs: string[], filePath: string): void {
   const known = new Set(knownSlugs);
 
   for (const slug of extractTermLinkSlugs(content)) {

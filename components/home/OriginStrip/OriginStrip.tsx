@@ -55,8 +55,24 @@ export function OriginStrip() {
           onClick={dismiss}
         >
           <svg viewBox="0 0 14 14" width="11" height="11" aria-hidden="true">
-            <line x1="2" y1="2" x2="12" y2="12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            <line x1="12" y1="2" x2="2" y2="12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            <line
+              x1="2"
+              y1="2"
+              x2="12"
+              y2="12"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+            />
+            <line
+              x1="12"
+              y1="2"
+              x2="2"
+              y2="12"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
       </div>

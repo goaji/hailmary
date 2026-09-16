@@ -13,9 +13,7 @@ import styles from "./page.module.scss";
 
 const GRID_SIZE = 4;
 
-export async function generateMetadata({
-  params,
-}: PageProps<"/[locale]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
@@ -48,10 +46,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const isFallback = servedLocale !== locale;
   const featured = selectFeatured(allArticles);
 
-  const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(
-    0,
-    GRID_SIZE,
-  );
+  const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(0, GRID_SIZE);
 
   const t = await getTranslations({ locale, namespace: "newsIndex" });
 

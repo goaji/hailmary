@@ -57,7 +57,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ status: "no-games" });
   }
 
-  writeScores(result.games, { updatedAt: now, source: "balldontlie", lastAttemptAt: now, lastAttemptOk: true });
+  writeScores(result.games, {
+    updatedAt: now,
+    source: "balldontlie",
+    lastAttemptAt: now,
+    lastAttemptOk: true,
+  });
 
   // Time-based revalidate isn't reliably landing on this host, so tell Next.js explicitly rather than waiting on it.
   for (const locale of routing.locales) {

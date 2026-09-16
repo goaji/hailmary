@@ -12,8 +12,7 @@ type LinkListValueItem = {
 };
 
 type LinkListProps =
-  | { variant: "link"; items: LinkListLinkItem[] }
-  | { variant: "value"; items: LinkListValueItem[] };
+  { variant: "link"; items: LinkListLinkItem[] } | { variant: "value"; items: LinkListValueItem[] };
 
 export function LinkList(props: LinkListProps) {
   return (

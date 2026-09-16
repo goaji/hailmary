@@ -30,7 +30,9 @@ export function FieldDiagram() {
     <section className={styles.diagram} aria-label={t("widgetLabel")}>
       <div className={styles.field}>
         <div className={`${styles.endZone} ${styles.endZoneLeft} ${isActive("end-zones") ?? ""}`} />
-        <div className={`${styles.endZone} ${styles.endZoneRight} ${isActive("end-zones") ?? ""}`} />
+        <div
+          className={`${styles.endZone} ${styles.endZoneRight} ${isActive("end-zones") ?? ""}`}
+        />
         <div className={`${styles.redZone} ${styles.redZoneLeft} ${isActive("red-zone") ?? ""}`} />
         <div className={`${styles.redZone} ${styles.redZoneRight} ${isActive("red-zone") ?? ""}`} />
         <div className={`${styles.yardLines} ${isActive("yard-lines") ?? ""}`} />

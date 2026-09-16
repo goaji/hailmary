@@ -6,9 +6,7 @@ import { latestMtime, resolveLastModified } from "./sitemap";
 
 describe("resolveLastModified", () => {
   it("parses a valid ISO string", () => {
-    expect(resolveLastModified("2026-08-24", new Date(0))).toEqual(
-      new Date("2026-08-24"),
-    );
+    expect(resolveLastModified("2026-08-24", new Date(0))).toEqual(new Date("2026-08-24"));
   });
 
   it("falls back to the given Date when there's no ISO string", () => {
