@@ -1,23 +1,19 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { getLanguageAlternates, routing } from "@/i18n";
+import { getLanguageAlternates } from "@/i18n";
 import { OriginStrip } from "@/components/home/OriginStrip/OriginStrip";
 import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
 import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
 import { Sidebar } from "@/components/home/Sidebar/Sidebar";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { excludeArticleBySlug, getAllArticlesWithFallback, selectFeatured } from "@/utils/articles";
+import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
 const GRID_SIZE = 4;
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   const featured = selectFeatured(getAllArticlesWithFallback(locale).articles);
   const t = await getTranslations({ locale, namespace: "meta" });
@@ -35,10 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
 }
 
 export default async function Home({ params }: PageProps<"/[locale]">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   // getAllArticlesWithFallback is synchronous (fs.readFileSync-backed,
   // React-cache-memoized) — there's no real async work here, so no Promise.all.

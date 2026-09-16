@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { Bebas_Neue, Work_Sans } from "next/font/google";
 import Script from "next/script";
 import { routing } from "@/i18n";
@@ -14,6 +13,7 @@ import { ExplainerContent } from "@/components/explainer/ExplainerContent/Explai
 import { getAllTerms } from "@/utils/glossary";
 import { SITE_URL } from "@/utils/site";
 import { HEADER_BG } from "@/utils/theme";
+import { requireLocale } from "@/utils/locale";
 import "../../styles/globals.scss";
 
 // "latin" alone silently drops ă/â/î/ș/ț — latin-ext is required too, alongside it (its own range excludes plain ASCII).
@@ -53,11 +53,7 @@ export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Pr
 }
 
 export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
-  const { locale } = await params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   const messages = await getMessages();
 

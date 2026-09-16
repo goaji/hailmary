@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
@@ -9,6 +8,7 @@ import { GlossaryTerm } from "@/components/reference/GlossaryTerm/GlossaryTerm";
 import { TargetRefresh } from "@/components/reference/TargetRefresh/TargetRefresh";
 import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
 import { getAllTerms, getGlossaryLetters, resolveLetter } from "@/utils/glossary";
+import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
@@ -20,10 +20,8 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/glosar/[letter]">): Promise<Metadata> {
-  const { locale, letter: letterParam } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const { locale: localeParam, letter: letterParam } = await params;
+  const locale = requireLocale(localeParam);
 
   const letter = resolveLetter(letterParam, getGlossaryLetters(locale));
   if (!letter) {
@@ -46,10 +44,8 @@ export async function generateMetadata({
 export default async function GlossaryLetterPage({
   params,
 }: PageProps<"/[locale]/glosar/[letter]">) {
-  const { locale, letter: letterParam } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const { locale: localeParam, letter: letterParam } = await params;
+  const locale = requireLocale(localeParam);
 
   const letters = getGlossaryLetters(locale);
   const letter = resolveLetter(letterParam, letters);

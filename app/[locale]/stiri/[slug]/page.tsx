@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
@@ -21,6 +20,7 @@ import {
 } from "@/utils/articles";
 import styles from "./page.module.scss";
 import { SITE_URL } from "@/utils/site";
+import { requireLocale } from "@/utils/locale";
 import {
   bcp47Locale,
   buildBreadcrumbJsonLd,
@@ -43,10 +43,8 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/stiri/[slug]">): Promise<Metadata> {
-  const { locale, slug } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const { locale: localeParam, slug } = await params;
+  const locale = requireLocale(localeParam);
 
   const article = getArticleBySlug(slug, locale);
   if (!article) {
@@ -75,10 +73,8 @@ export async function generateMetadata({
 }
 
 export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri/[slug]">) {
-  const { locale, slug } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const { locale: localeParam, slug } = await params;
+  const locale = requireLocale(localeParam);
 
   const article = getArticleBySlug(slug, locale);
   if (!article) {

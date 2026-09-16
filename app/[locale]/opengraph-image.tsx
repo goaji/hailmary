@@ -1,9 +1,8 @@
 import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
-import { hasLocale } from "next-intl";
-import { routing } from "@/i18n";
 import { OG_CONTENT_TYPE, OG_FONTS, OG_PAGE_BG, OG_SIZE, OG_TEXT_MUTED } from "@/utils/og";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
+import { resolveLocale } from "@/utils/locale";
 
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
@@ -12,8 +11,7 @@ export const contentType = OG_CONTENT_TYPE;
 // (currently /program and /echipe, alongside the homepage itself) inherits
 // this one, per Next's "more specific wins" file-convention resolution.
 export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale: requested } = await params;
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+  const locale = resolveLocale((await params).locale);
   const t = await getTranslations({ locale, namespace: "meta" });
   const team = TEAMS_BY_SLUG[DEFAULT_TEAM];
 

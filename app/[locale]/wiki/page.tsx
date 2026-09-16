@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
@@ -7,6 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { Card } from "@/components/ui/Card/Card";
 import { LinkList } from "@/components/ui/LinkList/LinkList";
 import { getAllWikiPages, getWikiStrandTree } from "@/utils/wiki";
+import { requireLocale } from "@/utils/locale";
 import type { Locale } from "@/types";
 import styles from "./page.module.scss";
 
@@ -20,8 +20,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps<"/[locale]/wiki">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale) || !availableLocales().includes(locale)) {
+  const locale = requireLocale((await params).locale);
+  if (!availableLocales().includes(locale)) {
     notFound();
   }
 
@@ -38,8 +38,8 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/wiki">):
 }
 
 export default async function WikiHubPage({ params }: PageProps<"/[locale]/wiki">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale) || !availableLocales().includes(locale)) {
+  const locale = requireLocale((await params).locale);
+  if (!availableLocales().includes(locale)) {
     notFound();
   }
 

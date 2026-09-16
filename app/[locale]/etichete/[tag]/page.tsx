@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
@@ -8,6 +7,7 @@ import { TagRail } from "@/components/articles/TagRail/TagRail";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { getAllArticlesWithFallback } from "@/utils/articles";
+import { requireLocale } from "@/utils/locale";
 import { TAG_IDS } from "@hailmary/shared";
 import styles from "./page.module.scss";
 
@@ -22,8 +22,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: TagPageParams): Promise<Metadata> {
-  const { locale, tag } = await params;
-  if (!hasLocale(routing.locales, locale) || !isTag(tag)) {
+  const { locale: localeParam, tag } = await params;
+  const locale = requireLocale(localeParam);
+  if (!isTag(tag)) {
     notFound();
   }
 
@@ -43,8 +44,9 @@ export async function generateMetadata({ params }: TagPageParams): Promise<Metad
 }
 
 export default async function TagPage({ params }: TagPageParams) {
-  const { locale, tag } = await params;
-  if (!hasLocale(routing.locales, locale) || !isTag(tag)) {
+  const { locale: localeParam, tag } = await params;
+  const locale = requireLocale(localeParam);
+  if (!isTag(tag)) {
     notFound();
   }
 

@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ArticleCard } from "@/components/home/ArticleCard/ArticleCard";
 import { NewsFilters } from "@/components/articles/NewsFilters/NewsFilters";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { getAllArticlesWithFallback } from "@/utils/articles";
+import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
@@ -17,10 +16,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/stiri">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   const t = await getTranslations({ locale, namespace: "newsIndex" });
 
@@ -35,10 +31,7 @@ export async function generateMetadata({
 }
 
 export default async function NewsIndexPage({ params }: PageProps<"/[locale]/stiri">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   // News is Romanian-only — getAllArticlesWithFallback falls back to the
   // ro list under /en (with a notice below), the same ro-fallback contract

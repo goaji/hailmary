@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { hasLocale } from "next-intl";
-import { routing } from "@/routing";
 import { getAllArticlesWithFallback } from "@/utils/articles";
 import { isTestEnvironmentEnabled, isTestRequestAuthorized } from "@/utils/testAuth";
+import { resolveLocale } from "@/utils/locale";
 
 // Only for hailmary-e2e — Never set E2E_TEST_SECRET
 // on the Hostinger production env; this is only meant to be reachable on
@@ -15,7 +14,7 @@ export async function GET(request: Request) {
   }
 
   const requested = new URL(request.url).searchParams.get("locale");
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+  const locale = resolveLocale(requested);
 
   const { articles } = getAllArticlesWithFallback(locale);
   return NextResponse.json({ count: articles.length });

@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { DivisionGroup } from "@/components/teams/DivisionGroup/DivisionGroup";
 import { CONFERENCES, DIVISIONS, getTeamsByDivision } from "@/utils/teams";
+import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
@@ -15,10 +14,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/echipe">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   const t = await getTranslations({ locale, namespace: "teams" });
 
@@ -33,10 +29,7 @@ export async function generateMetadata({
 }
 
 export default async function TeamsPage({ params }: PageProps<"/[locale]/echipe">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  requireLocale((await params).locale);
 
   const t = await getTranslations("teams");
 
