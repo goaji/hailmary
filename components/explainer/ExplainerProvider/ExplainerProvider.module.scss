@@ -1,6 +1,6 @@
 @use "mixins" as mix;
 
-.pageShift {
+.explainerProvider {
   main {
     @include mix.motion-safe {
       transition: margin-right 250ms ease;

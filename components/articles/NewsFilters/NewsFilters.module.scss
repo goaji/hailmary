@@ -1,6 +1,12 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
+.newsFilters {
+  display: flex;
+  flex-direction: column;
+  gap: v.space(32);
+}
+
 .filterBar {
   display: flex;
   flex-direction: column;
@@ -75,7 +81,6 @@
   display: grid;
   grid-template-columns: 1fr; // mobile-first: single column
   gap: v.space(22);
-  margin-top: v.space(32);
 
   @include mix.mq(md) {
     grid-template-columns: 1fr 1fr;
@@ -94,7 +99,7 @@
 }
 
 .empty {
-  margin-top: v.space(32);
+  margin: 0;
   color: v.$c-text-muted;
   font-size: v.$fs-body;
 }

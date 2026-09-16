@@ -26,7 +26,8 @@ export function ArticleGrid({
   priorityCount = 0,
   variant,
 }: ArticleGridProps) {
-  const sectionClass = variant === "news" ? styles.newsSection : styles.teamSection;
+  const sectionClass =
+    variant === "news" ? `${styles.articleGrid} ${styles.news}` : styles.articleGrid;
   const gridClass =
     variant === "news" ? styles.newsGrid : variant === "three" ? styles.threeGrid : styles.teamGrid;
 

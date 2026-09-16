@@ -16,7 +16,7 @@ export async function WikiPrevNext({ prevNext, locale }: WikiPrevNextProps) {
   const t = await getTranslations({ locale, namespace: "wikiPage" });
 
   return (
-    <nav aria-label={t("readingThreadNavLabel")} className={styles.nav}>
+    <nav aria-label={t("readingThreadNavLabel")} className={styles.wikiPrevNext}>
       {prevNext.prev ? (
         <Link
           href={`/wiki/${prevNext.prev.strand}/${prevNext.prev.slug}`}

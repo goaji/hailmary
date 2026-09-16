@@ -7,7 +7,7 @@ type TimelineEntryProps = {
 
 export function TimelineEntry({ entry }: TimelineEntryProps) {
   return (
-    <li className={styles.entry}>
+    <li className={styles.timelineEntry}>
       <span className={styles.dot} aria-hidden="true" />
       <div className={styles.heading}>
         <span className={styles.year}>{entry.year}</span>

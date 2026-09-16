@@ -1,7 +1,7 @@
 @use "variables" as v;
 
 // Same arrival highlight as GlossaryTerm — reserved transparent border so landing doesn't shift layout.
-.section {
+.ruleSection {
   margin-bottom: v.space(48);
   padding-left: v.space(16);
   border-left: 3px solid transparent;

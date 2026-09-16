@@ -12,7 +12,7 @@ type LiveScoreBadgeViewProps = {
 export function LiveScoreBadgeView({ quarter, clock, t }: LiveScoreBadgeViewProps) {
   return (
     // role="status" implies aria-live="polite" — announces polled quarter/clock changes.
-    <span className={styles.badge} role="status">
+    <span className={styles.liveScoreBadge} role="status">
       <span className={styles.dot} aria-hidden="true" />
       <span>{t("live")}</span>
       {quarter !== undefined && clock !== undefined && (

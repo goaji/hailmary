@@ -95,7 +95,7 @@ export function ScheduleWeekSwitcher({
 
   if (weeks.length <= 1) {
     return (
-      <div className={styles.root}>
+      <div className={styles.scheduleWeekSwitcher}>
         {heading}
         {content}
       </div>
@@ -103,7 +103,7 @@ export function ScheduleWeekSwitcher({
   }
 
   return (
-    <div className={styles.root}>
+    <div className={styles.scheduleWeekSwitcher}>
       {heading}
       <div className={styles.layout}>
         <div className={styles.rail}>

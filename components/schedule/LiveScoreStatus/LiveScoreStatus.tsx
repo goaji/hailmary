@@ -36,5 +36,5 @@ export function LiveScoreStatus({ initialIsLive, hasLiveGames }: LiveScoreStatus
     return null;
   }
 
-  return <p className={styles.notice}>{t("liveUnavailableNotice")}</p>;
+  return <p className={styles.liveScoreStatus}>{t("liveUnavailableNotice")}</p>;
 }

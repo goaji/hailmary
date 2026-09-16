@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.picker {
+.teamPicker {
   display: flex;
   align-items: center;
   gap: v.space(4);

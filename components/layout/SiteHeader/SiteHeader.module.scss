@@ -3,10 +3,10 @@
 
 // Full-width bar: background/border span the whole viewport, sticky-pinned
 // to the top. Only .inner (below) caps at the page's 1200px content width —
-// capping .header itself would leave the sticky bar's background stopping
+// capping .siteHeader itself would leave the sticky bar's background stopping
 // short at 1200px, exposing scrolled-past content in the side gutters on
 // wide viewports instead of a solid bar.
-.header {
+.siteHeader {
   position: sticky;
   top: 0;
   // Above ScrollProgress (10) and TermLink's hover tooltip (20) — the

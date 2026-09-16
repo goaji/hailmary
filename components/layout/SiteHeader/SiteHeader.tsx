@@ -6,7 +6,7 @@ import styles from "./SiteHeader.module.scss";
 
 export function SiteHeader() {
   return (
-    <header data-testid="site-header" className={styles.header}>
+    <header data-testid="site-header" className={styles.siteHeader}>
       <div className={styles.inner}>
         {/* Flex items get spaces between them in the accessible name; the label keeps it one word. */}
         <Link href="/" className={styles.logo} aria-label="HAILMARY.RO">

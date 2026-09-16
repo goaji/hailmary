@@ -15,7 +15,7 @@ export async function ArticleBody({ content, tags }: ArticleBodyProps) {
   const t = await getTranslations("articleBody");
 
   return (
-    <div className={styles.body}>
+    <div className={styles.articleBody}>
       <MDXRemote
         source={content}
         components={articleComponents}

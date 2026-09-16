@@ -16,7 +16,7 @@ type LinkListProps =
 
 export function LinkList(props: LinkListProps) {
   return (
-    <ul className={styles.list}>
+    <ul className={styles.linkList}>
       {props.variant === "link"
         ? props.items.map((item) => (
             <li key={item.href} className={styles.row}>

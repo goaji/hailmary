@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.notice {
+.fallbackNotice {
   max-width: 960px; // same reading width as article/glosar/istorie/regulament content
   margin: v.space(32) auto 0 auto;
   background: v.$c-surface;

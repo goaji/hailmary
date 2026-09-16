@@ -142,7 +142,7 @@ export function AlphabeticalRail(props: AlphabeticalRailProps) {
   };
 
   return (
-    <>
+    <div className={styles.alphabeticalRail}>
       <nav aria-label={props.railLabel} className={styles.desktopRail}>
         <RailBody {...bodyProps} />
       </nav>
@@ -155,6 +155,6 @@ export function AlphabeticalRail(props: AlphabeticalRailProps) {
           <RailBody {...bodyProps} />
         </nav>
       </details>
-    </>
+    </div>
   );
 }

@@ -16,7 +16,7 @@ export async function WikiBreadcrumbs({ strand, pageTitle, locale }: WikiBreadcr
   const tStrands = await getTranslations({ locale, namespace: "wikiStrands" });
 
   return (
-    <nav aria-label={t("breadcrumbNavLabel")} className={styles.breadcrumbs}>
+    <nav aria-label={t("breadcrumbNavLabel")} className={styles.wikiBreadcrumbs}>
       <ol className={styles.list}>
         <li>
           <Link href="/wiki" className={styles.link}>

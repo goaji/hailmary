@@ -42,7 +42,7 @@ export async function ArticleRail({ articles, currentSlug, locale }: ArticleRail
   const t = await getTranslations({ locale, namespace: "articleRail" });
 
   return (
-    <>
+    <div className={styles.articleRail}>
       <nav aria-label={t("label")} className={styles.desktopRail}>
         <h2 className={styles.heading}>{t("heading")}</h2>
         <ArticleRailList articles={articles} currentSlug={currentSlug} />
@@ -55,6 +55,6 @@ export async function ArticleRail({ articles, currentSlug, locale }: ArticleRail
         </summary>
         <ArticleRailList articles={articles} currentSlug={currentSlug} />
       </details>
-    </>
+    </div>
   );
 }

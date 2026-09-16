@@ -11,7 +11,7 @@ export async function TeamBlurb() {
   const t = await getTranslations("teamDetail.blurb");
 
   return (
-    <section className={styles.blurb} aria-labelledby={HEADING_ID}>
+    <section className={styles.teamBlurb} aria-labelledby={HEADING_ID}>
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
       <p className={styles.placeholder}>{t("placeholder")}</p>
     </section>

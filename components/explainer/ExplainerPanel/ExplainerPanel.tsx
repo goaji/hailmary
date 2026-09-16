@@ -74,7 +74,7 @@ export function ExplainerPanel({ entries, triggerRef }: ExplainerPanelProps) {
   return (
     <dialog
       ref={dialogRef}
-      className={styles.panel}
+      className={styles.explainerPanel}
       aria-labelledby={headingId}
       onClick={(event) => {
         // A click on ::backdrop is indistinguishable from a click on the dialog element itself.

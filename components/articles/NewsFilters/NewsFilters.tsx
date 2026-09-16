@@ -78,7 +78,7 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
     team === "all" ? byCategory : byCategory.filter((item) => item.teams?.includes(team));
 
   return (
-    <div>
+    <div className={styles.newsFilters}>
       <div className={styles.filterBar}>
         <div className={styles.field}>
           <label htmlFor={categorySelectId} className={styles.label}>

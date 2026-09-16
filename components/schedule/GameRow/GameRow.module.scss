@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 // Mobile-first: stacked blocks by default, a real table row from md up.
-.row {
+.gameRow {
   display: flex;
   flex-direction: column;
   gap: v.space(4);

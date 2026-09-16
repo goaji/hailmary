@@ -45,7 +45,7 @@ function GameRow({ game, locale }: { game: Game; locale: string }) {
   const isLive = isLiveStatus(game.status);
 
   return (
-    <tr className={rowStyles.row}>
+    <tr className={rowStyles.gameRow}>
       <td className={rowStyles.matchup}>
         <TeamBadge team={away} size="sm" />
         <span aria-hidden="true" className={rowStyles.separator}>
@@ -81,7 +81,7 @@ function ScheduleTable({ games, week, locale }: { games: Game[]; week: number; l
       role="region"
       aria-label={t("scrollLabel")}
       tabIndex={0}
-      className={tableStyles.tableWrapper}
+      className={tableStyles.scheduleTable}
     >
       <table className={tableStyles.table}>
         <caption className={tableStyles.caption}>{t("caption", { week })}</caption>
@@ -117,7 +117,11 @@ export function LiveSchedule({
   const defaultWeek = getCurrentWeek(games);
 
   if (games.length === 0) {
-    return <p className={styles.empty}>{t("empty")}</p>;
+    return (
+      <div className={styles.liveSchedule}>
+        <p className={styles.empty}>{t("empty")}</p>
+      </div>
+    );
   }
 
   const tables: Record<number, ReactNode> = Object.fromEntries(
@@ -136,23 +140,25 @@ export function LiveSchedule({
   const titleLabels = Object.fromEntries(weeks.map((week) => [week, t("titleWithWeek", { week })]));
 
   return (
-    <ScheduleWeekSwitcher
-      weeks={weeks}
-      defaultWeek={defaultWeek}
-      weekNavLabel={t("weekNavLabel")}
-      weeksHeading={t("weeksHeading")}
-      weekLabels={weekLabels}
-      weekAriaLabels={weekAriaLabels}
-      titleLabels={titleLabels}
-      tables={tables}
-      liveStatus={isLive ? null : undefined}
-      updatedAtNote={
-        updatedAt && (
-          <p className={styles.updatedAt} data-testid="schedule-updated-at">
-            {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
-          </p>
-        )
-      }
-    />
+    <div className={styles.liveSchedule}>
+      <ScheduleWeekSwitcher
+        weeks={weeks}
+        defaultWeek={defaultWeek}
+        weekNavLabel={t("weekNavLabel")}
+        weeksHeading={t("weeksHeading")}
+        weekLabels={weekLabels}
+        weekAriaLabels={weekAriaLabels}
+        titleLabels={titleLabels}
+        tables={tables}
+        liveStatus={isLive ? null : undefined}
+        updatedAtNote={
+          updatedAt && (
+            <p className={styles.updatedAt} data-testid="schedule-updated-at">
+              {t("updatedAt", { time: formatPublishedAt(updatedAt, locale) })}
+            </p>
+          )
+        }
+      />
+    </div>
   );
 }

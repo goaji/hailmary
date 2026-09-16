@@ -20,7 +20,7 @@ export function SiteNav() {
   const navId = useId();
 
   return (
-    <>
+    <div className={styles.siteNav}>
       <button
         type="button"
         className={styles.navToggle}
@@ -87,6 +87,6 @@ export function SiteNav() {
           })}
         </ul>
       </nav>
-    </>
+    </div>
   );
 }

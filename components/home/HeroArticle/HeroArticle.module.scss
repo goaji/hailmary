@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.hero {
+.heroArticle {
   display: flex;
   flex-direction: column;
   max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)

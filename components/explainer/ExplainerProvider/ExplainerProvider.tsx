@@ -188,7 +188,7 @@ export function ExplainerProvider({ entries, children }: ExplainerProviderProps)
                 {children} (rendered by the locale layout), not here, so
                 this is a plain descendant selector rather than a
                 component this file owns. */}
-            <div className={styles.pageShift} data-panel-open={activeTerm ? "" : undefined}>
+            <div className={styles.explainerProvider} data-panel-open={activeTerm ? "" : undefined}>
               {children}
             </div>
             <ExplainerPanel entries={entries} triggerRef={triggerRef} />

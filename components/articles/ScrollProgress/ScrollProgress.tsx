@@ -27,6 +27,10 @@ export function ScrollProgress() {
   }, []);
 
   return (
-    <div aria-hidden="true" className={styles.bar} style={{ transform: `scaleX(${progress})` }} />
+    <div
+      aria-hidden="true"
+      className={styles.scrollProgress}
+      style={{ transform: `scaleX(${progress})` }}
+    />
   );
 }

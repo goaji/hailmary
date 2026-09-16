@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.band {
+.teamIdentityBand {
   background: var(--band-bg);
   // Full opacity throughout — onBrandColor's contrast guarantee is computed
   // against this exact color, so dimming it (e.g. via opacity) for the meta

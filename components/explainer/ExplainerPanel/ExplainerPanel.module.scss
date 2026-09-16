@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.panel {
+.explainerPanel {
   // Full UA reset — <dialog> ships with its own border/padding/background
   // and an auto-centering position that this replaces entirely below.
   margin: 0;

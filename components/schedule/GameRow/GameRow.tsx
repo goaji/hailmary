@@ -20,7 +20,7 @@ export async function GameRow({ game, locale }: GameRowProps) {
   const isLive = isLiveStatus(game.status);
 
   return (
-    <tr className={styles.row}>
+    <tr className={styles.gameRow}>
       <td className={styles.matchup}>
         <TeamBadge team={away} size="sm" />
         <span aria-hidden="true" className={styles.separator}>

@@ -1,16 +1,14 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.newsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 24px; // bespoke to the homepage grid
-}
-
-.teamSection {
+.articleGrid {
   display: flex;
   flex-direction: column;
   gap: v.space(20);
+
+  &.news {
+    gap: 24px; // bespoke to the homepage grid
+  }
 }
 
 .newsGrid {

@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 // Each entry's own border-left segment chains into one continuous rail — the one other left-border treatment AGENTS.md allows besides blockquote.
-.entry {
+.timelineEntry {
   position: relative;
   padding: 0 0 v.space(32) v.space(20);
   border-left: 2px solid v.$c-border;

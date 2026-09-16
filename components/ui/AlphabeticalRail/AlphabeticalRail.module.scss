@@ -1,6 +1,11 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
+// Layout-neutral root: children stay direct items of the parent's grid/flex.
+.alphabeticalRail {
+  display: contents;
+}
+
 .desktopRail {
   display: none;
 }

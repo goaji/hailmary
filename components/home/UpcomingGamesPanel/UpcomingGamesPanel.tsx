@@ -17,17 +17,19 @@ export function UpcomingGamesPanel({ locale, emptyLabel, count }: UpcomingGamesP
   const { data } = useLiveScores(true);
   const games = selectUpcomingGames(data?.games ?? [], count);
 
-  if (games.length === 0) {
-    return <p className={styles.empty}>{emptyLabel}</p>;
-  }
-
   return (
-    <LinkList
-      variant="value"
-      items={games.map((game) => ({
-        label: `${getTeam(game.awayTeamId).shortName} @ ${getTeam(game.homeTeamId).shortName}`,
-        value: formatKickoff(game.kickoff, locale),
-      }))}
-    />
+    <div className={styles.upcomingGamesPanel}>
+      {games.length === 0 ? (
+        <p className={styles.empty}>{emptyLabel}</p>
+      ) : (
+        <LinkList
+          variant="value"
+          items={games.map((game) => ({
+            label: `${getTeam(game.awayTeamId).shortName} @ ${getTeam(game.homeTeamId).shortName}`,
+            value: formatKickoff(game.kickoff, locale),
+          }))}
+        />
+      )}
+    </div>
   );
 }

@@ -60,7 +60,7 @@ export function TeamColorProvider({ children }: TeamColorProviderProps) {
 
   return (
     <TeamColorContext.Provider value={{ teamId, setTeam }}>
-      <div className={styles.wrapper} style={accentStyle}>
+      <div className={styles.teamColorProvider} style={accentStyle}>
         {children}
       </div>
     </TeamColorContext.Provider>

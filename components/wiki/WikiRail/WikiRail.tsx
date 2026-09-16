@@ -32,7 +32,7 @@ export async function WikiRail({
     }));
 
   return (
-    <>
+    <div className={styles.wikiRail}>
       <nav aria-label={t("label")} className={styles.desktopRail}>
         <WikiRailTree
           strands={strands}
@@ -56,6 +56,6 @@ export async function WikiRail({
           />
         </nav>
       </details>
-    </>
+    </div>
   );
 }

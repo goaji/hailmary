@@ -1,6 +1,6 @@
 @use "variables" as v;
 
-.term {
+.glossaryTerm {
   padding: v.space(20) 0 v.space(20) v.space(16);
   border-bottom: 1px solid v.$c-border;
   // Reserved transparent border so the arrival highlight doesn't shift layout.

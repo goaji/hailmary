@@ -38,7 +38,7 @@ export function TeamPicker() {
   }
 
   return (
-    <div className={styles.picker} role="radiogroup" aria-label={t("label")}>
+    <div className={styles.teamPicker} role="radiogroup" aria-label={t("label")}>
       {PICKER_TEAMS.map((slug, index) => {
         const team = getTeam(slug);
         const isSelected = teamId === slug;

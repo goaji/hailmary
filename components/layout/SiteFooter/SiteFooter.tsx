@@ -7,7 +7,7 @@ export async function SiteFooter() {
   const year = new Intl.DateTimeFormat(locale, { year: "numeric" }).format(new Date());
 
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.siteFooter}>
       <p>{t("copyright", { year })}</p>
       <p className={styles.contact}>
         Email:{" "}

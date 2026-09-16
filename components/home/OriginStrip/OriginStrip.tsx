@@ -32,7 +32,7 @@ export function OriginStrip() {
 
   return (
     // suppressHydrationWarning: the layout's script sets style.display first, which never matches server markup.
-    <div className={styles.strip} id="origin-strip" suppressHydrationWarning>
+    <div className={styles.originStrip} id="origin-strip" suppressHydrationWarning>
       <div className={styles.copy}>
         <p className={styles.kicker}>{t("kicker")}</p>
         <p className={styles.story}>
