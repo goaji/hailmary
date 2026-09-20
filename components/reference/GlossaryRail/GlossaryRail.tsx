@@ -18,14 +18,24 @@ type GlossaryRailProps = {
 
 export function GlossaryRail(props: GlossaryRailProps) {
   const t = useTranslations("glossary");
-  const groups = props.letters.map((letter) => ({
-    letter,
-    href: `/glosar/${letter.toLowerCase()}`,
-    current: letter === props.currentLetter,
-    items: props.allTerms
-      .filter((term) => term.letter === letter)
-      .map((term) => ({ id: term.slug, label: term.term, href: `#${term.slug}` })),
-  }));
+  const groups = props.letters.map((letter) => {
+    const letterHref = `/glosar/${letter.toLowerCase()}`;
+    const onThisPage = letter === props.currentLetter;
+
+    return {
+      letter,
+      href: letterHref,
+      current: onThisPage,
+      items: props.allTerms
+        .filter((term) => term.letter === letter)
+        .map((term) => ({
+          id: term.slug,
+          label: term.term,
+          // search spans the whole glossary, but only this letter's terms exist on this page to anchor to
+          href: onThisPage ? `#${term.slug}` : `${letterHref}#${term.slug}`,
+        })),
+    };
+  });
 
   return (
     <AlphabeticalRail
