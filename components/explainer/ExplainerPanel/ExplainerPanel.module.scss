@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.panel {
+.explainerPanel {
   // Full UA reset — <dialog> ships with its own border/padding/background
   // and an auto-centering position that this replaces entirely below.
   margin: 0;
@@ -32,7 +32,7 @@
     background: rgba(0, 0, 0, 0.5);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @include mix.motion-safe {
     // `display`/`overlay` are discrete properties — allow-discrete plus
     // @starting-style is what lets the transform actually animate from
     // the closed (display: none) state instead of just snapping open.
@@ -67,7 +67,7 @@
       background: transparent;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
+    @include mix.motion-safe {
       @starting-style {
         &[open] {
           transform: translateX(100%);
@@ -142,7 +142,9 @@
   font-weight: 700;
   letter-spacing: 0.4px;
   text-transform: uppercase;
-  color: var(--accent-2); // panel surface — accent1 isn't guaranteed 4.5:1 here for every team, accent2 is
+  color: var(
+    --accent-2
+  ); // panel surface — accent1 isn't guaranteed 4.5:1 here for every team, accent2 is
 }
 
 .chips {
@@ -170,4 +172,3 @@
     @include mix.focus-ring;
   }
 }
-

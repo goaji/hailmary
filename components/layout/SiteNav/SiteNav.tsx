@@ -20,7 +20,7 @@ export function SiteNav() {
   const navId = useId();
 
   return (
-    <>
+    <div className={styles.siteNav}>
       <button
         type="button"
         className={styles.navToggle}
@@ -30,9 +30,33 @@ export function SiteNav() {
         onClick={() => setIsNavOpen((open) => !open)}
       >
         <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
-          <line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-          <line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-          <line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <line
+            x1="3"
+            y1="6"
+            x2="17"
+            y2="6"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <line
+            x1="3"
+            y1="10"
+            x2="17"
+            y2="10"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <line
+            x1="3"
+            y1="14"
+            x2="17"
+            y2="14"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
         </svg>
       </button>
 
@@ -46,8 +70,7 @@ export function SiteNav() {
             // Matches child routes too (e.g. /echipe/kc under /echipe,
             // /stiri/[slug] under /stiri) — harmless for items that don't
             // have any.
-            const isActive =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
             return (
               <li key={item.key}>
@@ -64,6 +87,6 @@ export function SiteNav() {
           })}
         </ul>
       </nav>
-    </>
+    </div>
   );
 }

@@ -96,6 +96,7 @@ export function normalizeGame(raw: RawGame): Game {
     homeTeamId: mapTeamId(raw.home_team),
     awayTeamId: mapTeamId(raw.visitor_team),
     kickoff: raw.date,
+    season: raw.season,
     week: raw.week,
     status: mapStatus(raw),
   };

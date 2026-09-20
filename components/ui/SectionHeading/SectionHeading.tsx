@@ -10,7 +10,7 @@ type SectionHeadingProps = {
 
 export function SectionHeading({ children, as: Tag = "h2", id }: SectionHeadingProps) {
   return (
-    <Tag id={id} className={styles.heading}>
+    <Tag id={id} className={styles.sectionHeading}>
       {children}
     </Tag>
   );

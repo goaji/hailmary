@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.footer {
+.siteFooter {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9,7 +9,7 @@
   gap: v.space(8);
   background: v.$c-header;
   border-top: 1px solid v.$c-border;
-  max-width: 1200px; // same content-width cap as SiteHeader and the page body
+  max-width: v.$content-width;
   margin: 0 auto;
   padding: v.space(32);
   color: v.$c-text-muted;

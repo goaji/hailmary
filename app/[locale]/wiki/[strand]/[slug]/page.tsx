@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
@@ -14,6 +13,7 @@ import { WikiBreadcrumbs } from "@/components/wiki/WikiBreadcrumbs/WikiBreadcrum
 import { WikiRail } from "@/components/wiki/WikiRail/WikiRail";
 import { WikiPrevNext } from "@/components/wiki/WikiPrevNext/WikiPrevNext";
 import { groupEntriesByEra, splitSectionContent } from "@/utils/reference";
+import { requireLocale } from "@/utils/locale";
 import {
   getAllWikiPages,
   getWikiPage,
@@ -37,8 +37,9 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/wiki/[strand]/[slug]">): Promise<Metadata> {
-  const { locale, strand, slug } = await params;
-  if (!hasLocale(routing.locales, locale) || !isWikiStrandId(strand)) {
+  const { locale: localeParam, strand, slug } = await params;
+  const locale = requireLocale(localeParam);
+  if (!isWikiStrandId(strand)) {
     notFound();
   }
 
@@ -62,8 +63,9 @@ export async function generateMetadata({
 export default async function WikiCategoryPage({
   params,
 }: PageProps<"/[locale]/wiki/[strand]/[slug]">) {
-  const { locale, strand, slug } = await params;
-  if (!hasLocale(routing.locales, locale) || !isWikiStrandId(strand)) {
+  const { locale: localeParam, strand, slug } = await params;
+  const locale = requireLocale(localeParam);
+  if (!isWikiStrandId(strand)) {
     notFound();
   }
 
@@ -113,17 +115,21 @@ export default async function WikiCategoryPage({
                 />
               </div>
 
-              {groupEntriesByEra(page.frontmatter.entries, page.sections).map(({ section, entries, startOrdinal }) =>
-                entries.length > 0 ? (
-                  <section key={section.id} className={styles.era} aria-labelledby={section.id}>
-                    <EraHeading id={section.id}>{section.title}</EraHeading>
-                    <ol className={styles.list} start={startOrdinal}>
-                      {entries.map((entry) => (
-                        <TimelineEntry key={`${entry.era}-${entry.year}-${entry.title}`} entry={entry} />
-                      ))}
-                    </ol>
-                  </section>
-                ) : null,
+              {groupEntriesByEra(page.frontmatter.entries, page.sections).map(
+                ({ section, entries, startOrdinal }) =>
+                  entries.length > 0 ? (
+                    <section key={section.id} className={styles.era} aria-labelledby={section.id}>
+                      <EraHeading id={section.id}>{section.title}</EraHeading>
+                      <ol className={styles.list} start={startOrdinal}>
+                        {entries.map((entry) => (
+                          <TimelineEntry
+                            key={`${entry.era}-${entry.year}-${entry.title}`}
+                            entry={entry}
+                          />
+                        ))}
+                      </ol>
+                    </section>
+                  ) : null,
               )}
             </>
           ) : (

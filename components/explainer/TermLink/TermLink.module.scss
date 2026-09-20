@@ -64,14 +64,16 @@
   visibility: hidden;
   // Never intercepts a click aimed at the word, even while visible.
   pointer-events: none;
-  transition: opacity 0s linear, visibility 0s linear;
+  transition:
+    opacity 0s linear,
+    visibility 0s linear;
 }
 
 // (hover: hover) + (pointer: fine) rules out touch — mobile has no hover
 // tier at all (a tap goes straight to the sheet), and this keeps a
 // touch-capable desktop/hybrid device from getting a stuck tooltip on tap.
 // mq(panel) matches the same desktop threshold the panel itself uses.
-@media (hover: hover) and (pointer: fine) {
+@include mix.fine-pointer {
   @include mix.mq(panel) {
     .termLink:hover .tooltip {
       opacity: 1;

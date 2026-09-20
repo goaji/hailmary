@@ -26,6 +26,7 @@ const LIVE_GAME: Game = {
   homeTeamId: "kc",
   awayTeamId: "buf",
   kickoff: "2026-09-13T20:25:00Z",
+  season: 2026,
   week: 2,
   status: "live",
 };
@@ -35,6 +36,7 @@ function game(overrides: Partial<Game> & Pick<Game, "id" | "week" | "status">): 
     homeTeamId: "kc",
     awayTeamId: "buf",
     kickoff: "2026-09-13T20:25:00Z",
+    season: 2026,
     ...overrides,
   };
 }
@@ -78,7 +80,6 @@ describe("getCurrentWeek", () => {
   });
 });
 
-
 describe("getSchedule", () => {
   it("returns an empty schedule when the store is empty", () => {
     const result = getSchedule(storePath);
@@ -88,7 +89,11 @@ describe("getSchedule", () => {
   it("returns store games and isLive:true once the store has data", () => {
     fs.writeFileSync(
       storePath,
-      JSON.stringify({ games: [LIVE_GAME], updatedAt: "2026-09-13T20:30:00Z", source: "balldontlie" }),
+      JSON.stringify({
+        games: [LIVE_GAME],
+        updatedAt: "2026-09-13T20:30:00Z",
+        source: "balldontlie",
+      }),
     );
 
     expect(getSchedule(storePath)).toEqual({

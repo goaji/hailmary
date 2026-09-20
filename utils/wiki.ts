@@ -16,7 +16,12 @@ import type {
   WikiStrandId,
 } from "@/types";
 import { parseFrontmatter } from "@/utils/content";
-import { referenceSectionSchema, timelineEntrySchema, validateEntryEras, validateSectionHeadings } from "@/utils/reference";
+import {
+  referenceSectionSchema,
+  timelineEntrySchema,
+  validateEntryEras,
+  validateSectionHeadings,
+} from "@/utils/reference";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "wiki");
 
@@ -79,7 +84,9 @@ export const getWikiPage = cache(
 
 /** Which locales have a real file for this strand/slug — for hreflang and generateStaticParams. */
 export const getWikiPageLocales = cache((strand: WikiStrandId, slug: string): Locale[] => {
-  return routing.locales.filter((candidate) => fs.existsSync(wikiFilePath(candidate, strand, slug)));
+  return routing.locales.filter((candidate) =>
+    fs.existsSync(wikiFilePath(candidate, strand, slug)),
+  );
 });
 
 /** Every {strand, slug} pair with a file under content/wiki/<locale>, unordered. */
@@ -153,18 +160,28 @@ export function computePrevNext(strandPages: WikiPage[], slug: string): WikiPrev
 
   return {
     prev: previousPage
-      ? { strand: previousPage.frontmatter.strand, slug: previousPage.slug, title: previousPage.frontmatter.title }
+      ? {
+          strand: previousPage.frontmatter.strand,
+          slug: previousPage.slug,
+          title: previousPage.frontmatter.title,
+        }
       : undefined,
     next: nextPage
-      ? { strand: nextPage.frontmatter.strand, slug: nextPage.slug, title: nextPage.frontmatter.title }
+      ? {
+          strand: nextPage.frontmatter.strand,
+          slug: nextPage.slug,
+          title: nextPage.frontmatter.title,
+        }
       : undefined,
   };
 }
 
-export const getWikiPrevNext = cache((strand: WikiStrandId, slug: string, locale: Locale): WikiPrevNext => {
-  const group = getWikiStrandTree(locale).find((candidate) => candidate.strand === strand);
-  return group ? computePrevNext(group.pages, slug) : {};
-});
+export const getWikiPrevNext = cache(
+  (strand: WikiStrandId, slug: string, locale: Locale): WikiPrevNext => {
+    const group = getWikiStrandTree(locale).find((candidate) => candidate.strand === strand);
+    return group ? computePrevNext(group.pages, slug) : {};
+  },
+);
 
 const SEE_ALSO_PATTERN = /^\/wiki\/([a-z0-9-]+)\/([a-z0-9-]+)(?:#([a-z0-9-]+))?$/;
 

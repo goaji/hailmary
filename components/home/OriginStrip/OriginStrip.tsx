@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n";
+import { DISMISS_KEY, STRIP_ID } from "./originStripConstants";
 import styles from "./OriginStrip.module.scss";
-
-// Must match the literal hardcoded in the root layout's hide-script.
-const DISMISS_KEY = "hm.strip";
 
 export function OriginStrip() {
   const t = useTranslations("originStrip");
@@ -32,7 +30,7 @@ export function OriginStrip() {
 
   return (
     // suppressHydrationWarning: the layout's script sets style.display first, which never matches server markup.
-    <div className={styles.strip} id="origin-strip" suppressHydrationWarning>
+    <div className={styles.originStrip} id={STRIP_ID} suppressHydrationWarning>
       <div className={styles.copy}>
         <p className={styles.kicker}>{t("kicker")}</p>
         <p className={styles.story}>
@@ -55,8 +53,24 @@ export function OriginStrip() {
           onClick={dismiss}
         >
           <svg viewBox="0 0 14 14" width="11" height="11" aria-hidden="true">
-            <line x1="2" y1="2" x2="12" y2="12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-            <line x1="12" y1="2" x2="2" y2="12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            <line
+              x1="2"
+              y1="2"
+              x2="12"
+              y2="12"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+            />
+            <line
+              x1="12"
+              y1="2"
+              x2="2"
+              y2="12"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
       </div>

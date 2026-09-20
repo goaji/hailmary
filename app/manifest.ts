@@ -1,12 +1,10 @@
 import type { MetadataRoute } from "next";
-import { HEADER_BG } from "@/utils/theme";
-
-const PAGE_BG = "#14151a"; // $c-page
+import { HEADER_BG, PAGE_BG } from "@/utils/theme";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "hailmary.ro — Fotbal american NFL, în română",
-    short_name: "Hail Mary",
+    short_name: "HailMary",
     description: "Fotbal american NFL, în română.",
     start_url: "/",
     display: "standalone",

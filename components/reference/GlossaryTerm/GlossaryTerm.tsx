@@ -17,7 +17,7 @@ export async function GlossaryTerm({ entry, locale, extended }: GlossaryTermProp
   const isFallback = entry.servedLocale !== locale;
 
   return (
-    <article id={entry.slug} className={styles.term}>
+    <article id={entry.slug} className={styles.glossaryTerm}>
       <h2 className={styles.heading}>{entry.term}</h2>
       {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
       <p className={styles.short}>{entry.short}</p>

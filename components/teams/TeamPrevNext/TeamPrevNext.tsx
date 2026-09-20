@@ -16,7 +16,7 @@ export async function TeamPrevNext({ previous, next }: TeamPrevNextProps) {
   const t = await getTranslations("teamDetail.prevNext");
 
   return (
-    <nav aria-label={t("navLabel")} className={styles.nav}>
+    <nav aria-label={t("navLabel")} className={styles.teamPrevNext}>
       {previous ? (
         <Link href={`/echipe/${previous.slug}`} className={styles.previous}>
           <span className={styles.direction}>{t("previous")}</span>

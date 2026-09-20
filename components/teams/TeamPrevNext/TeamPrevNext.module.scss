@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.nav {
+.teamPrevNext {
   display: grid;
   grid-template-columns: 1fr; // mobile-first: stacked
   gap: v.space(16);

@@ -1,10 +1,11 @@
 "use client"; // local filter selections are page-local UI state (AGENTS.md — useState, not lifted)
 
 import { useTranslations } from "next-intl";
-import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 import { CATEGORY_IDS } from "@/types";
 import type { Category } from "@/types";
 import { CATEGORIES } from "@/utils/categories";
+import { useRovingSelection } from "@/components/ui/useRovingSelection";
 import { CONFERENCES, DIVISIONS, getTeamsByDivision } from "@/utils/teams";
 import styles from "./NewsFilters.module.scss";
 
@@ -34,7 +35,6 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
   const [view, setView] = useState<View>("grid");
   const categorySelectId = useId();
   const teamSelectId = useId();
-  const viewButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   useEffect(() => {
     const stored = window.localStorage.getItem(VIEW_KEY);
@@ -49,34 +49,18 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
     window.localStorage.setItem(VIEW_KEY, next);
   }
 
-  // Roving tabindex: same pattern as TeamPicker's radiogroup — arrow keys
-  // move focus and selection together, wrapping between the two options.
-  function focusAndSelectView(index: number) {
-    const wrapped = (index + VIEWS.length) % VIEWS.length;
-    updateView(VIEWS[wrapped]);
-    viewButtonRefs.current[wrapped]?.focus();
-  }
+  const { registerButton, handleKeyDown: handleViewKeyDown } = useRovingSelection(
+    VIEWS,
+    updateView,
+  );
 
-  function handleViewKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    switch (event.key) {
-      case "ArrowRight":
-      case "ArrowDown":
-        event.preventDefault();
-        focusAndSelectView(index + 1);
-        break;
-      case "ArrowLeft":
-      case "ArrowUp":
-        event.preventDefault();
-        focusAndSelectView(index - 1);
-        break;
-    }
-  }
-
-  const byCategory = category === "all" ? items : items.filter((item) => item.category === category);
-  const filtered = team === "all" ? byCategory : byCategory.filter((item) => item.teams?.includes(team));
+  const byCategory =
+    category === "all" ? items : items.filter((item) => item.category === category);
+  const filtered =
+    team === "all" ? byCategory : byCategory.filter((item) => item.teams?.includes(team));
 
   return (
-    <div>
+    <div className={styles.newsFilters}>
       <div className={styles.filterBar}>
         <div className={styles.field}>
           <label htmlFor={categorySelectId} className={styles.label}>
@@ -126,9 +110,7 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
           {VIEWS.map((option, index) => (
             <button
               key={option}
-              ref={(el) => {
-                viewButtonRefs.current[index] = el;
-              }}
+              ref={registerButton(index)}
               type="button"
               role="radio"
               aria-checked={view === option}

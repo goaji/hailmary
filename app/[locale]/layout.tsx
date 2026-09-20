@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { Bebas_Neue, Work_Sans } from "next/font/google";
+import { Sofia_Sans_Condensed, Work_Sans } from "next/font/google";
 import Script from "next/script";
 import { routing } from "@/i18n";
 import { SiteFooter } from "@/components/layout/SiteFooter/SiteFooter";
@@ -13,13 +12,18 @@ import { ExplainerProvider } from "@/components/explainer/ExplainerProvider/Expl
 import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
 import { getAllTerms } from "@/utils/glossary";
 import { SITE_URL } from "@/utils/site";
-import { HEADER_BG } from "@/utils/theme";
+import { HEADER_BG, teamSurfaceVars } from "@/utils/theme";
+import { TEAMS } from "@/utils/teams";
+import { STORAGE_KEY } from "@/components/layout/TeamColorProvider/teamColorConstants";
+import { requireLocale } from "@/utils/locale";
+import { DISMISS_KEY, STRIP_ID } from "@/components/home/OriginStrip/originStripConstants";
 import "../../styles/globals.scss";
 
 // "latin" alone silently drops ă/â/î/ș/ț — latin-ext is required too, alongside it (its own range excludes plain ASCII).
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  variable: "--font-bebas-neue",
+// Only 700 is loaded, so every display element renders bold whatever font-weight it asks for.
+const sofiaSansCondensed = Sofia_Sans_Condensed({
+  weight: "700",
+  variable: "--font-sofia-sans-condensed",
   subsets: ["latin", "latin-ext"],
   display: "swap",
   preload: true,
@@ -41,9 +45,7 @@ export const viewport: Viewport = {
   themeColor: HEADER_BG,
 };
 
-export async function generateMetadata({
-  params,
-}: LayoutProps<"/[locale]">): Promise<Metadata> {
+export async function generateMetadata({ params }: LayoutProps<"/[locale]">): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
 
@@ -54,17 +56,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: LayoutProps<"/[locale]">) {
-  const { locale } = await params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+export default async function LocaleLayout({ children, params }: LayoutProps<"/[locale]">) {
+  const locale = requireLocale((await params).locale);
 
   const messages = await getMessages();
+
+  // Every team's tinted surfaces, so the pre-paint script below can look one up without shipping the color math.
+  const teamSurfaces = Object.fromEntries(
+    TEAMS.map((team) => [team.slug, teamSurfaceVars(team.accent1)]),
+  );
 
   // Entries are bundled at build/request time and handed to the client
   // provider as inert, pre-rendered content (extended MDX compiled once,
@@ -79,14 +79,26 @@ export default async function LocaleLayout({
   }));
 
   return (
-    <html lang={locale} className={`${bebasNeue.variable} ${workSans.variable}`}>
+    // suppressHydrationWarning: the tint script below writes a style attribute here before React hydrates, which is a mismatch by definition.
+    <html
+      lang={locale}
+      className={`${sofiaSansCondensed.variable} ${workSans.variable}`}
+      suppressHydrationWarning
+    >
       <body>
-        {/* Lives here, not in OriginStrip, so it survives client-side nav — "hm.strip" must match its DISMISS_KEY. */}
+        {/* Lives here, not in OriginStrip, so it runs before hydration and the dismissed strip never flashes. */}
         <Script
           id="origin-strip-hide"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `if(localStorage.getItem("hm.strip")==="true"){var el=document.getElementById("origin-strip");if(el)el.style.display="none"}`,
+            __html: `if(localStorage.getItem(${JSON.stringify(DISMISS_KEY)})==="true"){var el=document.getElementById(${JSON.stringify(STRIP_ID)});if(el)el.style.display="none"}`,
+          }}
+        />
+        {/* Applies the stored team's tint before first paint, so the default team's background never flashes. A plain inline script, not next/script: even
+            beforeInteractive is executed by Next's loader after paint, which is exactly the flash this prevents. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var s=${JSON.stringify(teamSurfaces)}[localStorage.getItem(${JSON.stringify(STORAGE_KEY)})];if(s)for(var k in s)document.documentElement.style.setProperty(k,s[k])})()`,
           }}
         />
         <NextIntlClientProvider messages={messages}>

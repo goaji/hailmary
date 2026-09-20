@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { OG_FONTS } from "@/utils/og";
+import { OG_DISPLAY_FONT, OG_FONTS } from "@/utils/og";
 import { HEADER_BG } from "@/utils/theme";
 import { DEFAULT_TEAM, TEAMS_BY_SLUG } from "@/utils/teams";
 
@@ -10,22 +10,18 @@ export default function AppleIcon() {
   const accent = TEAMS_BY_SLUG[DEFAULT_TEAM].accent1;
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: HEADER_BG,
-        }}
-      >
-        <span style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 150, color: accent }}>
-          H
-        </span>
-      </div>
-    ),
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: HEADER_BG,
+      }}
+    >
+      <span style={{ display: "flex", ...OG_DISPLAY_FONT, fontSize: 150, color: accent }}>H</span>
+    </div>,
     { ...size, fonts: [OG_FONTS[0]] },
   );
 }

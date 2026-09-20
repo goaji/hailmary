@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
@@ -12,6 +11,7 @@ import { TEAMS, TEAMS_BY_SLUG, getAdjacentTeams } from "@/utils/teams";
 import { getArticlesByTeam } from "@/utils/articles";
 import { getSchedule } from "@/utils/schedule";
 import { SITE_URL } from "@/utils/site";
+import { requireLocale } from "@/utils/locale";
 import {
   buildBreadcrumbJsonLd,
   buildSportsOrganizationJsonLd,
@@ -20,18 +20,14 @@ import {
 import styles from "./page.module.scss";
 
 export function generateStaticParams() {
-  return routing.locales.flatMap((locale) =>
-    TEAMS.map((team) => ({ locale, team: team.slug })),
-  );
+  return routing.locales.flatMap((locale) => TEAMS.map((team) => ({ locale, team: team.slug })));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/echipe/[team]">): Promise<Metadata> {
-  const { locale, team: teamSlug } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const { locale: localeParam, team: teamSlug } = await params;
+  const locale = requireLocale(localeParam);
 
   const team = TEAMS_BY_SLUG[teamSlug];
   if (!team) {
@@ -55,13 +51,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function TeamDetailPage({
-  params,
-}: PageProps<"/[locale]/echipe/[team]">) {
-  const { locale, team: teamSlug } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+export default async function TeamDetailPage({ params }: PageProps<"/[locale]/echipe/[team]">) {
+  const { locale: localeParam, team: teamSlug } = await params;
+  const locale = requireLocale(localeParam);
 
   const team = TEAMS_BY_SLUG[teamSlug];
   if (!team) {

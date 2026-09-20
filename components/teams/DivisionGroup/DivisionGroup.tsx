@@ -26,7 +26,10 @@ export function DivisionGroup({
     // AFC East and NFC East would otherwise be two landmarks with the same
     // name (axe: landmark-unique). The visible h3 text stays just "East";
     // sighted users get the conference from the nested heading hierarchy.
-    <section aria-labelledby={`${conferenceHeadingId} ${headingId}`} className={styles.group}>
+    <section
+      aria-labelledby={`${conferenceHeadingId} ${headingId}`}
+      className={styles.divisionGroup}
+    >
       <h3 id={headingId} className={styles.heading}>
         {division}
       </h3>

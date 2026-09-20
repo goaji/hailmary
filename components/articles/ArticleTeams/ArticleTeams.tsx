@@ -16,7 +16,7 @@ export async function ArticleTeams({ teams }: ArticleTeamsProps) {
   const t = await getTranslations("articleTeams");
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.articleTeams}>
       <span className={styles.label}>{t("label")}</span>
       <ul className={styles.list}>
         {teams.map((slug) => {

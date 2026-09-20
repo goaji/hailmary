@@ -1,8 +1,8 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.notice {
-  max-width: 960px; // same reading width as article/glosar/istorie/regulament content
+.fallbackNotice {
+  max-width: v.$reading-width;
   margin: v.space(32) auto 0 auto;
   background: v.$c-surface;
   border: 1px solid v.$c-border;

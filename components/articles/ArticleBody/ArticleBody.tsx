@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { Link } from "@/i18n";
 import remarkGfm from "remark-gfm";
 import rehypeUnwrapImages from "rehype-unwrap-images";
 import { articleComponents } from "./articleComponents";
@@ -14,7 +15,7 @@ export async function ArticleBody({ content, tags }: ArticleBodyProps) {
   const t = await getTranslations("articleBody");
 
   return (
-    <div className={styles.body}>
+    <div className={styles.articleBody}>
       <MDXRemote
         source={content}
         components={articleComponents}
@@ -34,12 +35,12 @@ export async function ArticleBody({ content, tags }: ArticleBodyProps) {
       />
 
       {tags && tags.length > 0 ? (
-        // Plain, non-interactive chips — no tag route or /glosar link
-        // exists yet (out of scope for this step).
         <ul className={styles.tags} aria-label={t("tagsLabel")}>
           {tags.map((tag) => (
             <li key={tag} className={styles.tag}>
-              {tag}
+              <Link href={`/etichete/${tag}`} className={styles.tagLink}>
+                {tag}
+              </Link>
             </li>
           ))}
         </ul>

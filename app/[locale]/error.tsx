@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n";
+import { StatusPanel } from "@/components/layout/StatusPanel/StatusPanel";
 import styles from "./error.module.scss";
 
 export default function LocaleError({
@@ -19,17 +19,15 @@ export default function LocaleError({
   }, [error]);
 
   return (
-    <div className={styles.wrapper}>
-      <h1 className={styles.title}>{t("title")}</h1>
-      <p className={styles.description}>{t("description")}</p>
-      <div className={styles.actions}>
-        <button type="button" className={styles.retryButton} onClick={() => retry()}>
-          {t("retry")}
-        </button>
-        <Link href="/" className={styles.backLink}>
-          {t("backHome")}
-        </Link>
-      </div>
-    </div>
+    <StatusPanel
+      title={t("title")}
+      description={t("description")}
+      backHref="/"
+      backLabel={t("backHome")}
+    >
+      <button type="button" className={styles.retryButton} onClick={() => retry()}>
+        {t("retry")}
+      </button>
+    </StatusPanel>
   );
 }

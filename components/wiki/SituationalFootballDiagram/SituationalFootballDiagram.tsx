@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { useTranslations } from "next-intl";
+import { useRovingSelection } from "@/components/ui/useRovingSelection";
 import styles from "./SituationalFootballDiagram.module.scss";
 
 const SCENARIO_IDS = ["twoMinute", "fourthDown", "redZone", "clockMgmt", "kneelDown"] as const;
@@ -23,29 +24,39 @@ export function SituationalFootballDiagram() {
   const [activeId, setActiveId] = useState<ScenarioId>(SCENARIO_IDS[0]);
   const panelId = useId();
   const tabId = (id: ScenarioId) => `${panelId}-tab-${id}`;
+  const { registerButton, handleKeyDown } = useRovingSelection(SCENARIO_IDS, setActiveId);
 
   return (
     <section className={styles.diagram} aria-label={t("widgetLabel")}>
       <p className={styles.hint}>{t("hint")}</p>
 
       <div className={styles.pillRow} role="tablist" aria-label={t("widgetLabel")}>
-        {SCENARIO_IDS.map((id) => (
+        {SCENARIO_IDS.map((id, index) => (
           <button
             key={id}
             id={tabId(id)}
+            ref={registerButton(index)}
             type="button"
             role="tab"
             aria-selected={id === activeId}
             aria-controls={panelId}
+            tabIndex={id === activeId ? 0 : -1}
             className={styles.pill}
             onClick={() => setActiveId(id)}
+            onKeyDown={(event) => handleKeyDown(event, index)}
           >
             {t(`${id}Pill`)}
           </button>
         ))}
       </div>
 
-      <div id={panelId} role="tabpanel" aria-labelledby={tabId(activeId)} className={styles.dashboard}>
+      <div
+        id={panelId}
+        role="tabpanel"
+        aria-labelledby={tabId(activeId)}
+        tabIndex={0}
+        className={styles.dashboard}
+      >
         <p className={styles.chip}>
           {t(`${activeId}DownDistance`)} · {t(`${activeId}Clock`)}
         </p>

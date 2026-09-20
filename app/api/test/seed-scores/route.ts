@@ -14,6 +14,7 @@ const gameSchema = z.object({
   homeTeamId: z.string(),
   awayTeamId: z.string(),
   kickoff: z.string(),
+  season: z.number(),
   week: z.number(),
   status: z.enum(["scheduled", "live", "halftime", "final", "postponed"]),
   homeScore: z.number().optional(),

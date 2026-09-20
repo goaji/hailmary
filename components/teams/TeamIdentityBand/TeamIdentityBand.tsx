@@ -20,7 +20,7 @@ export function TeamIdentityBand({ team }: TeamIdentityBandProps) {
   };
 
   return (
-    <div className={styles.band} style={bandStyle}>
+    <div className={styles.teamIdentityBand} style={bandStyle}>
       <div className={styles.inner}>
         {/* alt="" — the h1 right beside it already carries the team name as
             text, so an alt like "Kansas City Chiefs logo" would double it. */}

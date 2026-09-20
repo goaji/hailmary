@@ -1,11 +1,10 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.related {
-  max-width: 960px; // matches ArticleHeader/ArticleBody/ArticlePrevNext's column width
-  margin: v.space(48) auto 0 auto;
-  padding: 0 32px v.space(48) 32px;
-  @include mix.panel-open-flush-left;
+.relatedArticles {
+  margin-top: v.space(48);
+  padding-bottom: v.space(48);
+  @include mix.reading-column;
 }
 
 .grid {

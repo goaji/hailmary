@@ -19,7 +19,7 @@ export function TeamBadge({ team, size = "md" }: TeamBadgeProps) {
   const dimension = LOGO_DIMENSION[size];
 
   return (
-    <span className={`${styles.badge} ${styles[size]}`}>
+    <span className={`${styles.teamBadge} ${styles[size]}`}>
       {/* alt="" — the team name renders as adjacent text right below, so an
           alt like "Kansas City Chiefs logo" would announce the name twice. */}
       <Image

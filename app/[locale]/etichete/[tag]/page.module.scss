@@ -1,0 +1,43 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.page {
+  @include mix.page-shell;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(32);
+  margin-top: v.space(32);
+
+  @include mix.mq(lg) {
+    grid-template-columns: 220px 1fr;
+    column-gap: v.space(48);
+    align-items: start;
+  }
+}
+
+.rail {
+  min-width: 0;
+}
+
+.content {
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(22);
+
+  @include mix.mq(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.empty {
+  margin: 0;
+  color: v.$c-text-muted;
+  font-size: v.$fs-body;
+}

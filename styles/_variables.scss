@@ -4,15 +4,23 @@
 // in utils/teams.ts, nothing else may hardcode one. Accents are never
 // defined here; they only ever arrive as var(--accent-1) / var(--accent-2)
 // from TeamColorProvider.
-$c-header: #0d0e12;
-$c-page: #14151a;
-$c-surface: #191b21;
-$c-border: #2a2c34;
+$base-header: #0d0e12;
+$base-page: #14151a;
+$base-surface: #191b21;
+$base-border: #2a2c34;
+$base-surface-raised: #1e2027;
+$base-border-soft: #2c2e37;
 $c-text: #f5f4f2;
 $c-text-dim: #cfd0d6;
 $c-text-muted: #9a9ba3;
-$c-surface-raised: #1e2027;
-$c-border-soft: #2c2e37;
+
+// Resolved at runtime so the selected team can tint them — defaults are set on :root in globals.scss, page/header overridden per team by TeamColorProvider.
+$c-header: var(--c-header);
+$c-page: var(--c-page);
+$c-surface: var(--c-surface);
+$c-border: var(--c-border);
+$c-surface-raised: var(--c-surface-raised);
+$c-border-soft: var(--c-border-soft);
 
 // Field-diagram colors — turf and the broadcast first-down line, shared by every Wiki hero visual (down system, the field, positions, route tree).
 $c-field-dark: #0e2416;
@@ -45,7 +53,13 @@ $space: (
   @return map.get($space, $step);
 }
 
-// Type scale, UI chrome through section headings. Bebas display sizes
+// Page content-width cap — header, footer, and every page body line up on it.
+$content-width: 1200px;
+
+// Reading-column width — article sections, plus FallbackNotice on glosar/istorie/regulament.
+$reading-width: 960px;
+
+// Type scale, UI chrome through section headings. Display-font sizes
 // (hero/headline) are separate tokens, added when those components land.
 $fs-chip: 11px; // category tags — the one size smaller than UI chrome
 $fs-ui: 12px; // nav labels, footer, badges
@@ -56,7 +70,7 @@ $fs-article-body: 18px; // article reading column — excerpt and MDX body parag
 $fs-h3: 22px; // subheadings
 $fs-h2: 30px; // large in-page headings (not the SectionHeading primitive — see $fs-section-heading)
 
-// Bebas display sizes, added as those components land — kept separate from
+// Display-font sizes, added as those components land — kept separate from
 // the UI type scale above since a display size and a body heading can
 // diverge even where their px values start out matching.
 $fs-logo: 28px;
@@ -66,5 +80,5 @@ $fs-team-name: 44px; // /echipe/[team] identity band h1
 // Font stacks. The CSS variables come from next/font/google in
 // app/[locale]/layout.tsx; the literal names are the fallback before
 // those load.
-$font-display: var(--font-bebas-neue), "Bebas Neue", sans-serif;
+$font-display: var(--font-sofia-sans-condensed), "Sofia Sans Condensed", sans-serif;
 $font-body: var(--font-work-sans), "Work Sans", sans-serif;

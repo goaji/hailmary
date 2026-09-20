@@ -10,6 +10,7 @@ const SAMPLE_GAME: Game = {
   homeTeamId: "kc",
   awayTeamId: "buf",
   kickoff: "2026-09-13T20:25:00Z",
+  season: 2026,
   week: 2,
   status: "live",
   homeScore: 14,
@@ -44,7 +45,11 @@ describe("readScores", () => {
   });
 
   it("round-trips games and meta written by writeScores", () => {
-    writeScores([SAMPLE_GAME], { updatedAt: "2026-09-13T20:30:00Z", source: "balldontlie" }, storePath);
+    writeScores(
+      [SAMPLE_GAME],
+      { updatedAt: "2026-09-13T20:30:00Z", source: "balldontlie" },
+      storePath,
+    );
     expect(readScores(storePath)).toEqual({
       games: [SAMPLE_GAME],
       updatedAt: "2026-09-13T20:30:00Z",
@@ -54,9 +59,17 @@ describe("readScores", () => {
   });
 
   it("round-trips a failed-attempt marker without touching games or updatedAt", () => {
-    writeScores([SAMPLE_GAME], { updatedAt: "2026-09-13T20:30:00Z", source: "balldontlie" }, storePath);
+    writeScores(
+      [SAMPLE_GAME],
+      { updatedAt: "2026-09-13T20:30:00Z", source: "balldontlie" },
+      storePath,
+    );
     const existing = readScores(storePath);
-    writeScores(existing.games, { ...existing, lastAttemptAt: "2026-09-13T20:31:00Z", lastAttemptOk: false }, storePath);
+    writeScores(
+      existing.games,
+      { ...existing, lastAttemptAt: "2026-09-13T20:31:00Z", lastAttemptOk: false },
+      storePath,
+    );
     expect(readScores(storePath)).toEqual({
       games: [SAMPLE_GAME],
       updatedAt: "2026-09-13T20:30:00Z",

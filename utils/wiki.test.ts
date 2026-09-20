@@ -65,18 +65,23 @@ describe("parseWikiFrontmatter", () => {
 
   it("rejects an unknown strand, naming the file and field", () => {
     expect(() =>
-      parseWikiFrontmatter({ ...validFrontmatter, strand: "not-a-strand" }, "content/wiki/ro/x/y.mdx"),
+      parseWikiFrontmatter(
+        { ...validFrontmatter, strand: "not-a-strand" },
+        "content/wiki/ro/x/y.mdx",
+      ),
     ).toThrow('content/wiki/ro/x/y.mdx: field "strand"');
   });
 
   it("rejects an unknown shape", () => {
-    expect(() => parseWikiFrontmatter({ ...validFrontmatter, shape: "nested" }, "test.mdx")).toThrow(
-      '"shape"',
-    );
+    expect(() =>
+      parseWikiFrontmatter({ ...validFrontmatter, shape: "nested" }, "test.mdx"),
+    ).toThrow('"shape"');
   });
 
   it("rejects a non-positive order", () => {
-    expect(() => parseWikiFrontmatter({ ...validFrontmatter, order: 0 }, "test.mdx")).toThrow('"order"');
+    expect(() => parseWikiFrontmatter({ ...validFrontmatter, order: 0 }, "test.mdx")).toThrow(
+      '"order"',
+    );
   });
 });
 
@@ -110,7 +115,13 @@ describe("groupPagesByStrand", () => {
 
     const groups = groupPagesByStrand(pages);
 
-    expect(groups.map((g) => g.strand)).toEqual(["the-game", "chess-match", "the-league", "the-numbers", "istorie"]);
+    expect(groups.map((g) => g.strand)).toEqual([
+      "the-game",
+      "chess-match",
+      "the-league",
+      "the-numbers",
+      "istorie",
+    ]);
     expect(groups[0].pages.map((p) => p.slug)).toEqual(["a", "b"]);
     expect(groups[4].pages.map((p) => p.slug)).toEqual(["c"]);
   });

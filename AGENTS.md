@@ -14,7 +14,8 @@ Romanian-language American football site: NFL news (~2/3 of content) plus evergr
 ## Non-negotiables
 
 1. **No Tailwind, no styled-components, no CSS-in-JS.** Styling lives in `.module.scss` files. This is a deliberate choice — the project doubles as an interview portfolio piece and should demonstrate CSS fundamentals.
-2. **Team accent colors are CSS custom properties**, never hardcoded hex in component SCSS. `TeamColorProvider` sets `--accent-1` / `--accent-2` on a root wrapper; components read `var(--accent-1)`. This is what makes the "Echipa mea" team-color switcher work without per-component logic. The page background does **not** change with the team — the dark base is the brand, the accent is the personalisation.3. **No hardcoded UI copy.** Every label, button, error, and empty state comes from `messages/ro.json` / `messages/en.json` via `next-intl` — even in v1 where Romanian is the only complete locale. Romanian is the primary voice: diacritics required (Știri, nu Stiri). Football jargon stays in English (touchdown, quarterback, blitz) since that's how Romanian fans actually speak, but explain it on first use in beginner-facing content.
+2. **Team accent colors are CSS custom properties**, never hardcoded hex in component SCSS. `TeamColorProvider` sets `--accent-1` / `--accent-2` on a root wrapper; components read `var(--accent-1)`. This is what makes the "Echipa mea" team-color switcher work without per-component logic. The page and header take a 10% tint toward the selected team's `accent1`, mixed so the surface keeps its original luminance — the base stays as dark as it was, only its hue shifts, and every contrast ratio measured against it is unchanged. Cards, panels and borders stay neutral: tinting them was tried and is barely visible, while it drops nine teams' `accent2` below its bar. The tint lives in `tintSurface` / `teamSurfaceVars` (`utils/theme.ts`), and the surfaces are CSS custom properties (`--c-page`, `--c-header`) so a component never reads a team color to get them.
+3. **No hardcoded UI copy.** Every label, button, error, and empty state comes from `messages/ro.json` / `messages/en.json` via `next-intl` — even in v1 where Romanian is the only complete locale. Romanian is the primary voice: diacritics required (Știri, nu Stiri). Football jargon stays in English (touchdown, quarterback, blitz) since that's how Romanian fans actually speak, but explain it on first use in beginner-facing content.
 4. **Content access goes through the data layer**, never a direct `fs.readFile` in a component. All reads use `getAllArticles` / `getArticleBySlug` / `getTeam` etc. from `utils/`. This keeps the future CMS swap a one-file change.
 5. **Server Components by default.** Add `'use client'` only where interaction demands it (glossary filter, team-color picker, explainer panel, mobile nav).
 6. **No global state store.** See below.
@@ -71,7 +72,7 @@ If a feature seems to need one of these, stop and ask rather than scaffolding it
 
 ## Design direction — "Night Lights"
 
-Dark stadium-at-night feel. Dark base (`#0d0e12` header, `#14151a` page), off-white text (`#f5f4f2`), muted grey secondary text (`#9a9ba3`), and a team-driven accent pair. Bold condensed display type (Bebas Neue) for headlines and the logo; Work Sans for body and UI. Sharp corners, thin borders, minimal shadow — editorial, not app-like.
+Dark stadium-at-night feel. Dark base (`#0d0e12` header, `#14151a` page), off-white text (`#f5f4f2`), muted grey secondary text (`#9a9ba3`), and a team-driven accent pair. Bold condensed display type (Sofia Sans Condensed 700) for headlines and the logo; Work Sans for body and UI. Sharp corners, thin borders, minimal shadow — editorial, not app-like.
 
 Reference mockup: `Homepage.dc.html` in the design project. Match its layout and spacing, not its markup (it's a prototype, not production code).
 
@@ -119,7 +120,7 @@ Defined once in `types/index.ts`, imported everywhere. `ArticleFrontmatter`, `Te
 - Dates formatted with `Intl.DateTimeFormat(locale)` — locale from `next-intl`, never hardcoded, never a hand-rolled formatter
 - Internal links use `next-intl`'s locale-aware `Link`, never a bare `next/link` with a hand-built `/ro/...` path
 - Images via `next/image` with explicit dimensions; placeholder images live in `public/placeholder/`
-- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `utils/teams.ts`, never the component and never the surface
+- Accessibility is not a polish step: visible focus rings, real heading hierarchy, alt text on every image, and contrast checked against *every* team accent at the bar its role demands — `accent1` ≥ 3.0 on the page, `accent2` ≥ 4.5 on the panel. Fix the token in `src/teams.ts` in `@hailmary/shared` (then bump the pinned tag in `package.json`), never the component and never the surface
 
 ## Semantic markup
 

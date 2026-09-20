@@ -13,7 +13,7 @@ type FallbackNoticeProps = {
 // locale — never a silent language switch.
 export function FallbackNotice({ locale, children }: FallbackNoticeProps) {
   return (
-    <p className={styles.notice} role="status" lang={locale}>
+    <p className={styles.fallbackNotice} role="status" lang={locale}>
       {children}
     </p>
   );

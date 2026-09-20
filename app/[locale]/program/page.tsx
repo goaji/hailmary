@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { LiveSchedule } from "@/components/schedule/LiveSchedule/LiveSchedule";
 import { getSchedule } from "@/utils/schedule";
+import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
 // Keep this route out of Hostinger's request-time Node path. The week switcher
@@ -19,10 +18,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/program">): Promise<Metadata> {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   const t = await getTranslations({ locale, namespace: "schedulePage" });
 
@@ -37,10 +33,7 @@ export async function generateMetadata({
 }
 
 export default async function SchedulePage({ params }: PageProps<"/[locale]/program">) {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const locale = requireLocale((await params).locale);
 
   const { games, isLive, updatedAt } = getSchedule();
 

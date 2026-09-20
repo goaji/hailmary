@@ -9,7 +9,7 @@ type ArticleHeaderProps = {
 
 export function ArticleHeader({ article }: ArticleHeaderProps) {
   return (
-    <header className={styles.header}>
+    <header className={styles.articleHeader}>
       <Tag category={article.category} />
       <h1 className={styles.title}>{article.title}</h1>
       <p className={styles.excerpt}>{article.excerpt}</p>

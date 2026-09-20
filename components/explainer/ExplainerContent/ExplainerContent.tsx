@@ -26,7 +26,7 @@ const glossaryComponents = {
 // compiled, per AGENTS.md's "never a second copy of a definition".
 export async function ExplainerContent({ content }: ExplainerContentProps) {
   return (
-    <div className={styles.body}>
+    <div className={styles.explainerContent}>
       <MDXRemote source={content} components={glossaryComponents} />
     </div>
   );

@@ -90,19 +90,13 @@ export function resolveServedLocale(
  * path and the offending field on failure — never silently falls back to
  * a default, since that would hide a content typo forever.
  */
-export function parseFrontmatter<T>(
-  schema: z.ZodType<T>,
-  data: unknown,
-  filePath: string,
-): T {
+export function parseFrontmatter<T>(schema: z.ZodType<T>, data: unknown, filePath: string): T {
   const result = schema.safeParse(data);
 
   if (!result.success) {
     const issue = result.error.issues[0];
     const field = issue.path.join(".") || "(root)";
-    throw new Error(
-      `Invalid frontmatter in ${filePath}: field "${field}" — ${issue.message}`,
-    );
+    throw new Error(`Invalid frontmatter in ${filePath}: field "${field}" — ${issue.message}`);
   }
 
   return result.data;

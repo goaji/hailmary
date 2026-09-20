@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
@@ -21,6 +20,7 @@ import {
 } from "@/utils/articles";
 import styles from "./page.module.scss";
 import { SITE_URL } from "@/utils/site";
+import { requireLocale } from "@/utils/locale";
 import {
   bcp47Locale,
   buildBreadcrumbJsonLd,
@@ -43,10 +43,8 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/stiri/[slug]">): Promise<Metadata> {
-  const { locale, slug } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  const { locale: localeParam, slug } = await params;
+  const locale = requireLocale(localeParam);
 
   const article = getArticleBySlug(slug, locale);
   if (!article) {
@@ -74,13 +72,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticlePage({
-  params,
-}: PageProps<"/[locale]/stiri/[slug]">) {
-  const { locale, slug } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri/[slug]">) {
+  const { locale: localeParam, slug } = await params;
+  const locale = requireLocale(localeParam);
 
   const article = getArticleBySlug(slug, locale);
   if (!article) {
@@ -137,7 +131,9 @@ export default async function ArticlePage({
 
           {/* lang matches the served content, not the URL — WCAG 3.1.2 for the /en-serves-ro fallback case. */}
           <article lang={article.servedLocale} className={styles.content}>
-            {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
+            {isFallback ? (
+              <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+            ) : null}
 
             <ArticleHeader article={article} />
             <ArticleBody content={article.content} tags={article.tags} />

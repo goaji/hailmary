@@ -1,10 +1,10 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.hero {
+.heroArticle {
   display: flex;
   flex-direction: column;
-  max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
+  max-width: v.$content-width;
   margin: 0 auto;
   padding-top: v.space(32);
 
@@ -59,7 +59,7 @@
   letter-spacing: 0.5px;
 
   @include mix.mq(md) {
-    font-size: 38px; // smaller than a full-bleed hero would use — this column is only ~1/3 of the 1200px cap
+    font-size: 38px; // smaller than a full-bleed hero would use — this column is only ~1/3 of the content-width cap
   }
 }
 

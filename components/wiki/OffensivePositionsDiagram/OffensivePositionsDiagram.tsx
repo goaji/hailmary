@@ -1,7 +1,11 @@
 "use client"; // resolves its own translations, then delegates rendering to the shared FormationDiagram
 
 import { useTranslations } from "next-intl";
-import { FormationDiagram, type FormationDot, type FormationPosition } from "@/components/wiki/FormationDiagram/FormationDiagram";
+import {
+  FormationDiagram,
+  type FormationDot,
+  type FormationPosition,
+} from "@/components/wiki/FormationDiagram/FormationDiagram";
 
 const POSITION_IDS = ["qb", "rb", "wr", "te", "ol"] as const;
 
@@ -29,5 +33,12 @@ export function OffensivePositionsDiagram() {
     blurb: t(`${id}Blurb`),
   }));
 
-  return <FormationDiagram widgetLabel={t("widgetLabel")} hint={t("hint")} positions={positions} dots={DOTS} />;
+  return (
+    <FormationDiagram
+      widgetLabel={t("widgetLabel")}
+      hint={t("hint")}
+      positions={positions}
+      dots={DOTS}
+    />
+  );
 }

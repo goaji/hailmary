@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 // Mobile-first: stacked blocks by default, a real table row from md up.
-.row {
+.gameRow {
   display: flex;
   flex-direction: column;
   gap: v.space(4);
@@ -66,6 +66,16 @@
 .scoreCell {
   color: v.$c-text;
   font-weight: 700;
+}
+
+.score {
+  display: block;
+  font-family: v.$font-display;
+  font-size: v.$fs-body-lg;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
 }
 
 .postponed {

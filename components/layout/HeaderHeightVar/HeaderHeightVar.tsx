@@ -1,6 +1,7 @@
 "use client"; // measures the sticky header's rendered height via ResizeObserver
 
 import { useEffect } from "react";
+import { SITE_HEADER_ID } from "@/components/layout/SiteHeader/siteHeaderConstants";
 
 // SiteHeader's height isn't fixed (it wraps at narrow widths and grows
 // again when the mobile nav opens — see SiteNav's .navRegionOpen), so
@@ -8,7 +9,7 @@ import { useEffect } from "react";
 // ScrollProgress) reads this instead of a hardcoded pixel value.
 export function HeaderHeightVar() {
   useEffect(() => {
-    const header = document.querySelector("header");
+    const header = document.getElementById(SITE_HEADER_ID);
     if (!header) {
       return;
     }

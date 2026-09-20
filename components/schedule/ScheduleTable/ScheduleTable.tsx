@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 import type { Game } from "@/types";
 import { GameRow } from "@/components/schedule/GameRow/GameRow";
 import styles from "./ScheduleTable.module.scss";
@@ -9,12 +9,12 @@ type ScheduleTableProps = {
   locale: string;
 };
 
-export async function ScheduleTable({ games, week, locale }: ScheduleTableProps) {
-  const t = await getTranslations({ locale, namespace: "scheduleTable" });
+export function ScheduleTable({ games, week, locale }: ScheduleTableProps) {
+  const t = useTranslations("scheduleTable");
 
   return (
-    // role="region" is what lets aria-label apply to a <div> — same pattern as ArticleBody's MdxTable.
-    <div role="region" aria-label={t("scrollLabel")} tabIndex={0} className={styles.tableWrapper}>
+    // A named <section> maps to role "region" — same pattern as ArticleBody's MdxTable.
+    <section aria-label={t("scrollLabel")} tabIndex={0} className={styles.scheduleTable}>
       <table className={styles.table}>
         <caption className={styles.caption}>{t("caption", { week })}</caption>
         <thead>
@@ -30,6 +30,6 @@ export async function ScheduleTable({ games, week, locale }: ScheduleTableProps)
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }

@@ -16,7 +16,7 @@ export async function ArticlePrevNext({ previous, next }: ArticlePrevNextProps) 
   const t = await getTranslations("articlePrevNext");
 
   return (
-    <nav aria-label={t("navLabel")} className={styles.nav}>
+    <nav aria-label={t("navLabel")} className={styles.articlePrevNext}>
       {previous ? (
         <Link href={`/stiri/${previous.slug}`} className={styles.previous}>
           <span className={styles.direction}>{t("previous")}</span>

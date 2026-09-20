@@ -32,7 +32,7 @@ export async function ArticleCard({ article, priority, headingLevel = "h3" }: Ar
   const Heading = headingLevel;
 
   return (
-    <article className={styles.card}>
+    <article className={styles.articleCard}>
       <div className={styles.imageWrap}>
         <ArticleImage
           image={article.image}

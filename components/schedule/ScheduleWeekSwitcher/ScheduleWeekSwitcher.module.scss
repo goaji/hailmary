@@ -2,7 +2,7 @@
 @use "mixins" as mix;
 
 // Owns the gap below the h1, same "* + *" pattern as .content below.
-.root > * + * {
+.scheduleWeekSwitcher > * + * {
   margin-top: v.space(22);
 }
 

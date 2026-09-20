@@ -2,7 +2,7 @@
 // below it instead of at the very top (HeaderHeightVar keeps
 // --header-height in sync — the header's own height isn't fixed, since it
 // wraps at narrow widths and grows again when the mobile nav opens).
-.bar {
+.scrollProgress {
   position: sticky;
   top: var(--header-height, 71px);
   z-index: 10;

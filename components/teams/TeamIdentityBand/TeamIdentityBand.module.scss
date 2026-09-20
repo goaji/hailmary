@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.band {
+.teamIdentityBand {
   background: var(--band-bg);
   // Full opacity throughout — onBrandColor's contrast guarantee is computed
   // against this exact color, so dimming it (e.g. via opacity) for the meta
@@ -9,13 +9,13 @@
   color: var(--band-fg);
 }
 
-// Same max-width/padding as .sections in page.module.scss, so the logo and
+// Same max-width and similar padding as .sections in page.module.scss, so the logo and
 // name line up with the content below instead of sitting flush left.
 .inner {
   display: flex;
   align-items: center;
   gap: v.space(20);
-  max-width: 1200px;
+  max-width: v.$content-width;
   margin: 0 auto;
   padding: v.space(32) v.space(20);
 
@@ -40,7 +40,7 @@
   margin: 0;
   font-family: v.$font-display;
   font-size: 32px; // mobile; v.$fs-team-name from md up
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   line-height: 1.05;

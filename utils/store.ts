@@ -36,7 +36,13 @@ export function readScores(storePath: string = DEFAULT_STORE_PATH): ScoreStore {
       return EMPTY_STORE;
     }
     const { games, updatedAt, source, lastAttemptAt, lastAttemptOk } = parsed as ScoreStore;
-    return { games, updatedAt: updatedAt ?? null, source, lastAttemptAt: lastAttemptAt ?? null, lastAttemptOk };
+    return {
+      games,
+      updatedAt: updatedAt ?? null,
+      source,
+      lastAttemptAt: lastAttemptAt ?? null,
+      lastAttemptOk,
+    };
   } catch {
     return EMPTY_STORE;
   }

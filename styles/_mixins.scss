@@ -2,11 +2,12 @@
 @use "variables" as v;
 
 // Mobile-first breakpoints. Every media query in the codebase goes through
-// mq() — a raw @media is a review failure.
+// a mixin here (mq, motion-safe, fine-pointer) — a raw @media is a review failure.
 $breakpoints: (
   sm: 375px,
   md: 768px,
-  panel: 1024px, // the explainer panel's own desktop threshold (spec section 9) — distinct from lg, which tracks the 1440 visual-regression width
+  panel: 1024px,
+  // the explainer panel's own desktop threshold (spec section 9) — distinct from lg, which tracks the 1440 visual-regression width
   lg: 1440px,
 );
 
@@ -16,6 +17,20 @@ $breakpoints: (
   }
 
   @media (min-width: map.get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Motion is opt-in: animations and transitions go inside this, never undone later under `reduce`.
+@mixin motion-safe {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Hover-capable mouse/trackpad only — keeps touch and hybrid devices from getting stuck hover states.
+@mixin fine-pointer {
+  @media (hover: hover) and (pointer: fine) {
     @content;
   }
 }
@@ -43,7 +58,7 @@ $breakpoints: (
 @mixin panel-shift-align {
   @include mq(panel) {
     :global([data-panel-open]) & {
-      margin-left: max(0px, calc((100vw - var(--scrollbar-width, 0px) - 1200px) / 2));
+      margin-left: max(0px, calc((100vw - var(--scrollbar-width, 0px) - #{v.$content-width}) / 2));
       margin-right: 0;
     }
   }
@@ -57,6 +72,25 @@ $breakpoints: (
       margin-right: auto;
     }
   }
+}
+
+// The standard page container: content-width cap plus the site's page gutters.
+@mixin page-shell {
+  max-width: v.$content-width;
+  margin: 0 auto;
+  padding: v.space(32) v.space(20) v.space(64);
+
+  @include mq(md) {
+    padding: v.space(48) v.space(32) v.space(64);
+  }
+}
+
+// The article reading column: every article section owns its width independently, so they all go through this to line up.
+@mixin reading-column {
+  max-width: v.$reading-width;
+  margin-inline: auto;
+  padding-inline: 32px; // bespoke to the reading column, not the spacing scale
+  @include panel-open-flush-left;
 }
 
 // The boxed-card treatment shared by every Wiki hero diagram (DownSystemDiagram, FieldDiagram, and future ones).
@@ -80,4 +114,36 @@ $breakpoints: (
     -webkit-line-clamp: $lines;
     overflow: hidden;
   }
+}
+
+// The toggleable legend row shared by the interactive Wiki diagrams.
+@mixin diagram-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+}
+
+@mixin diagram-legend-item {
+  padding: v.space(8) v.space(12);
+  background: v.$c-surface-raised;
+  border: 1px solid v.$c-border;
+  color: v.$c-text;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: v.$fs-meta;
+
+  &:hover {
+    border-color: var(--accent-1);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+@mixin diagram-legend-item-active {
+  border-color: var(--accent-1);
+  // Text, not border/UI chrome — 14px bold on $c-surface-raised needs the panel-calibrated accent2 bar (≥4.5), not accent1's ≥3.0.
+  color: var(--accent-2);
+  font-weight: 700;
 }

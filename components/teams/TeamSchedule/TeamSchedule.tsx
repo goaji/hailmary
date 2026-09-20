@@ -27,7 +27,7 @@ export async function TeamSchedule({ team, games, isLive }: TeamScheduleProps) {
     .sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime());
 
   return (
-    <section className={styles.schedule} aria-labelledby={HEADING_ID}>
+    <section className={styles.teamSchedule} aria-labelledby={HEADING_ID}>
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
       {teamGames.length > 0 ? (
         <>

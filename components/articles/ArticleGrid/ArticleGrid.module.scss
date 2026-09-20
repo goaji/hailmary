@@ -1,16 +1,14 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.newsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 24px; // bespoke to the homepage grid
-}
-
-.teamSection {
+.articleGrid {
   display: flex;
   flex-direction: column;
   gap: v.space(20);
+
+  &.news {
+    gap: 24px; // bespoke to the homepage grid
+  }
 }
 
 .newsGrid {
@@ -20,6 +18,20 @@
 
   @include mix.mq(md) {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+.threeGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.space(22);
+
+  @include mix.mq(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mix.mq(lg) {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

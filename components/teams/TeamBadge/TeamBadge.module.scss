@@ -1,6 +1,6 @@
 @use "variables" as v;
 
-.badge {
+.teamBadge {
   display: inline-flex;
   align-items: center;
   gap: v.space(8);
@@ -38,7 +38,7 @@
 .lg .name {
   font-family: v.$font-display;
   font-size: v.$fs-h2;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }

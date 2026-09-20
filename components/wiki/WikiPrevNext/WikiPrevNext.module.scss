@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.nav {
+.wikiPrevNext {
   display: grid;
   grid-template-columns: 1fr;
   gap: v.space(16);

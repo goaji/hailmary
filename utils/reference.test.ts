@@ -75,9 +75,7 @@ describe("validateSectionHeadings", () => {
   it("throws naming the section id when heading text has drifted from the frontmatter title", () => {
     const content = "## Obiectivul jocului\n\nText.\n\n## Terenul (revizuit)\n\nText.";
 
-    expect(() => validateSectionHeadings(content, sections, "test.mdx")).toThrow(
-      '"teren"',
-    );
+    expect(() => validateSectionHeadings(content, sections, "test.mdx")).toThrow('"teren"');
   });
 });
 

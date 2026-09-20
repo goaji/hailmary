@@ -1,25 +1,15 @@
 import type { Locale } from "@/i18n";
 import type { Conference, Division, Team } from "@/utils/teams";
-import type { Tag } from "@/utils/tags";
-import type { Game, GameStatus } from "@hailmary/shared";
+import {
+  CATEGORY_IDS,
+  type Category,
+  type Game,
+  type GameStatus,
+  type Tag,
+} from "@hailmary/shared";
 
-export type { Locale, Team, Conference, Division, Tag, Game, GameStatus };
-
-// Categories for ARTICLES — six to eight ids covering the mockup's four card
-// chips (transferuri, accidentari, analiza, antrenori) plus Draft, Program and Regulament. 
-// this file stays the single source of truth for which ids are allowed to exist.
-export const CATEGORY_IDS = [
-  "transferuri",
-  "accidentari",
-  "analiza",
-  "antrenori",
-  "draft",
-  "program",
-  "regulament",
-  "meciuri"
-] as const;
-
-export type Category = (typeof CATEGORY_IDS)[number];
+export { CATEGORY_IDS };
+export type { Locale, Team, Conference, Division, Category, Tag, Game, GameStatus };
 
 export type ArticleImage = {
   src: string;
@@ -57,12 +47,7 @@ export type Article = ArticleFrontmatter & {
 };
 
 // Categories for GLOSSARY terms,
-export const GLOSSARY_CATEGORY_IDS = [
-  "reguli",
-  "pozitii",
-  "pariuri",
-  "generale",
-] as const;
+export const GLOSSARY_CATEGORY_IDS = ["reguli", "pozitii", "pariuri", "generale"] as const;
 
 export type GlossaryCategory = (typeof GLOSSARY_CATEGORY_IDS)[number];
 

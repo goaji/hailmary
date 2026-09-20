@@ -18,7 +18,7 @@ export async function RelatedArticles({ articles }: RelatedArticlesProps) {
   const t = await getTranslations("relatedArticles");
 
   return (
-    <section className={styles.related} aria-labelledby={HEADING_ID}>
+    <section className={styles.relatedArticles} aria-labelledby={HEADING_ID}>
       <SectionHeading id={HEADING_ID}>{t("heading")}</SectionHeading>
       <div className={styles.grid}>
         {articles.map((article) => (

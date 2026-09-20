@@ -2,11 +2,11 @@
 @use "mixins" as mix;
 
 // Full-width bar: background/border span the whole viewport, sticky-pinned
-// to the top. Only .inner (below) caps at the page's 1200px content width —
-// capping .header itself would leave the sticky bar's background stopping
-// short at 1200px, exposing scrolled-past content in the side gutters on
+// to the top. Only .inner (below) caps at the page's content width —
+// capping .siteHeader itself would leave the sticky bar's background stopping
+// short at that width, exposing scrolled-past content in the side gutters on
 // wide viewports instead of a solid bar.
-.header {
+.siteHeader {
   position: sticky;
   top: 0;
   // Above ScrollProgress (10) and TermLink's hover tooltip (20) — the
@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: space-between;
   gap: v.space(20);
-  max-width: 1200px; // same content-width cap as the page body (/echipe, /program, /stiri, homepage news grid)
+  max-width: v.$content-width;
   margin: 0 auto;
   padding: v.space(18) v.space(32);
 }
@@ -32,7 +32,6 @@
   order: 0;
   display: flex;
   align-items: baseline;
-  gap: v.space(4);
   font-family: v.$font-display;
   font-size: v.$fs-logo;
   letter-spacing: 1px;
@@ -54,7 +53,6 @@
 .logoRo {
   color: v.$c-text-muted;
   font-size: v.$fs-body-lg;
-  margin-left: v.space(4);
 }
 
 // Holds the team picker + language switcher together as one right-side

@@ -3,7 +3,7 @@
 
 // position: relative lives here, not on Card itself (shared primitive, left
 // untouched) — .titleLink's ::after overlay anchors to this box instead.
-.wrapper {
+.teamCard {
   position: relative;
   height: 100%;
 }
@@ -22,7 +22,7 @@
   text-decoration: none;
 
   // Stretches the click target to the whole card, same pattern as
-  // ArticleCard — anchors against .wrapper (the nearest positioned
+  // ArticleCard — anchors against .teamCard (the nearest positioned
   // ancestor), not against this link's own (static) box.
   &::after {
     content: "";

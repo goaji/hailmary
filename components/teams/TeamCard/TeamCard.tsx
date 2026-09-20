@@ -17,7 +17,7 @@ export function TeamCard({ team }: TeamCardProps) {
   const wrapperStyle: WrapperStyle = { "--team-brand": team.brand1 };
 
   return (
-    <div className={styles.wrapper} style={wrapperStyle}>
+    <div className={styles.teamCard} style={wrapperStyle}>
       <Card>
         {/* brand1 as decoration (never as text color) — the left edge is the
             card's identity treatment, per AGENTS.md's brand-vs-accent rule. */}

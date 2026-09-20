@@ -39,7 +39,7 @@ export function ArticleImage(props: ArticleImageProps) {
         preload={props.preload}
         loading={props.eager ? "eager" : undefined}
         fetchPriority={props.eager ? "high" : undefined}
-        className={styles.image}
+        className={styles.articleImage}
       />
     );
   }
@@ -53,7 +53,7 @@ export function ArticleImage(props: ArticleImageProps) {
       preload={props.preload}
       loading={props.eager ? "eager" : undefined}
       fetchPriority={props.eager ? "high" : undefined}
-      className={styles.image}
+      className={styles.articleImage}
     />
   );
 }

@@ -21,7 +21,7 @@ export function RuleSection({ section, body }: RuleSectionProps) {
   };
 
   return (
-    <section className={styles.section} aria-labelledby={section.id}>
+    <section className={styles.ruleSection} aria-labelledby={section.id}>
       <MDXRemote
         source={body}
         components={components}

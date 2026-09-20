@@ -15,12 +15,12 @@ export const OG_CONTENT_TYPE = "image/png";
 
 const FONTS_DIR = path.join(process.cwd(), "assets", "fonts");
 
-/** Real Bebas Neue / Work Sans binaries, subset to latin-ext (see assets/fonts) so ă/â/î/ș/ț render — a system-font fallback would silently change the design in every social preview. Read once at module scope per the next/og docs' guidance for request-independent assets. */
+/** Real Sofia Sans Condensed / Work Sans binaries, subset to latin-ext (see assets/fonts) so ă/â/î/ș/ț render — a system-font fallback would silently change the design in every social preview. Read once at module scope per the next/og docs' guidance for request-independent assets. */
 export const OG_FONTS = [
   {
-    name: "Bebas Neue",
-    data: fs.readFileSync(path.join(FONTS_DIR, "BebasNeue-Regular.ttf")),
-    weight: 400 as const,
+    name: "Sofia Sans Condensed",
+    data: fs.readFileSync(path.join(FONTS_DIR, "SofiaSansCondensed-Bold.ttf")),
+    weight: 700 as const,
     style: "normal" as const,
   },
   {
@@ -36,6 +36,9 @@ export const OG_FONTS = [
     style: "normal" as const,
   },
 ];
+
+/** Spread into any display-type style; the weight must match the one binary above or Satori falls back. */
+export const OG_DISPLAY_FONT = { fontFamily: "Sofia Sans Condensed", fontWeight: 700 } as const;
 
 // $c-page / $c-text / $c-text-muted from styles/_variables.scss.
 export const OG_PAGE_BG = "#14151a";
@@ -67,12 +70,13 @@ export function svgDataUri(publicPath: string): string {
   return `data:image/svg+xml;base64,${base64}`;
 }
 
-/** The header's "HAIL MARY.RO" wordmark, reproduced with inline styles for Satori. `accent` is the one color that varies by context (a team's accent/brand color, or the default team's when no team applies). */
+/** The header's "HAILMARY.RO" wordmark, reproduced with inline styles for Satori. `accent` is the one color that varies by context (a team's accent/brand color, or the default team's when no team applies). */
 export function OgWordmark({ accent }: { accent: string }): ReactElement {
   return (
-    <div style={{ display: "flex", fontFamily: "Bebas Neue", fontSize: 30, letterSpacing: 1 }}>
+    <div style={{ display: "flex", ...OG_DISPLAY_FONT, fontSize: 30, letterSpacing: 1 }}>
       <span style={{ color: OG_TEXT }}>HAIL</span>
       <span style={{ color: accent }}>MARY</span>
+      {/* Unlike the header, a small gap before .RO on purpose: it reads better at image size. */}
       <span style={{ color: OG_TEXT_MUTED, fontSize: 20, marginLeft: 6 }}>.RO</span>
     </div>
   );
@@ -88,7 +92,12 @@ type ReferenceOgCardProps = {
 };
 
 /** Shared "title + kicker" card for /glosar — same layout as other section OG images, differing only in kicker label and title. */
-export function ReferenceOgCard({ kicker, title, accentBar, accentText }: ReferenceOgCardProps): ReactElement {
+export function ReferenceOgCard({
+  kicker,
+  title,
+  accentBar,
+  accentText,
+}: ReferenceOgCardProps): ReactElement {
   return (
     <div
       style={{
@@ -120,7 +129,7 @@ export function ReferenceOgCard({ kicker, title, accentBar, accentText }: Refere
         <span
           style={{
             display: "flex",
-            fontFamily: "Bebas Neue",
+            ...OG_DISPLAY_FONT,
             fontSize: 84,
             lineHeight: 1.05,
             color: OG_TEXT,

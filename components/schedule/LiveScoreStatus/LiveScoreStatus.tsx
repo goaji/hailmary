@@ -1,4 +1,4 @@
-"use client";
+"use client"; // live polling plus a ticking "updated X ago" clock
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -28,11 +28,13 @@ export function LiveScoreStatus({ initialIsLive, hasLiveGames }: LiveScoreStatus
     return () => clearInterval(interval);
   }, []);
 
-  const isStale = data?.updatedAt ? now - new Date(data.updatedAt).getTime() > STALE_THRESHOLD_MS : false;
+  const isStale = data?.updatedAt
+    ? now - new Date(data.updatedAt).getTime() > STALE_THRESHOLD_MS
+    : false;
 
   if (initialIsLive && !error && !isStale) {
     return null;
   }
 
-  return <p className={styles.notice}>{t("liveUnavailableNotice")}</p>;
+  return <p className={styles.liveScoreStatus}>{t("liveUnavailableNotice")}</p>;
 }

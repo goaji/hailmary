@@ -21,10 +21,7 @@ const TEAMS_FILE = path.join(process.cwd(), "utils", "teams.ts");
 
 function withSiteUrl(languages: Record<string, string>): Record<string, string> {
   return Object.fromEntries(
-    Object.entries(languages).map(([locale, pathname]) => [
-      locale,
-      `${SITE_URL}${pathname}`,
-    ]),
+    Object.entries(languages).map(([locale, pathname]) => [locale, `${SITE_URL}${pathname}`]),
   );
 }
 
@@ -85,7 +82,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const locale of routing.locales) {
     for (const letter of getGlossaryLetters(locale)) {
       const files = getTermsByLetter(locale, letter).map((term) => termFilePath(locale, term.slug));
-      entries.push(entry(`/glosar/${letter.toLowerCase()}`, locale, routing.locales, latestMtime(files)));
+      entries.push(
+        entry(`/glosar/${letter.toLowerCase()}`, locale, routing.locales, latestMtime(files)),
+      );
     }
   }
 

@@ -124,10 +124,9 @@
   border: 2px solid v.$c-border;
   font-family: v.$font-display;
   font-size: v.$fs-body-lg;
-  animation: playClockPulse 1s ease-in-out infinite;
 
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
+  @include mix.motion-safe {
+    animation: playClockPulse 1s ease-in-out infinite;
   }
 }
 
@@ -160,36 +159,17 @@
 }
 
 .legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: v.space(8);
+  @include mix.diagram-legend;
   margin-top: v.space(16);
 }
 
 .legendItem,
 .legendItemActive {
-  padding: v.space(8) v.space(12);
-  background: v.$c-surface-raised;
-  border: 1px solid v.$c-border;
-  color: v.$c-text;
-  border-radius: 2px;
-  cursor: pointer;
-  font-size: v.$fs-meta;
-
-  &:hover {
-    border-color: var(--accent-1);
-  }
-
-  &:focus-visible {
-    @include mix.focus-ring;
-  }
+  @include mix.diagram-legend-item;
 }
 
 .legendItemActive {
-  border-color: var(--accent-1);
-  // Text, not border/UI chrome — 14px bold on $c-surface-raised needs the panel-calibrated accent2 bar (≥4.5), not accent1's ≥3.0.
-  color: var(--accent-2);
-  font-weight: 700;
+  @include mix.diagram-legend-item-active;
 }
 
 .hint {

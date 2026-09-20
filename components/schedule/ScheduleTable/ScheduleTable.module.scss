@@ -1,7 +1,7 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.tableWrapper {
+.scheduleTable {
   max-width: 100%;
 
   // No margin-top here on purpose — this can be the first thing in .content

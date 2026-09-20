@@ -1,16 +1,9 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-// Same content-width cap/padding as the Wiki page.
 .page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: v.space(32) v.space(20) v.space(64);
+  @include mix.page-shell;
   @include mix.panel-shift-align;
-
-  @include mix.mq(md) {
-    padding: v.space(48) v.space(32) v.space(64);
-  }
 
   // Panel open: drop side padding so ArticleHeader/ArticleBody's own padding sets the gutter.
   @include mix.mq(panel) {

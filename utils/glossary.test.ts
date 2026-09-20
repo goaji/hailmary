@@ -17,18 +17,16 @@ const validFrontmatter = {
 
 describe("parseGlossaryFrontmatter", () => {
   it("accepts a valid file", () => {
-    expect(parseGlossaryFrontmatter(validFrontmatter, "test.mdx")).toEqual(
-      validFrontmatter,
-    );
+    expect(parseGlossaryFrontmatter(validFrontmatter, "test.mdx")).toEqual(validFrontmatter);
   });
 
   it("rejects a file missing a required field, naming the file and the field", () => {
     const { term, ...missingTerm } = validFrontmatter;
     void term;
 
-    expect(() =>
-      parseGlossaryFrontmatter(missingTerm, "content/glossary/ro/x.mdx"),
-    ).toThrow('content/glossary/ro/x.mdx: field "term"');
+    expect(() => parseGlossaryFrontmatter(missingTerm, "content/glossary/ro/x.mdx")).toThrow(
+      'content/glossary/ro/x.mdx: field "term"',
+    );
   });
 
   it("rejects a file with an unknown category", () => {
@@ -50,12 +48,7 @@ describe("sortByTerm", () => {
       { term: "Down" },
     ]);
 
-    expect(sorted.map((e) => e.term)).toEqual([
-      "Blitz",
-      "Down",
-      "Întoarcere",
-      "Touchdown",
-    ]);
+    expect(sorted.map((e) => e.term)).toEqual(["Blitz", "Down", "Întoarcere", "Touchdown"]);
   });
 });
 
@@ -112,9 +105,7 @@ describe("validateTermLinks", () => {
   it("throws naming the file and the unknown slug", () => {
     const content = `<TermLink term="not-a-real-term">acesta</TermLink>`;
 
-    expect(() =>
-      validateTermLinks(content, ["blitz"], "content/articles/ro/x.mdx"),
-    ).toThrow(
+    expect(() => validateTermLinks(content, ["blitz"], "content/articles/ro/x.mdx")).toThrow(
       'Unknown glossary term "not-a-real-term" referenced by <TermLink> in content/articles/ro/x.mdx',
     );
   });

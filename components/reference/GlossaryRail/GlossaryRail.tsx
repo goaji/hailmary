@@ -1,9 +1,5 @@
-"use client"; // local search filter state
-
-import { useId, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n";
-import styles from "./GlossaryRail.module.scss";
+import { AlphabeticalRail } from "@/components/ui/AlphabeticalRail/AlphabeticalRail";
 
 export type GlossaryRailTerm = {
   slug: string;
@@ -20,119 +16,37 @@ type GlossaryRailProps = {
   allTerms: GlossaryRailTerm[];
 };
 
-function matchesQuery(term: GlossaryRailTerm, query: string): boolean {
-  return term.term.toLowerCase().includes(query.trim().toLowerCase());
-}
-
-function subscribeToHash(onChange: () => void) {
-  window.addEventListener("hashchange", onChange);
-  return () => window.removeEventListener("hashchange", onChange);
-}
-
-// Search filters this rail only — the page underneath stays unfiltered.
-function RailBody({ letters, currentLetter, allTerms }: GlossaryRailProps) {
-  const t = useTranslations("glossary");
-  // Mirrors the term TargetRefresh highlights in the page, so rail and content agree.
-  const targetSlug = useSyncExternalStore(
-    subscribeToHash,
-    () => window.location.hash.slice(1),
-    () => "",
-  );
-  const [query, setQuery] = useState("");
-  const filterId = useId();
-  const isSearching = query.trim().length > 0;
-  const matches = isSearching ? allTerms.filter((term) => matchesQuery(term, query)) : [];
-
-  return (
-    <>
-      <div className={styles.filterRow}>
-        <label htmlFor={filterId} className={styles.filterLabel}>
-          {t("filterLabel")}
-        </label>
-        <input
-          id={filterId}
-          type="search"
-          role="searchbox"
-          className={styles.filterInput}
-          placeholder={t("filterPlaceholder")}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-      </div>
-
-      {isSearching ? (
-        matches.length === 0 ? (
-          <p className={styles.empty} role="status">
-            {t("noResults")}
-          </p>
-        ) : (
-          <ul className={styles.list}>
-            {matches.map((term) => (
-              <li key={term.slug}>
-                <Link href={`/glosar/${term.letter.toLowerCase()}#${term.slug}`} className={styles.termLink}>
-                  {term.term}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )
-      ) : (
-        <ul className={styles.list}>
-          {letters.map((letter) => {
-            const isCurrent = letter === currentLetter;
-            return (
-              <li key={letter}>
-                <Link
-                  href={`/glosar/${letter.toLowerCase()}`}
-                  aria-current={isCurrent ? "page" : undefined}
-                  className={styles.letterLink}
-                >
-                  {letter}
-                </Link>
-                {isCurrent ? (
-                  <ul className={styles.termSubList}>
-                    {allTerms
-                      .filter((term) => term.letter === letter)
-                      .map((term) => (
-                        <li key={term.slug}>
-                          <a
-                            href={`#${term.slug}`}
-                            aria-current={term.slug === targetSlug ? "location" : undefined}
-                            className={styles.termLink}
-                          >
-                            {term.term}
-                          </a>
-                        </li>
-                      ))}
-                  </ul>
-                ) : null}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </>
-  );
-}
-
 export function GlossaryRail(props: GlossaryRailProps) {
   const t = useTranslations("glossary");
+  const groups = props.letters.map((letter) => {
+    const letterHref = `/glosar/${letter.toLowerCase()}`;
+    const onThisPage = letter === props.currentLetter;
+
+    return {
+      letter,
+      href: letterHref,
+      current: onThisPage,
+      items: props.allTerms
+        .filter((term) => term.letter === letter)
+        .map((term) => ({
+          id: term.slug,
+          label: term.term,
+          // search spans the whole glossary, but only this letter's terms exist on this page to anchor to
+          href: onThisPage ? `#${term.slug}` : `${letterHref}#${term.slug}`,
+        })),
+    };
+  });
 
   return (
-    <>
-      <nav aria-label={t("railLabel")} className={styles.desktopRail}>
-        <RailBody {...props} />
-      </nav>
-
-      <details className={styles.mobileRail}>
-        <summary className={styles.summary}>
-          {t("railMobileLabel")}
-          <span className={styles.chevron} aria-hidden="true" />
-        </summary>
-        <nav aria-label={t("railLabel")}>
-          <RailBody {...props} />
-        </nav>
-      </details>
-    </>
+    <AlphabeticalRail
+      groups={groups}
+      filterLabel={t("filterLabel")}
+      filterPlaceholder={t("filterPlaceholder")}
+      noResults={t("noResults")}
+      railLabel={t("railLabel")}
+      mobileLabel={t("railMobileLabel")}
+      expandCurrentGroupOnly
+      hashLocation
+    />
   );
 }

@@ -1,10 +1,17 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
+// Layout-neutral root: children stay direct items of the parent's grid/flex.
+.alphabeticalRail {
+  display: contents;
+}
+
 .desktopRail {
   display: none;
+}
 
-  @include mix.mq(lg) {
+@include mix.mq(lg) {
+  .desktopRail {
     display: block;
     position: sticky;
     top: calc(var(--header-height, 71px) + #{v.space(32)});
@@ -17,8 +24,10 @@
   border: 1px solid v.$c-border;
   border-radius: 3px;
   padding: v.space(16);
+}
 
-  @include mix.mq(lg) {
+@include mix.mq(lg) {
+  .mobileRail {
     display: none;
   }
 }
@@ -32,11 +41,9 @@
   list-style: none;
   margin-bottom: v.space(12);
 
-  &::-webkit-details-marker {
-    display: none;
-  }
-
+  &::-webkit-details-marker,
   &::marker {
+    display: none;
     content: "";
   }
 
@@ -84,7 +91,6 @@
   &::placeholder {
     color: v.$c-text-muted;
   }
-
   &:focus-visible {
     @include mix.focus-ring;
   }
@@ -96,15 +102,15 @@
 }
 
 .list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: v.space(8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.letterLink {
+.groupLabel {
   display: block;
   padding: v.space(4) 0;
   font-family: v.$font-display;
@@ -116,28 +122,26 @@
     color: v.$c-text;
     text-decoration: none;
   }
-
   &:focus-visible {
     @include mix.focus-ring;
   }
-
-  &[aria-current="page"] {
-    color: var(--accent-1);
-  }
 }
 
-// Nested one level, like WikiRail's .sectionList.
-.termSubList {
-  list-style: none;
-  margin: v.space(4) 0 0 0;
-  padding: 0 0 0 v.space(12);
+.currentGroup {
+  color: var(--accent-1);
+}
+
+.subList {
   display: flex;
   flex-direction: column;
   gap: v.space(4);
+  list-style: none;
+  margin: v.space(4) 0 0 0;
+  padding: 0 0 0 v.space(12);
   border-left: 1px solid v.$c-border;
 }
 
-.termLink {
+.itemLink {
   display: block;
   padding: v.space(4) 0 v.space(4) v.space(12);
   overflow-wrap: break-word;
@@ -148,18 +152,16 @@
     color: v.$c-text;
     text-decoration: none;
   }
-
   &:focus-visible {
     @include mix.focus-ring;
   }
-
+  &[aria-current="page"],
   &[aria-current="location"] {
     color: var(--accent-1);
     font-weight: 700;
   }
 }
 
-// Search-result links aren't nested in .termSubList — drop its padding.
-.list > li > .termLink {
+.list > li > .itemLink {
   padding-left: 0;
 }
