@@ -34,8 +34,29 @@ function subscribeToHash(onChange: () => void) {
   return () => window.removeEventListener("hashchange", onChange);
 }
 
+function subscribeToNothing() {
+  return () => {};
+}
+
+function readHash() {
+  return window.location.hash.slice(1);
+}
+
+function readNoHash() {
+  return "";
+}
+
 function RailItemLink({ item, targetId }: { item: AlphabeticalRailItem; targetId: string }) {
   const current = targetId === item.id ? "location" : item.current ? "page" : undefined;
+
+  // Next routes hash links through pushState, which never fires hashchange
+  if (item.href.startsWith("#")) {
+    return (
+      <a href={item.href} aria-current={current} className={styles.itemLink}>
+        {item.label}
+      </a>
+    );
+  }
 
   return (
     <Link href={item.href} aria-current={current} className={styles.itemLink}>
@@ -55,9 +76,9 @@ function RailBody({
   const [query, setQuery] = useState("");
   const filterId = useId();
   const targetId = useSyncExternalStore(
-    hashLocation ? subscribeToHash : () => () => {},
-    hashLocation ? () => window.location.hash.slice(1) : () => "",
-    () => "",
+    hashLocation ? subscribeToHash : subscribeToNothing,
+    hashLocation ? readHash : readNoHash,
+    readNoHash,
   );
   const matches = groups
     .flatMap((group) => group.items)
