@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import type { CSSProperties } from "react";
 import { PICKER_TEAMS, getTeam } from "@/utils/teams";
-import { useRovingRadioGroup } from "@/components/ui/useRovingRadioGroup";
+import { useRovingSelection } from "@/components/ui/useRovingSelection";
 import { useTeamColor } from "@/components/layout/TeamColorProvider/TeamColorProvider";
 import styles from "./TeamPicker.module.scss";
 
@@ -14,7 +14,7 @@ type SwatchStyle = CSSProperties & {
 export function TeamPicker() {
   const t = useTranslations("teamPicker");
   const { teamId, setTeam } = useTeamColor();
-  const { registerButton, handleKeyDown } = useRovingRadioGroup(PICKER_TEAMS, setTeam);
+  const { registerButton, handleKeyDown } = useRovingSelection(PICKER_TEAMS, setTeam);
 
   return (
     <div className={styles.teamPicker} role="radiogroup" aria-label={t("label")}>

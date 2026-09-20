@@ -1,7 +1,7 @@
 import { useRef, type KeyboardEvent } from "react";
 
-// Roving tabindex for a role="radiogroup" of buttons: arrow keys move focus and selection together, wrapping at the ends.
-export function useRovingRadioGroup<T>(options: readonly T[], onSelect: (option: T) => void) {
+// Roving tabindex for a role="radiogroup" or role="tablist" of buttons: arrow keys move focus and selection together, wrapping at the ends.
+export function useRovingSelection<T>(options: readonly T[], onSelect: (option: T) => void) {
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   function focusAndSelect(index: number) {
@@ -27,6 +27,14 @@ export function useRovingRadioGroup<T>(options: readonly T[], onSelect: (option:
       case "ArrowUp":
         event.preventDefault();
         focusAndSelect(index - 1);
+        break;
+      case "Home":
+        event.preventDefault();
+        focusAndSelect(0);
+        break;
+      case "End":
+        event.preventDefault();
+        focusAndSelect(options.length - 1);
         break;
     }
   }

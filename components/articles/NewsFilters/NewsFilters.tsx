@@ -5,7 +5,7 @@ import { useEffect, useId, useState, type ReactNode } from "react";
 import { CATEGORY_IDS } from "@/types";
 import type { Category } from "@/types";
 import { CATEGORIES } from "@/utils/categories";
-import { useRovingRadioGroup } from "@/components/ui/useRovingRadioGroup";
+import { useRovingSelection } from "@/components/ui/useRovingSelection";
 import { CONFERENCES, DIVISIONS, getTeamsByDivision } from "@/utils/teams";
 import styles from "./NewsFilters.module.scss";
 
@@ -49,7 +49,7 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
     window.localStorage.setItem(VIEW_KEY, next);
   }
 
-  const { registerButton, handleKeyDown: handleViewKeyDown } = useRovingRadioGroup(
+  const { registerButton, handleKeyDown: handleViewKeyDown } = useRovingSelection(
     VIEWS,
     updateView,
   );

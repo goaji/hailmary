@@ -51,6 +51,7 @@ export function BoxScoreDiagram() {
     return (
       <div
         className={`${styles.region} ${styles.timeoutStars} ${isActive("timeouts") ?? ""}`}
+        role="img"
         aria-label={t("timeoutsAriaLabel", { team: teamCode, remaining, total: TIMEOUTS_TOTAL })}
       >
         {Array.from({ length: TIMEOUTS_TOTAL }).map((_, i) => (
@@ -108,6 +109,7 @@ export function BoxScoreDiagram() {
           </span>
           <span
             className={`${styles.region} ${styles.playClockCircle} ${isActive("playClock") ?? ""}`}
+            role="timer"
             aria-label={t("playClockAriaLabel")}
           >
             {playClock}

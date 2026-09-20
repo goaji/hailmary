@@ -21,7 +21,7 @@
   border-collapse: collapse;
   border: 1px solid v.$c-border;
   border-radius: 2px;
-  transition: opacity 200ms ease;
+  transition: border-color 200ms ease;
   width: 100%;
 
   th,
@@ -30,6 +30,9 @@
     text-align: center;
     border-bottom: 1px solid v.$c-border;
     font-size: v.$fs-meta;
+    transition:
+      color 200ms ease,
+      background-color 200ms ease;
   }
 
   th {
@@ -48,15 +51,27 @@
   }
 }
 
+// Dimmed by muting fills and switching text to the muted token; opacity would drop this text under 4.5:1.
 .tableDim {
-  opacity: 0.35;
+  border-color: v.$c-border-soft;
+
+  th {
+    background: none;
+  }
+
+  td,
+  caption {
+    color: v.$c-text-muted;
+  }
 }
 
 .tableCaption {
   caption-side: top;
   padding: v.space(4) v.space(8);
+  border-left: 2px solid var(--accent-1);
   text-align: left;
-  color: var(--accent-1);
+  color: v.$c-text;
+  transition: color 200ms ease;
   font-family: v.$font-display;
   letter-spacing: 1px;
 }
