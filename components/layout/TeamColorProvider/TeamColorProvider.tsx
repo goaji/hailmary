@@ -9,9 +9,9 @@ import {
   type ReactNode,
 } from "react";
 import { DEFAULT_TEAM, getTeam } from "@/utils/teams";
+import { teamSurfaceVars } from "@/utils/theme";
+import { STORAGE_KEY } from "./teamColorConstants";
 import styles from "./TeamColorProvider.module.scss";
-
-const STORAGE_KEY = "hm.team";
 
 type TeamColorContextValue = {
   teamId: string;
@@ -57,6 +57,16 @@ export function TeamColorProvider({ children }: TeamColorProviderProps) {
     "--accent-1": team.accent1,
     "--accent-2": team.accent2,
   };
+
+  // The tinted page and header go on <html>, not this wrapper: body's background
+  // paints the whole viewport including the overscroll area, which no descendant
+  // can reach. The pre-paint script in the layout sets the same vars on first load.
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    for (const [name, value] of Object.entries(teamSurfaceVars(team.accent1))) {
+      root.style.setProperty(name, value);
+    }
+  }, [team.accent1]);
 
   return (
     <TeamColorContext.Provider value={{ teamId, setTeam }}>

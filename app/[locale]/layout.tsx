@@ -12,7 +12,9 @@ import { ExplainerProvider } from "@/components/explainer/ExplainerProvider/Expl
 import { ExplainerContent } from "@/components/explainer/ExplainerContent/ExplainerContent";
 import { getAllTerms } from "@/utils/glossary";
 import { SITE_URL } from "@/utils/site";
-import { HEADER_BG } from "@/utils/theme";
+import { HEADER_BG, teamSurfaceVars } from "@/utils/theme";
+import { TEAMS } from "@/utils/teams";
+import { STORAGE_KEY } from "@/components/layout/TeamColorProvider/teamColorConstants";
 import { requireLocale } from "@/utils/locale";
 import { DISMISS_KEY, STRIP_ID } from "@/components/home/OriginStrip/originStripConstants";
 import "../../styles/globals.scss";
@@ -59,6 +61,11 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
 
   const messages = await getMessages();
 
+  // Every team's tinted surfaces, so the pre-paint script below can look one up without shipping the color math.
+  const teamSurfaces = Object.fromEntries(
+    TEAMS.map((team) => [team.slug, teamSurfaceVars(team.accent1)]),
+  );
+
   // Entries are bundled at build/request time and handed to the client
   // provider as inert, pre-rendered content (extended MDX compiled once,
   // here) — the panel never fetches on open.
@@ -72,7 +79,12 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   }));
 
   return (
-    <html lang={locale} className={`${sofiaSansCondensed.variable} ${workSans.variable}`}>
+    // suppressHydrationWarning: the tint script below writes a style attribute here before React hydrates, which is a mismatch by definition.
+    <html
+      lang={locale}
+      className={`${sofiaSansCondensed.variable} ${workSans.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         {/* Lives here, not in OriginStrip, so it runs before hydration and the dismissed strip never flashes. */}
         <Script
@@ -80,6 +92,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `if(localStorage.getItem(${JSON.stringify(DISMISS_KEY)})==="true"){var el=document.getElementById(${JSON.stringify(STRIP_ID)});if(el)el.style.display="none"}`,
+          }}
+        />
+        {/* Applies the stored team's tint before first paint, so the default team's background never flashes. A plain inline script, not next/script: even
+            beforeInteractive is executed by Next's loader after paint, which is exactly the flash this prevents. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var s=${JSON.stringify(teamSurfaces)}[localStorage.getItem(${JSON.stringify(STORAGE_KEY)})];if(s)for(var k in s)document.documentElement.style.setProperty(k,s[k])})()`,
           }}
         />
         <NextIntlClientProvider messages={messages}>

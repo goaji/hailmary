@@ -8,6 +8,15 @@
   initial-value: 0px;
 }
 
+:root {
+  --c-header: #{v.$base-header};
+  --c-page: #{v.$base-page};
+  --c-surface: #{v.$base-surface};
+  --c-border: #{v.$base-border};
+  --c-surface-raised: #{v.$base-surface-raised};
+  --c-border-soft: #{v.$base-border-soft};
+}
+
 html {
   height: 100%;
   box-sizing: border-box;
