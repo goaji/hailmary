@@ -1,38 +1,8 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-// Owns the gap below the h1, same "* + *" pattern as .content below.
-.scheduleWeekSwitcher > * + * {
-  margin-top: v.space(22);
-}
-
-// Same grid shape as PageLayout, switching at `panel` — the same breakpoint the rail below switches on.
-.layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-areas: "rail" "content";
-  gap: v.space(32);
-
-  @include mix.mq(panel) {
-    grid-template-columns: 220px 1fr;
-    grid-template-areas: "rail content";
-    column-gap: v.space(48);
-  }
-}
-
-.rail {
-  grid-area: rail;
-}
-
 .content {
-  grid-area: content;
-  min-width: 0;
-
-  // This container owns spacing between its own stacked children (the live-status
-  // notice, the table, the updated-at note) instead of each of them assuming what
-  // comes before it. "* + *" only ever matches an element with a preceding sibling,
-  // so whichever one ends up first (state-dependent — the notice doesn't always
-  // render) is naturally exempt and .content always starts flush with .rail.
+  // Owns spacing between its stacked children; "* + *" exempts whichever renders first.
   > * + * {
     margin-top: v.space(22);
   }
@@ -46,8 +16,6 @@
     display: block;
     position: sticky;
     top: calc(var(--header-height, 71px) + #{v.space(32)});
-    min-width: 0;
-    width: 220px;
     max-height: calc(100vh - var(--header-height, 71px) - #{v.space(64)});
     overflow-y: auto;
     overflow-x: hidden;
@@ -64,7 +32,6 @@
 }
 
 .mobileRail {
-  margin-bottom: v.space(32);
   border: 1px solid v.$c-border;
   border-radius: 3px;
   padding: v.space(16);

@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import styles from "./ScheduleWeekSwitcher.module.scss";
 
 export type ScheduleWeek = {
@@ -95,19 +96,14 @@ export function ScheduleWeekSwitcher({
   const heading = <SectionHeading as="h1">{selected?.title}</SectionHeading>;
 
   if (weeks.length <= 1) {
-    return (
-      <div className={styles.scheduleWeekSwitcher}>
-        {heading}
-        {content}
-      </div>
-    );
+    return <PageLayout heading={heading}>{content}</PageLayout>;
   }
 
   return (
-    <div className={styles.scheduleWeekSwitcher}>
-      {heading}
-      <div className={styles.layout}>
-        <div className={styles.rail}>
+    <PageLayout
+      heading={heading}
+      aside={
+        <>
           <nav aria-label={weekNavLabel} className={styles.desktopRail}>
             <h2 className={styles.heading}>{weeksHeading}</h2>
             <WeekList weeks={weeks} selectedWeek={selectedWeek} onSelect={setSelectedWeek} />
@@ -119,9 +115,11 @@ export function ScheduleWeekSwitcher({
             </summary>
             <WeekList weeks={weeks} selectedWeek={selectedWeek} onSelect={setSelectedWeek} />
           </details>
-        </div>
-        {content}
-      </div>
-    </div>
+        </>
+      }
+      asideOnMobile="above"
+    >
+      {content}
+    </PageLayout>
   );
 }

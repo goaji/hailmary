@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   gap: v.space(20);
-  max-width: 420px; // a short label/value list reads worse stretched full-width
 }
 
 .empty {

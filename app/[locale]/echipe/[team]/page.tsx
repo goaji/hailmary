@@ -5,7 +5,6 @@ import { getLanguageAlternates, routing } from "@/i18n";
 import { TeamIdentityBand } from "@/components/teams/TeamIdentityBand/TeamIdentityBand";
 import { ArticleGrid } from "@/components/articles/ArticleGrid/ArticleGrid";
 import { TeamSchedule } from "@/components/teams/TeamSchedule/TeamSchedule";
-import { TeamBlurb } from "@/components/teams/TeamBlurb/TeamBlurb";
 import { TEAMS, TEAMS_BY_SLUG } from "@/utils/teams";
 import { getArticlesByTeam } from "@/utils/articles";
 import { getSchedule } from "@/utils/schedule";
@@ -17,6 +16,9 @@ import {
   jsonLdScript,
 } from "@/utils/structuredData";
 import styles from "./page.module.scss";
+
+// The schedule table shows scores and live status, so the page can't be frozen at build time.
+export const revalidate = 60;
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) => TEAMS.map((team) => ({ locale, team: team.slug })));
@@ -100,7 +102,6 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
         articles={articles}
       />
       <TeamSchedule team={team} games={games} isLive={isLive} />
-      <TeamBlurb />
     </div>
   );
 }

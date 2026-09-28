@@ -19,13 +19,15 @@
         "aside main";
     }
 
-    // No room beside the explainer panel, so the aside hides and main reclaims the row.
-    :global([data-panel-open]) & {
+    // No aside, or no room beside the explainer panel: main reclaims the row.
+    :global([data-panel-open]) &,
+    &.noAside {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: "main";
     }
 
-    :global([data-panel-open]) &.withHeading {
+    :global([data-panel-open]) &.withHeading,
+    &.noAside.withHeading {
       grid-template-areas:
         "heading"
         "main";

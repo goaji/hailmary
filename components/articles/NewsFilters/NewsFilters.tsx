@@ -1,11 +1,10 @@
 "use client"; // local filter selections are page-local UI state (AGENTS.md — useState, not lifted)
 
 import { useTranslations } from "next-intl";
-import { useEffect, useId, useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import { CATEGORY_IDS } from "@/types";
 import type { Category } from "@/types";
 import { CATEGORIES } from "@/utils/categories";
-import { useRovingSelection } from "@/components/ui/useRovingSelection";
 import { CONFERENCES, DIVISIONS, getTeamsByDivision } from "@/utils/teams";
 import styles from "./NewsFilters.module.scss";
 
@@ -22,37 +21,13 @@ type NewsFiltersProps = {
   lang?: string;
 };
 
-type View = "grid" | "list";
-
-const VIEWS: View[] = ["grid", "list"];
-const VIEW_KEY = "hm.newsView";
-
 export function NewsFilters({ items, lang }: NewsFiltersProps) {
   const t = useTranslations("newsIndex");
   const tCategories = useTranslations("categories");
   const [category, setCategory] = useState<"all" | Category>("all");
   const [team, setTeam] = useState("all");
-  const [view, setView] = useState<View>("grid");
   const categorySelectId = useId();
   const teamSelectId = useId();
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(VIEW_KEY);
-    if (stored === "grid" || stored === "list") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setView(stored);
-    }
-  }, []);
-
-  function updateView(next: View) {
-    setView(next);
-    window.localStorage.setItem(VIEW_KEY, next);
-  }
-
-  const { registerButton, handleKeyDown: handleViewKeyDown } = useRovingSelection(
-    VIEWS,
-    updateView,
-  );
 
   const byCategory =
     category === "all" ? items : items.filter((item) => item.category === category);
@@ -105,28 +80,10 @@ export function NewsFilters({ items, lang }: NewsFiltersProps) {
             )}
           </select>
         </div>
-
-        <div className={styles.viewToggle} role="radiogroup" aria-label={t("viewToggleLabel")}>
-          {VIEWS.map((option, index) => (
-            <button
-              key={option}
-              ref={registerButton(index)}
-              type="button"
-              role="radio"
-              aria-checked={view === option}
-              tabIndex={view === option ? 0 : -1}
-              className={styles.viewButton}
-              onClick={() => updateView(option)}
-              onKeyDown={(event) => handleViewKeyDown(event, index)}
-            >
-              {t(option === "grid" ? "gridView" : "listView")}
-            </button>
-          ))}
-        </div>
       </div>
 
       {filtered.length > 0 ? (
-        <div className={styles.grid} data-view={view} lang={lang}>
+        <div className={styles.grid} lang={lang}>
           {filtered.map((item) => item.node)}
         </div>
       ) : (

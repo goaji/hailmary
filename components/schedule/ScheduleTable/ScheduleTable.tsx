@@ -5,18 +5,19 @@ import styles from "./ScheduleTable.module.scss";
 
 type ScheduleTableProps = {
   games: Game[];
-  week: number;
+  /** Visually hidden table caption, e.g. the week on /program or the team on its own page. */
+  caption: string;
   locale: string;
 };
 
-export function ScheduleTable({ games, week, locale }: ScheduleTableProps) {
+export function ScheduleTable({ games, caption, locale }: ScheduleTableProps) {
   const t = useTranslations("scheduleTable");
 
   return (
     // A named <section> maps to role "region" — same pattern as ArticleBody's MdxTable.
     <section aria-label={t("scrollLabel")} tabIndex={0} className={styles.scheduleTable}>
       <table className={styles.table}>
-        <caption className={styles.caption}>{t("caption", { week })}</caption>
+        <caption className={styles.caption}>{caption}</caption>
         <thead>
           <tr>
             <th scope="col">{t("matchup")}</th>

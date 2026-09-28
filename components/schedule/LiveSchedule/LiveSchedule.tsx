@@ -12,6 +12,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { useLiveScores } from "@/components/schedule/useLiveScores";
 import { formatPublishedAt } from "@/utils/formatPublishedAt";
 import { hasLiveGame } from "@/utils/liveGames";
+import { getAvailableWeeks, getCurrentWeek } from "@/utils/scheduleWeeks";
 import styles from "./LiveSchedule.module.scss";
 
 type LiveScheduleProps = {
@@ -21,20 +22,6 @@ type LiveScheduleProps = {
   initialUpdatedAt: string | null;
 };
 
-function getAvailableWeeks(games: Game[]): number[] {
-  return Array.from(new Set(games.map((game) => game.week))).sort((a, b) => a - b);
-}
-
-function getCurrentWeek(games: Game[]): number {
-  if (games.length === 0) {
-    return 1;
-  }
-  const unresolved = games.filter((game) => game.status !== "final");
-  return unresolved.length > 0
-    ? Math.min(...unresolved.map((game) => game.week))
-    : Math.max(...games.map((game) => game.week));
-}
-
 export function LiveSchedule({
   locale,
   initialGames,
@@ -42,6 +29,7 @@ export function LiveSchedule({
   initialUpdatedAt,
 }: LiveScheduleProps) {
   const t = useTranslations("schedulePage");
+  const tTable = useTranslations("scheduleTable");
   const { data } = useLiveScores(true);
   const games = data?.games ?? initialGames;
   const updatedAt = data?.updatedAt ?? initialUpdatedAt;
@@ -65,7 +53,7 @@ export function LiveSchedule({
     table: (
       <ScheduleTable
         games={games.filter((game) => game.week === week)}
-        week={week}
+        caption={tTable("caption", { week })}
         locale={locale}
       />
     ),

@@ -1,10 +1,8 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Game, Team } from "@/types";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
-import { LinkList } from "@/components/ui/LinkList/LinkList";
+import { ScheduleTable } from "@/components/schedule/ScheduleTable/ScheduleTable";
 import { LiveScoreStatus } from "@/components/schedule/LiveScoreStatus/LiveScoreStatus";
-import { getTeam } from "@/utils/teams";
-import { formatKickoff } from "@/utils/formatKickoff";
 import { hasLiveGame } from "@/utils/liveGames";
 import styles from "./TeamSchedule.module.scss";
 
@@ -32,18 +30,7 @@ export async function TeamSchedule({ team, games, isLive }: TeamScheduleProps) {
       {teamGames.length > 0 ? (
         <>
           <LiveScoreStatus initialIsLive={isLive} hasLiveGames={hasLiveGame(teamGames)} />
-          <LinkList
-            variant="value"
-            items={teamGames.map((game) => {
-              const isHome = game.homeTeamId === team.slug;
-              const opponent = getTeam(isHome ? game.awayTeamId : game.homeTeamId);
-
-              return {
-                label: `${isHome ? "vs" : "@"} ${opponent.shortName}`,
-                value: formatKickoff(game.kickoff, locale),
-              };
-            })}
-          />
+          <ScheduleTable games={teamGames} caption={t("caption", { team: team.name })} locale={locale} />
         </>
       ) : (
         <p className={styles.empty}>{t("empty", { team: team.name })}</p>

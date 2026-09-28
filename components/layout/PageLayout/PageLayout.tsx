@@ -4,22 +4,34 @@ import styles from "./PageLayout.module.scss";
 type PageLayoutProps = {
   /** Sits above the main column on desktop, and above everything on mobile. */
   heading?: ReactNode;
-  aside: ReactNode;
   children: ReactNode;
-  /** Nav rails collapse to a dropdown above the content on mobile; supplementary panels go below it. */
-  asideOnMobile: "above" | "below";
-};
+} & (
+  | {
+      aside: ReactNode;
+      /** Nav rails collapse to a dropdown above the content on mobile; supplementary panels go below it. */
+      asideOnMobile: "above" | "below";
+    }
+  // Without an aside, main takes the full width at every breakpoint.
+  | { aside?: undefined; asideOnMobile?: undefined }
+);
 
 // Source order follows the mobile stacking so reading order matches what's on screen.
 export function PageLayout({ heading, aside, children, asideOnMobile }: PageLayoutProps) {
   const asideNode = <div className={styles.aside}>{aside}</div>;
+  const className = [
+    styles.pageLayout,
+    heading ? styles.withHeading : null,
+    aside ? null : styles.noAside,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <div className={heading ? `${styles.pageLayout} ${styles.withHeading}` : styles.pageLayout}>
+    <div className={className}>
       {heading ? <div className={styles.heading}>{heading}</div> : null}
-      {asideOnMobile === "above" ? asideNode : null}
+      {aside && asideOnMobile === "above" ? asideNode : null}
       <div className={styles.main}>{children}</div>
-      {asideOnMobile === "below" ? asideNode : null}
+      {aside && asideOnMobile === "below" ? asideNode : null}
     </div>
   );
 }

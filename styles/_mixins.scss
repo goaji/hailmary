@@ -135,20 +135,6 @@ $breakpoints: (
   background: v.$c-surface;
 }
 
-// Single-line ellipsis at 1 (the common case); -webkit-line-clamp above.
-@mixin truncate($lines: 1) {
-  @if $lines == 1 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  } @else {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: $lines;
-    overflow: hidden;
-  }
-}
-
 // The toggleable legend row shared by the interactive Wiki diagrams.
 @mixin diagram-legend {
   display: flex;
