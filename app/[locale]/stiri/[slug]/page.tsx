@@ -9,7 +9,7 @@ import { ArticleTeams } from "@/components/articles/ArticleTeams/ArticleTeams";
 import { ArticleRail } from "@/components/articles/ArticleRail/ArticleRail";
 import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
-import { ArticlePrevNext } from "@/components/articles/ArticlePrevNext/ArticlePrevNext";
+import { PrevNext } from "@/components/ui/PrevNext/PrevNext";
 import { ScrollProgress } from "@/components/articles/ScrollProgress/ScrollProgress";
 import {
   getAllArticles,
@@ -84,6 +84,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
 
   const t = await getTranslations("article");
   const tBreadcrumb = await getTranslations("breadcrumb");
+  const tPrevNext = await getTranslations("articlePrevNext");
   const isFallback = article.servedLocale !== locale;
 
   // Sourced from the served locale, not the requested one: news is
@@ -143,7 +144,17 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
             <ArticleBody content={article.content} tags={article.tags} />
             <ArticleTeams teams={article.teams} />
             <RelatedArticles articles={related} />
-            <ArticlePrevNext previous={previous} next={next} />
+            {(previous || next) && (
+              <div className={styles.prevNext}>
+                <PrevNext
+                  label={tPrevNext("navLabel")}
+                  previousLabel={tPrevNext("previous")}
+                  nextLabel={tPrevNext("next")}
+                  previous={previous && { href: `/stiri/${previous.slug}`, title: previous.title }}
+                  next={next && { href: `/stiri/${next.slug}`, title: next.title }}
+                />
+              </div>
+            )}
           </article>
         </PageLayout>
       </div>

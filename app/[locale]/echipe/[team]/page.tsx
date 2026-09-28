@@ -6,7 +6,7 @@ import { TeamIdentityBand } from "@/components/teams/TeamIdentityBand/TeamIdenti
 import { ArticleGrid } from "@/components/articles/ArticleGrid/ArticleGrid";
 import { TeamSchedule } from "@/components/teams/TeamSchedule/TeamSchedule";
 import { TeamBlurb } from "@/components/teams/TeamBlurb/TeamBlurb";
-import { TeamPrevNext } from "@/components/teams/TeamPrevNext/TeamPrevNext";
+import { PrevNext } from "@/components/ui/PrevNext/PrevNext";
 import { TEAMS, TEAMS_BY_SLUG, getAdjacentTeams } from "@/utils/teams";
 import { getArticlesByTeam } from "@/utils/articles";
 import { getSchedule } from "@/utils/schedule";
@@ -67,6 +67,7 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
   const tBreadcrumb = await getTranslations({ locale, namespace: "breadcrumb" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tNews = await getTranslations({ locale, namespace: "teamDetail.news" });
+  const tPrevNext = await getTranslations({ locale, namespace: "teamDetail.prevNext" });
   const homeUrl = `${SITE_URL}${getLanguageAlternates("/", [locale])[locale]}`;
   const teamsUrl = `${SITE_URL}${getLanguageAlternates("/echipe", [locale])[locale]}`;
   const teamUrl = `${SITE_URL}${getLanguageAlternates(`/echipe/${team.slug}`, [locale])[locale]}`;
@@ -104,7 +105,13 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
         />
         <TeamSchedule team={team} games={games} isLive={isLive} />
         <TeamBlurb />
-        <TeamPrevNext previous={previous} next={next} />
+        <PrevNext
+          label={tPrevNext("navLabel")}
+          previousLabel={tPrevNext("previous")}
+          nextLabel={tPrevNext("next")}
+          previous={previous && { href: `/echipe/${previous.slug}`, title: previous.name }}
+          next={next && { href: `/echipe/${next.slug}`, title: next.name }}
+        />
       </div>
     </div>
   );

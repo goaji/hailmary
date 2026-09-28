@@ -1,12 +1,12 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.teamPrevNext {
+.prevNext {
   display: grid;
-  grid-template-columns: 1fr; // mobile-first: stacked
+  grid-template-columns: 1fr;
   gap: v.space(16);
-  margin: v.space(48) 0 0;
-  padding: v.space(32) 0 0;
+  margin-top: v.space(48);
+  padding-top: v.space(32);
   border-top: 1px solid v.$c-border;
 
   @include mix.mq(md) {
@@ -21,7 +21,7 @@
   gap: v.space(4);
   text-decoration: none;
 
-  &:hover .name {
+  &:hover .title {
     text-decoration: underline;
   }
 
@@ -31,8 +31,7 @@
 }
 
 .next {
-  // Explicit placement, not DOM order: keeps "next" right-aligned even
-  // when "previous" is absent, with no empty spacer element needed.
+  // Explicit placement keeps "next" right-aligned even without "previous".
   grid-column: 1;
   text-align: left;
 
@@ -50,7 +49,7 @@
   letter-spacing: 0.4px;
 }
 
-.name {
+.title {
   font-size: v.$fs-body-lg;
   font-weight: 600;
   color: v.$c-text;

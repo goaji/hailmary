@@ -1,3 +1,4 @@
+@use "variables" as v;
 @use "mixins" as mix;
 
 .page {
@@ -12,7 +13,12 @@
   }
 }
 
-// Same frame as ArticleHeader/ArticleBody, so the notice lines up with their text instead of their padding box.
+// Same frame as ArticleHeader/ArticleBody, so these line up with their text instead of their padding box.
 .notice {
   @include mix.reading-column;
+}
+
+.prevNext {
+  @include mix.reading-column;
+  padding-bottom: v.space(48);
 }
