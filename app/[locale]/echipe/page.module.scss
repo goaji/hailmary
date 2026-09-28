@@ -2,9 +2,30 @@
 @use "mixins" as mix;
 
 .page {
-  @include mix.page-shell;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: v.space(16);
 }
 
-.conference {
-  margin-top: v.space(32);
+.intro {
+  margin: 0;
+  max-width: 60ch;
+  color: v.$c-text-dim;
+  font-size: v.$fs-body-lg;
+}
+
+.learnMore {
+  // Body-size text needs 4.5:1; accent2 clears that on the panel, so it clears the darker page too.
+  color: var(--accent-2);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
 }

@@ -1,0 +1,5 @@
+@use "mixins" as mix;
+
+.page {
+  @include mix.page-shell;
+}

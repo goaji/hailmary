@@ -6,8 +6,7 @@ import { TeamIdentityBand } from "@/components/teams/TeamIdentityBand/TeamIdenti
 import { ArticleGrid } from "@/components/articles/ArticleGrid/ArticleGrid";
 import { TeamSchedule } from "@/components/teams/TeamSchedule/TeamSchedule";
 import { TeamBlurb } from "@/components/teams/TeamBlurb/TeamBlurb";
-import { PrevNext } from "@/components/ui/PrevNext/PrevNext";
-import { TEAMS, TEAMS_BY_SLUG, getAdjacentTeams } from "@/utils/teams";
+import { TEAMS, TEAMS_BY_SLUG } from "@/utils/teams";
 import { getArticlesByTeam } from "@/utils/articles";
 import { getSchedule } from "@/utils/schedule";
 import { SITE_URL } from "@/utils/site";
@@ -62,12 +61,10 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
 
   const articles = getArticlesByTeam(team.slug, locale);
   const { games, isLive } = getSchedule();
-  const { previous, next } = getAdjacentTeams(team.slug);
 
   const tBreadcrumb = await getTranslations({ locale, namespace: "breadcrumb" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
   const tNews = await getTranslations({ locale, namespace: "teamDetail.news" });
-  const tPrevNext = await getTranslations({ locale, namespace: "teamDetail.prevNext" });
   const homeUrl = `${SITE_URL}${getLanguageAlternates("/", [locale])[locale]}`;
   const teamsUrl = `${SITE_URL}${getLanguageAlternates("/echipe", [locale])[locale]}`;
   const teamUrl = `${SITE_URL}${getLanguageAlternates(`/echipe/${team.slug}`, [locale])[locale]}`;
@@ -95,24 +92,15 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
         dangerouslySetInnerHTML={{ __html: jsonLdScript(breadcrumbJsonLd) }}
       />
       <TeamIdentityBand team={team} />
-      <div className={styles.sections}>
-        {/* Zero articles is the common case for most teams: an honest empty message, never a hidden section. */}
-        <ArticleGrid
-          headingId="team-news-heading"
-          heading={tNews("heading")}
-          emptyMessage={tNews("empty", { team: team.name })}
-          articles={articles}
-        />
-        <TeamSchedule team={team} games={games} isLive={isLive} />
-        <TeamBlurb />
-        <PrevNext
-          label={tPrevNext("navLabel")}
-          previousLabel={tPrevNext("previous")}
-          nextLabel={tPrevNext("next")}
-          previous={previous && { href: `/echipe/${previous.slug}`, title: previous.name }}
-          next={next && { href: `/echipe/${next.slug}`, title: next.name }}
-        />
-      </div>
+      {/* Zero articles is the common case for most teams: an honest empty message, never a hidden section. */}
+      <ArticleGrid
+        headingId="team-news-heading"
+        heading={tNews("heading")}
+        emptyMessage={tNews("empty", { team: team.name })}
+        articles={articles}
+      />
+      <TeamSchedule team={team} games={games} isLive={isLive} />
+      <TeamBlurb />
     </div>
   );
 }

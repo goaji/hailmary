@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { getLanguageAlternates, routing } from "@/i18n";
+import { Link, getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
-import { DivisionGroup } from "@/components/teams/DivisionGroup/DivisionGroup";
-import { CONFERENCES, DIVISIONS, getTeamsByDivision } from "@/utils/teams";
 import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
@@ -36,27 +34,12 @@ export default async function TeamsPage({ params }: PageProps<"/[locale]/echipe"
   return (
     <div className={styles.page}>
       <SectionHeading as="h1">{t("title")}</SectionHeading>
-
-      {/* Conference names are proper nouns ("AFC"/"NFC"), not translated —
-          same treatment as team names, per AGENTS.md. */}
-      {CONFERENCES.map((conference) => {
-        const headingId = `conference-${conference}`;
-
-        return (
-          <section key={conference} aria-labelledby={headingId} className={styles.conference}>
-            <SectionHeading id={headingId}>{conference}</SectionHeading>
-            {DIVISIONS.map((division) => (
-              <DivisionGroup
-                key={division}
-                conference={conference}
-                division={division}
-                teams={getTeamsByDivision(conference, division)}
-                conferenceHeadingId={headingId}
-              />
-            ))}
-          </section>
-        );
-      })}
+      <p className={styles.intro}>{t("intro")}</p>
+      <p className={styles.intro}>{t("pickPrompt")}</p>
+      <Link href="/wiki/the-league/conferinte-si-divizii" className={styles.learnMore}>
+        {t("learnMore")}
+        <span aria-hidden="true"> ›</span>
+      </Link>
     </div>
   );
 }

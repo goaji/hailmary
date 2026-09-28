@@ -1,15 +1,7 @@
 @use "variables" as v;
-@use "mixins" as mix;
 
 .page {
   display: flex;
   flex-direction: column;
-}
-
-.sections {
-  display: flex;
-  flex-direction: column;
   gap: v.space(48);
-  width: 100%;
-  @include mix.page-shell;
 }

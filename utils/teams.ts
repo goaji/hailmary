@@ -9,7 +9,6 @@ export {
   CONFERENCES,
   DIVISIONS,
   getTeamsByDivision,
-  getAdjacentTeams,
   onBrandColor,
   PICKER_TEAMS,
 } from "@hailmary/shared";
