@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { TeamIdentityBand } from "@/components/teams/TeamIdentityBand/TeamIdentityBand";
-import { TeamNews } from "@/components/teams/TeamNews/TeamNews";
+import { ArticleGrid } from "@/components/articles/ArticleGrid/ArticleGrid";
 import { TeamSchedule } from "@/components/teams/TeamSchedule/TeamSchedule";
 import { TeamBlurb } from "@/components/teams/TeamBlurb/TeamBlurb";
 import { TeamPrevNext } from "@/components/teams/TeamPrevNext/TeamPrevNext";
@@ -66,6 +66,7 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
 
   const tBreadcrumb = await getTranslations({ locale, namespace: "breadcrumb" });
   const tNav = await getTranslations({ locale, namespace: "nav" });
+  const tNews = await getTranslations({ locale, namespace: "teamDetail.news" });
   const homeUrl = `${SITE_URL}${getLanguageAlternates("/", [locale])[locale]}`;
   const teamsUrl = `${SITE_URL}${getLanguageAlternates("/echipe", [locale])[locale]}`;
   const teamUrl = `${SITE_URL}${getLanguageAlternates(`/echipe/${team.slug}`, [locale])[locale]}`;
@@ -94,7 +95,13 @@ export default async function TeamDetailPage({ params }: PageProps<"/[locale]/ec
       />
       <TeamIdentityBand team={team} />
       <div className={styles.sections}>
-        <TeamNews teamName={team.name} articles={articles} />
+        {/* Zero articles is the common case for most teams: an honest empty message, never a hidden section. */}
+        <ArticleGrid
+          headingId="team-news-heading"
+          heading={tNews("heading")}
+          emptyMessage={tNews("empty", { team: team.name })}
+          articles={articles}
+        />
         <TeamSchedule team={team} games={games} isLive={isLive} />
         <TeamBlurb />
         <TeamPrevNext previous={previous} next={next} />

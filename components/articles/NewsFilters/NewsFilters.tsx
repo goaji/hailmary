@@ -18,7 +18,7 @@ export type NewsFilterItem = {
 
 type NewsFiltersProps = {
   items: NewsFilterItem[];
-  /** Set when items are ro-fallback content served under a different locale — see NewsGrid's equivalent use. */
+  /** Set when items are ro-fallback content served under a different locale — see ArticleGrid's equivalent use. */
   lang?: string;
 };
 

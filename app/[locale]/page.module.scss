@@ -1,11 +1,8 @@
-@use "variables" as v;
 @use "mixins" as mix;
 
-// The notice sits directly in <main>, so it needs the content-width frame and panel shift that page-shell gives nested ones.
+// The notice sits directly in <main>, so it needs the frame, gutters and panel shift that page-shell gives nested ones.
 .notice {
-  max-width: v.$content-width;
-  margin-inline: auto;
-  @include mix.panel-shift-align;
+  @include mix.page-gutters;
 }
 
 .newsSection {

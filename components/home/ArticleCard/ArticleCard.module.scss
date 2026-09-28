@@ -34,23 +34,15 @@
     width: 160px;
     align-self: center;
   }
-
-  :global([data-hide-image-mobile]) & {
-    display: none;
-
-    @include mix.mq(md) {
-      display: block;
-    }
-  }
 }
 
 .meta {
   display: flex;
+  flex-wrap: wrap; // team badge drops under the category tag when the card is narrow
   align-items: center;
   gap: v.space(10);
 
   :global([data-view="list"]) & {
-    flex-wrap: wrap; // team badge drops under the category tag when the column is narrow
     grid-column: 2;
     grid-row: 1;
   }

@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { getLanguageAlternates } from "@/i18n";
 import { OriginStrip } from "@/components/home/OriginStrip/OriginStrip";
 import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
-import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
+import { ArticleGrid } from "@/components/articles/ArticleGrid/ArticleGrid";
 import { Sidebar } from "@/components/home/Sidebar/Sidebar";
 import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
@@ -11,7 +11,7 @@ import { excludeArticleBySlug, getAllArticlesWithFallback, selectFeatured } from
 import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
 
-const GRID_SIZE = 4;
+const GRID_SIZE = 6;
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const locale = requireLocale((await params).locale);
@@ -43,6 +43,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const gridArticles = excludeArticleBySlug(allArticles, featured?.slug).slice(0, GRID_SIZE);
 
   const t = await getTranslations({ locale, namespace: "newsIndex" });
+  const tGrid = await getTranslations({ locale, namespace: "newsGrid" });
 
   return (
     <>
@@ -56,7 +57,14 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
 
       <div className={styles.newsSection}>
         <PageLayout aside={<Sidebar locale={locale} />} asideOnMobile="below">
-          <NewsGrid articles={gridArticles} lang={isFallback ? servedLocale : undefined} />
+          <ArticleGrid
+            headingId="news-grid-heading"
+            heading={tGrid("heading")}
+            emptyMessage={tGrid("empty")}
+            articles={gridArticles}
+            lang={isFallback ? servedLocale : undefined}
+            priorityCount={3}
+          />
         </PageLayout>
       </div>
     </>

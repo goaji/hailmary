@@ -9,8 +9,7 @@
   gap: v.space(8);
   background: v.$c-header;
   border-top: 1px solid v.$c-border;
-  max-width: v.$content-width;
-  margin: 0 auto;
+  @include mix.content-band;
   padding: v.space(32);
   color: v.$c-text-muted;
   font-size: v.$fs-ui;

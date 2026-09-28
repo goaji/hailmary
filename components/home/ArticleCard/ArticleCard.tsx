@@ -10,15 +10,9 @@ import styles from "./ArticleCard.module.scss";
 
 type ArticleCardProps = {
   article: Article;
-  /** True for the first row of cards, which land above the fold on both the 1-column mobile and 2-column desktop grid. */
+  /** Preloads the cover image; for the leading cards of an above-the-fold grid. */
   priority?: boolean;
-  /**
-   * Every existing caller (NewsGrid, TeamNews, RelatedArticles) nests its
-   * grid under its own h2 SectionHeading, so "h3" stays the default. A
-   * flat archive page with no such intermediate heading (e.g. /stiri)
-   * passes "h2" instead, to avoid an h1 → h3 skip that axe's
-   * heading-order rule (and real screen-reader users) flag.
-   */
+  /** "h2" on flat archives like /stiri, where no section h2 sits above the cards to avoid an h1 → h3 skip. */
   headingLevel?: "h2" | "h3";
 };
 

@@ -17,7 +17,7 @@ type TeamScheduleProps = {
   isLive: boolean;
 };
 
-// Most teams have zero games until the schedule store syncs — same honest-empty-state contract as TeamNews.
+// Most teams have zero games until the schedule store syncs — same honest-empty-state contract as the team news grid.
 export async function TeamSchedule({ team, games, isLive }: TeamScheduleProps) {
   const locale = await getLocale();
   const t = await getTranslations("teamDetail.schedule");

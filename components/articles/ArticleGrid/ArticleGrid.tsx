@@ -7,14 +7,13 @@ import styles from "./ArticleGrid.module.scss";
 type ArticleGridProps = {
   headingId: string;
   heading: ReactNode;
-  emptyMessage: string;
+  /** Omitted by callers that render nothing at all when there are no articles. */
+  emptyMessage?: string;
   articles: Article[];
   /** Set when articles are ro-fallback content served under a different locale — see HeroArticle's equivalent use of article.servedLocale. */
   lang?: string;
   /** Leading cards that render with next/image `priority` — above-the-fold grids only. */
   priorityCount?: number;
-  /** "news" caps at 2 columns (homepage); "three" uses 3 columns; "team" grows to 4. */
-  variant: "news" | "three" | "team";
 };
 
 export function ArticleGrid({
@@ -24,29 +23,19 @@ export function ArticleGrid({
   articles,
   lang,
   priorityCount = 0,
-  variant,
 }: ArticleGridProps) {
-  const sectionClass =
-    variant === "news" ? `${styles.articleGrid} ${styles.news}` : styles.articleGrid;
-  const gridClass =
-    variant === "news" ? styles.newsGrid : variant === "three" ? styles.threeGrid : styles.teamGrid;
-
   return (
-    <section className={sectionClass} aria-labelledby={headingId} lang={lang}>
+    <section className={styles.articleGrid} aria-labelledby={headingId} lang={lang}>
       <SectionHeading id={headingId}>{heading}</SectionHeading>
       {articles.length > 0 ? (
-        <div
-          className={gridClass}
-          // Read by ArticleCard.module.scss to hide the cover image below md.
-          data-hide-image-mobile={variant === "news" || variant === "three" ? "" : undefined}
-        >
+        <div className={styles.grid}>
           {articles.map((article, index) => (
             <ArticleCard key={article.slug} article={article} priority={index < priorityCount} />
           ))}
         </div>
-      ) : (
+      ) : emptyMessage ? (
         <p className={styles.empty}>{emptyMessage}</p>
-      )}
+      ) : null}
     </section>
   );
 }

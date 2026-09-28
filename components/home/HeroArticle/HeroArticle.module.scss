@@ -4,8 +4,7 @@
 .heroArticle {
   display: flex;
   flex-direction: column;
-  max-width: v.$content-width;
-  margin: 0 auto;
+  @include mix.content-band;
   padding-top: v.space(32);
 
   @include mix.mq(md) {

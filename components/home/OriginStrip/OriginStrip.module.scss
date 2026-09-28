@@ -22,8 +22,7 @@
   // the header above it. min-height keeps the 76px band at rest while
   // letting it grow with wrapped content instead of overflowing.
   min-height: 76px;
-  max-width: v.$content-width;
-  margin: 0 auto;
+  @include mix.content-band;
   padding: v.space(12) v.space(32);
   background: v.$c-surface;
   border-bottom: 1px solid v.$c-border;
