@@ -10,7 +10,7 @@
   display: none;
 }
 
-@include mix.mq(lg) {
+@include mix.mq(panel) {
   .desktopRail {
     display: block;
     position: sticky;
@@ -26,7 +26,7 @@
   padding: v.space(16);
 }
 
-@include mix.mq(lg) {
+@include mix.mq(panel) {
   .mobileRail {
     display: none;
   }

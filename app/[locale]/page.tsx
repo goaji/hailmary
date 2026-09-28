@@ -5,6 +5,7 @@ import { OriginStrip } from "@/components/home/OriginStrip/OriginStrip";
 import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
 import { NewsGrid } from "@/components/home/NewsGrid/NewsGrid";
 import { Sidebar } from "@/components/home/Sidebar/Sidebar";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { excludeArticleBySlug, getAllArticlesWithFallback, selectFeatured } from "@/utils/articles";
 import { requireLocale } from "@/utils/locale";
@@ -46,16 +47,17 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   return (
     <>
       <OriginStrip />
-      {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
+      {isFallback ? (
+        <div className={styles.notice}>
+          <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+        </div>
+      ) : null}
       {featured ? <HeroArticle article={featured} /> : null}
 
       <div className={styles.newsSection}>
-        <div className={styles.newsGridColumn}>
+        <PageLayout aside={<Sidebar locale={locale} />} asideOnMobile="below">
           <NewsGrid articles={gridArticles} lang={isFallback ? servedLocale : undefined} />
-        </div>
-        <div className={styles.sidebarColumn}>
-          <Sidebar locale={locale} />
-        </div>
+        </PageLayout>
       </div>
     </>
   );

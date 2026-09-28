@@ -7,6 +7,7 @@ import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
 import { ArticleTeams } from "@/components/articles/ArticleTeams/ArticleTeams";
 import { ArticleRail } from "@/components/articles/ArticleRail/ArticleRail";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
 import { ArticlePrevNext } from "@/components/articles/ArticlePrevNext/ArticlePrevNext";
 import { ScrollProgress } from "@/components/articles/ScrollProgress/ScrollProgress";
@@ -124,15 +125,18 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
       />
       <ScrollProgress />
       <div className={styles.page}>
-        <div className={styles.layout}>
-          <div className={styles.rail}>
+        <PageLayout
+          aside={
             <ArticleRail articles={recentArticles} currentSlug={article.slug} locale={locale} />
-          </div>
-
+          }
+          asideOnMobile="above"
+        >
           {/* lang matches the served content, not the URL — WCAG 3.1.2 for the /en-serves-ro fallback case. */}
-          <article lang={article.servedLocale} className={styles.content}>
+          <article lang={article.servedLocale}>
             {isFallback ? (
-              <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+              <div className={styles.notice}>
+                <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+              </div>
             ) : null}
 
             <ArticleHeader article={article} />
@@ -141,7 +145,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
             <RelatedArticles articles={related} />
             <ArticlePrevNext previous={previous} next={next} />
           </article>
-        </div>
+        </PageLayout>
       </div>
     </>
   );

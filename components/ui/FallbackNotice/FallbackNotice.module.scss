@@ -1,14 +1,12 @@
 @use "variables" as v;
-@use "mixins" as mix;
 
 .fallbackNotice {
   max-width: v.$reading-width;
-  margin: v.space(32) auto 0 auto;
+  margin: v.space(32) 0 0; // left-aligned, so it starts where its container's content does
   background: v.$c-surface;
   border: 1px solid v.$c-border;
   border-radius: 3px;
   padding: v.space(12) v.space(16);
   color: v.$c-text-dim;
   font-size: v.$fs-meta;
-  @include mix.panel-shift-align;
 }

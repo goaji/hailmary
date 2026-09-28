@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { GlossaryRail } from "@/components/reference/GlossaryRail/GlossaryRail";
 import { GlossaryTerm } from "@/components/reference/GlossaryTerm/GlossaryTerm";
 import { TargetRefresh } from "@/components/reference/TargetRefresh/TargetRefresh";
@@ -65,14 +66,12 @@ export default async function GlossaryLetterPage({
   return (
     <div className={styles.page}>
       <TargetRefresh />
-      <SectionHeading as="h1">{t("pageTitle", { letter })}</SectionHeading>
-
-      <div className={styles.layout}>
-        <div className={styles.rail}>
-          <GlossaryRail letters={letters} currentLetter={letter} allTerms={allTerms} />
-        </div>
-
-        <div className={styles.content}>
+      <PageLayout
+        heading={<SectionHeading as="h1">{t("pageTitle", { letter })}</SectionHeading>}
+        aside={<GlossaryRail letters={letters} currentLetter={letter} allTerms={allTerms} />}
+        asideOnMobile="above"
+      >
+        <div className={styles.terms}>
           {currentTerms.map((entry) => (
             <GlossaryTerm
               key={entry.slug}
@@ -82,7 +81,7 @@ export default async function GlossaryLetterPage({
             />
           ))}
         </div>
-      </div>
+      </PageLayout>
     </div>
   );
 }

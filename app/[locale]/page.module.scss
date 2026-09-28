@@ -1,27 +1,13 @@
 @use "variables" as v;
 @use "mixins" as mix;
 
-.newsSection {
-  display: flex;
-  flex-direction: column; // mobile-first: sidebar goes below the main content
-  gap: 32px; // bespoke to this page
+// The notice sits directly in <main>, so it needs the content-width frame and panel shift that page-shell gives nested ones.
+.notice {
   max-width: v.$content-width;
-  margin: 0 auto;
-  padding: 36px 40px; // bespoke to this page
-
-  @include mix.mq(md) {
-    flex-direction: row;
-  }
+  margin-inline: auto;
+  @include mix.panel-shift-align;
 }
 
-.newsGridColumn {
-  @include mix.mq(md) {
-    flex: 2;
-  }
-}
-
-.sidebarColumn {
-  @include mix.mq(md) {
-    flex: 1;
-  }
+.newsSection {
+  @include mix.page-shell;
 }

@@ -1,0 +1,62 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+// Mobile stacks in source order; grid areas only exist from `panel` up, where the aside moves to the left.
+.pageLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: v.space(32);
+
+  @include mix.mq(panel) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    grid-template-areas: "aside main";
+    column-gap: v.space(48);
+
+    &.withHeading {
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "aside heading"
+        "aside main";
+    }
+
+    // No room beside the explainer panel, so the aside hides and main reclaims the row.
+    :global([data-panel-open]) & {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "main";
+    }
+
+    :global([data-panel-open]) &.withHeading {
+      grid-template-areas:
+        "heading"
+        "main";
+    }
+  }
+}
+
+.heading {
+  min-width: 0;
+
+  @include mix.mq(panel) {
+    grid-area: heading;
+  }
+}
+
+.aside {
+  min-width: 0;
+
+  @include mix.mq(panel) {
+    grid-area: aside;
+
+    :global([data-panel-open]) & {
+      display: none;
+    }
+  }
+}
+
+.main {
+  min-width: 0;
+
+  @include mix.mq(panel) {
+    grid-area: main;
+  }
+}

@@ -9,19 +9,11 @@
 .desktopRail {
   display: none;
 
-  @include mix.mq(lg) {
+  @include mix.mq(panel) {
     display: block;
     position: sticky;
     // Sticks just below the sticky header.
     top: calc(var(--header-height, 71px) + #{v.space(32)});
-    flex: 0 0 220px;
-    // Flex items default to min-width: auto, which lets long unwrapped
-    // content (a strand/page name) burst past the 220px flex-basis and
-    // widen .layout past the viewport — this is what forces the page-wide
-    // horizontal scrollbar. min-width: 0 lets the column actually hold to
-    // 220px and wrap its own content instead.
-    min-width: 0;
-    width: 220px;
     max-height: calc(100vh - var(--header-height, 71px) - #{v.space(64)});
     overflow-y: auto;
     // Setting only overflow-y forces overflow-x to compute as "auto" too
@@ -34,12 +26,11 @@
 }
 
 .mobileRail {
-  margin-bottom: v.space(32);
   border: 1px solid v.$c-border;
   border-radius: 3px;
   padding: v.space(16);
 
-  @include mix.mq(lg) {
+  @include mix.mq(panel) {
     display: none;
   }
 }

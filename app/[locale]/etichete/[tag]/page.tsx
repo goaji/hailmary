@@ -6,6 +6,7 @@ import { ArticleCard } from "@/components/home/ArticleCard/ArticleCard";
 import { TagRail } from "@/components/articles/TagRail/TagRail";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { getAllArticlesWithFallback } from "@/utils/articles";
 import { requireLocale } from "@/utils/locale";
 import { TAG_IDS } from "@hailmary/shared";
@@ -62,13 +63,12 @@ export default async function TagPage({ params }: TagPageParams) {
       {isFallback ? (
         <FallbackNotice locale={locale}>{tNews("fallbackNotice")}</FallbackNotice>
       ) : null}
-      <SectionHeading as="h1">{tTag(tag)}</SectionHeading>
-      <div className={styles.layout}>
-        <div className={styles.rail}>
-          <TagRail tags={tags} currentTag={tag} />
-        </div>
-
-        <main className={styles.content} lang={isFallback ? servedLocale : undefined}>
+      <PageLayout
+        heading={<SectionHeading as="h1">{tTag(tag)}</SectionHeading>}
+        aside={<TagRail tags={tags} currentTag={tag} />}
+        asideOnMobile="above"
+      >
+        <div lang={isFallback ? servedLocale : undefined}>
           {taggedArticles.length > 0 ? (
             <div className={styles.grid}>
               {taggedArticles.map((article, index) => (
@@ -78,8 +78,8 @@ export default async function TagPage({ params }: TagPageParams) {
           ) : (
             <p className={styles.empty}>{tNews("emptyFiltered")}</p>
           )}
-        </main>
-      </div>
+        </div>
+      </PageLayout>
     </div>
   );
 }

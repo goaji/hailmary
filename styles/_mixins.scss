@@ -83,6 +83,8 @@ $breakpoints: (
   @include mq(md) {
     padding: v.space(48) v.space(32) v.space(64);
   }
+
+  @include panel-shift-align;
 }
 
 // The article reading column: every article section owns its width independently, so they all go through this to line up.

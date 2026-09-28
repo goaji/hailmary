@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import rehypeUnwrapImages from "rehype-unwrap-images";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { RuleSection } from "@/components/reference/RuleSection/RuleSection";
 import { TimelineEntry } from "@/components/reference/TimelineEntry/TimelineEntry";
 import { TargetRefresh } from "@/components/reference/TargetRefresh/TargetRefresh";
@@ -85,61 +86,61 @@ export default async function WikiCategoryPage({
       <WikiBreadcrumbs strand={strand} pageTitle={page.frontmatter.title} locale={locale} />
 
       <div className={styles.layout}>
-        <div className={styles.heading}>
-          <SectionHeading as="h1">{page.frontmatter.title}</SectionHeading>
-        </div>
+        <PageLayout
+          heading={<SectionHeading as="h1">{page.frontmatter.title}</SectionHeading>}
+          aside={
+            <WikiRail
+              tree={strandTree}
+              currentStrand={strand}
+              currentSlug={slug}
+              currentPageSections={page.sections}
+              locale={locale}
+            />
+          }
+          asideOnMobile="above"
+        >
+          <div className={styles.content}>
+            {page.frontmatter.entries ? (
+              <>
+                <div className={styles.intro}>
+                  <MDXRemote
+                    source={page.content}
+                    components={articleComponents}
+                    options={{
+                      mdxOptions: {
+                        remarkPlugins: [remarkGfm],
+                        rehypePlugins: [rehypeUnwrapImages],
+                      },
+                    }}
+                  />
+                </div>
 
-        <div className={styles.rail}>
-          <WikiRail
-            tree={strandTree}
-            currentStrand={strand}
-            currentSlug={slug}
-            currentPageSections={page.sections}
-            locale={locale}
-          />
-        </div>
+                {groupEntriesByEra(page.frontmatter.entries, page.sections).map(
+                  ({ section, entries, startOrdinal }) =>
+                    entries.length > 0 ? (
+                      <section key={section.id} className={styles.era} aria-labelledby={section.id}>
+                        <EraHeading id={section.id}>{section.title}</EraHeading>
+                        <ol className={styles.list} start={startOrdinal}>
+                          {entries.map((entry) => (
+                            <TimelineEntry
+                              key={`${entry.era}-${entry.year}-${entry.title}`}
+                              entry={entry}
+                            />
+                          ))}
+                        </ol>
+                      </section>
+                    ) : null,
+                )}
+              </>
+            ) : (
+              splitSectionContent(page.content, page.sections).map((section) => (
+                <RuleSection key={section.id} section={section} body={section.body} />
+              ))
+            )}
 
-        <div className={styles.content}>
-          {page.frontmatter.entries ? (
-            <>
-              <div className={styles.intro}>
-                <MDXRemote
-                  source={page.content}
-                  components={articleComponents}
-                  options={{
-                    mdxOptions: {
-                      remarkPlugins: [remarkGfm],
-                      rehypePlugins: [rehypeUnwrapImages],
-                    },
-                  }}
-                />
-              </div>
-
-              {groupEntriesByEra(page.frontmatter.entries, page.sections).map(
-                ({ section, entries, startOrdinal }) =>
-                  entries.length > 0 ? (
-                    <section key={section.id} className={styles.era} aria-labelledby={section.id}>
-                      <EraHeading id={section.id}>{section.title}</EraHeading>
-                      <ol className={styles.list} start={startOrdinal}>
-                        {entries.map((entry) => (
-                          <TimelineEntry
-                            key={`${entry.era}-${entry.year}-${entry.title}`}
-                            entry={entry}
-                          />
-                        ))}
-                      </ol>
-                    </section>
-                  ) : null,
-              )}
-            </>
-          ) : (
-            splitSectionContent(page.content, page.sections).map((section) => (
-              <RuleSection key={section.id} section={section} body={section.body} />
-            ))
-          )}
-
-          <WikiPrevNext prevNext={prevNext} locale={locale} />
-        </div>
+            <WikiPrevNext prevNext={prevNext} locale={locale} />
+          </div>
+        </PageLayout>
       </div>
     </div>
   );
