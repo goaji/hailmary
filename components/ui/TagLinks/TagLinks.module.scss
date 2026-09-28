@@ -1,0 +1,36 @@
+@use "variables" as v;
+@use "mixins" as mix;
+
+.tagLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.space(8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  display: block;
+  padding: v.space(4) v.space(12);
+  border: 1px solid v.$c-border-soft;
+  border-radius: 3px;
+  font-size: v.$fs-ui;
+  color: v.$c-text-muted;
+  text-decoration: none;
+
+  &:hover {
+    color: v.$c-text;
+  }
+
+  &:focus-visible {
+    @include mix.focus-ring;
+  }
+
+  // accent1 marks the chip as a non-text border; the text stays neutral so it clears 4.5:1 on any surface.
+  &[aria-current="page"] {
+    border-color: var(--accent-1);
+    color: v.$c-text;
+    font-weight: 600;
+  }
+}

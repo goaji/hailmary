@@ -5,20 +5,20 @@ import { LinkList } from "@/components/ui/LinkList/LinkList";
 import { selectUpcomingGames } from "@/utils/games";
 import { getTeam } from "@/utils/teams";
 import { formatKickoff } from "@/utils/formatKickoff";
-import styles from "./UpcomingGamesPanel.module.scss";
+import styles from "./UpcomingGames.module.scss";
 
-type UpcomingGamesPanelProps = {
+type UpcomingGamesProps = {
   locale: string;
   emptyLabel: string;
   count: number;
 };
 
-export function UpcomingGamesPanel({ locale, emptyLabel, count }: UpcomingGamesPanelProps) {
+export function UpcomingGames({ locale, emptyLabel, count }: UpcomingGamesProps) {
   const { data } = useLiveScores(true);
   const games = selectUpcomingGames(data?.games ?? [], count);
 
   return (
-    <div className={styles.upcomingGamesPanel}>
+    <div className={styles.upcomingGames}>
       {games.length === 0 ? (
         <p className={styles.empty}>{emptyLabel}</p>
       ) : (

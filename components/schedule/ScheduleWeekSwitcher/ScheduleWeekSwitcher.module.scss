@@ -6,8 +6,7 @@
   margin-top: v.space(22);
 }
 
-// Same grid shape as ArticleRail's/WikiRail's page layout, switching at `panel` —
-// the same breakpoint the rail below switches on, so both change shape together.
+// Same grid shape as PageLayout, switching at `panel` — the same breakpoint the rail below switches on.
 .layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -39,8 +38,7 @@
   }
 }
 
-// Rail treatment copied from ArticleRail.module.scss — kept as its own copy since this
-// is the schedule's own rail, not the article one.
+// Same sticky-rail treatment as WikiRail, kept as the schedule's own copy.
 .desktopRail {
   display: none;
 

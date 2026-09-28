@@ -37,6 +37,12 @@
   }
 }
 
+// Small text on the panel surface, so accent2 (4.5:1 there), not accent1.
+.rowCurrent {
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
 .chevron,
 .value {
   color: v.$c-text-muted;

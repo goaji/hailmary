@@ -3,10 +3,12 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { ArticleCard } from "@/components/home/ArticleCard/ArticleCard";
-import { TagRail } from "@/components/articles/TagRail/TagRail";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
+import { Sidebar } from "@/components/layout/Sidebar/Sidebar";
+import { Panel } from "@/components/ui/Panel/Panel";
+import { TagLinks } from "@/components/ui/TagLinks/TagLinks";
 import { getAllArticlesWithFallback } from "@/utils/articles";
 import { requireLocale } from "@/utils/locale";
 import { TAG_IDS } from "@hailmary/shared";
@@ -56,6 +58,7 @@ export default async function TagPage({ params }: TagPageParams) {
   const isFallback = servedLocale !== locale;
   const tTag = await getTranslations({ locale, namespace: "tags" });
   const tNews = await getTranslations({ locale, namespace: "newsIndex" });
+  const tSidebar = await getTranslations({ locale, namespace: "sidebar" });
   const tags = [...TAG_IDS];
 
   return (
@@ -65,8 +68,14 @@ export default async function TagPage({ params }: TagPageParams) {
       ) : null}
       <PageLayout
         heading={<SectionHeading as="h1">{tTag(tag)}</SectionHeading>}
-        aside={<TagRail tags={tags} currentTag={tag} />}
-        asideOnMobile="above"
+        aside={
+          <Sidebar locale={locale}>
+            <Panel heading={tSidebar("tags.heading")}>
+              <TagLinks tags={tags} currentTag={tag} />
+            </Panel>
+          </Sidebar>
+        }
+        asideOnMobile="below"
       >
         <div lang={isFallback ? servedLocale : undefined}>
           {taggedArticles.length > 0 ? (

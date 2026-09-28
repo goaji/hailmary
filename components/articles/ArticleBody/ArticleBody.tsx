@@ -1,14 +1,15 @@
 import { getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { Link } from "@/i18n";
 import remarkGfm from "remark-gfm";
 import rehypeUnwrapImages from "rehype-unwrap-images";
+import type { Tag } from "@/types";
+import { TagLinks } from "@/components/ui/TagLinks/TagLinks";
 import { articleComponents } from "./articleComponents";
 import styles from "./ArticleBody.module.scss";
 
 type ArticleBodyProps = {
   content: string;
-  tags?: string[];
+  tags?: Tag[];
 };
 
 export async function ArticleBody({ content, tags }: ArticleBodyProps) {
@@ -35,15 +36,9 @@ export async function ArticleBody({ content, tags }: ArticleBodyProps) {
       />
 
       {tags && tags.length > 0 ? (
-        <ul className={styles.tags} aria-label={t("tagsLabel")}>
-          {tags.map((tag) => (
-            <li key={tag} className={styles.tag}>
-              <Link href={`/etichete/${tag}`} className={styles.tagLink}>
-                {tag}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className={styles.tags}>
+          <TagLinks tags={tags} label={t("tagsLabel")} />
+        </div>
       ) : null}
     </div>
   );

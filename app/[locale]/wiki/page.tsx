@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { getLanguageAlternates, routing } from "@/i18n";
 import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
-import { Card } from "@/components/ui/Card/Card";
+import { Panel } from "@/components/ui/Panel/Panel";
 import { LinkList } from "@/components/ui/LinkList/LinkList";
 import { getAllWikiPages, getWikiStrandTree } from "@/utils/wiki";
 import { requireLocale } from "@/utils/locale";
@@ -54,8 +54,10 @@ export default async function WikiHubPage({ params }: PageProps<"/[locale]/wiki"
 
       <div className={styles.grid}>
         {tree.map((group) => (
-          <Card key={group.strand}>
-            <SectionHeading as="h2">{tStrands(`${group.strand}.name`)}</SectionHeading>
+          <Panel
+            key={group.strand}
+            heading={tStrands(`${group.strand}.name`)}
+          >
             <p className={styles.strandDescription}>{tStrands(`${group.strand}.description`)}</p>
             <LinkList
               variant="link"
@@ -64,7 +66,7 @@ export default async function WikiHubPage({ params }: PageProps<"/[locale]/wiki"
                 href: `/wiki/${group.strand}/${page.slug}`,
               }))}
             />
-          </Card>
+          </Panel>
         ))}
       </div>
     </div>

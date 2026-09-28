@@ -6,7 +6,9 @@ import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { ArticleHeader } from "@/components/articles/ArticleHeader/ArticleHeader";
 import { ArticleBody } from "@/components/articles/ArticleBody/ArticleBody";
 import { ArticleTeams } from "@/components/articles/ArticleTeams/ArticleTeams";
-import { ArticleRail } from "@/components/articles/ArticleRail/ArticleRail";
+import { Sidebar } from "@/components/layout/Sidebar/Sidebar";
+import { Panel } from "@/components/ui/Panel/Panel";
+import { LinkList } from "@/components/ui/LinkList/LinkList";
 import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { RelatedArticles } from "@/components/articles/RelatedArticles/RelatedArticles";
 import { PrevNext } from "@/components/ui/PrevNext/PrevNext";
@@ -34,6 +36,8 @@ import {
 // safety net for a slug rendered on demand (e.g. an /en fallback path that
 // wasn't statically generated) so it doesn't stay cached indefinitely.
 export const revalidate = 3600;
+
+const RECENT_ARTICLE_COUNT = 8;
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -84,6 +88,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
 
   const t = await getTranslations("article");
   const tBreadcrumb = await getTranslations("breadcrumb");
+  const tSidebar = await getTranslations({ locale, namespace: "sidebar" });
   const tPrevNext = await getTranslations("articlePrevNext");
   const isFallback = article.servedLocale !== locale;
 
@@ -94,7 +99,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
   const related = selectRelatedArticles(siblingArticles, article);
   const { previous, next } = selectAdjacentArticles(siblingArticles, article.slug);
   // Newest-first; current article always included even if outside the window.
-  const recentArticles = selectRecentArticles(siblingArticles, article, 15);
+  const recentArticles = selectRecentArticles(siblingArticles, article, RECENT_ARTICLE_COUNT);
 
   // Same URL as generateMetadata's own canonical — the fallback view keeps
   // its own /en URL as the entity id, it never aliases to the /ro one.
@@ -128,9 +133,20 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/stiri
       <div className={styles.page}>
         <PageLayout
           aside={
-            <ArticleRail articles={recentArticles} currentSlug={article.slug} locale={locale} />
+            <Sidebar locale={locale}>
+              <Panel heading={tSidebar("recentArticles.heading")}>
+                <LinkList
+                  variant="link"
+                  items={recentArticles.map((recent) => ({
+                    label: recent.title,
+                    href: `/stiri/${recent.slug}`,
+                    current: recent.slug === article.slug,
+                  }))}
+                />
+              </Panel>
+            </Sidebar>
           }
-          asideOnMobile="above"
+          asideOnMobile="below"
         >
           {/* lang matches the served content, not the URL — WCAG 3.1.2 for the /en-serves-ro fallback case. */}
           <article lang={article.servedLocale}>

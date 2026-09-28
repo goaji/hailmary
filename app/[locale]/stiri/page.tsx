@@ -5,6 +5,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading/SectionHeading";
 import { ArticleCard } from "@/components/home/ArticleCard/ArticleCard";
 import { NewsFilters } from "@/components/articles/NewsFilters/NewsFilters";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
+import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
+import { Sidebar } from "@/components/layout/Sidebar/Sidebar";
 import { getAllArticlesWithFallback } from "@/utils/articles";
 import { requireLocale } from "@/utils/locale";
 import styles from "./page.module.scss";
@@ -51,14 +53,24 @@ export default async function NewsIndexPage({ params }: PageProps<"/[locale]/sti
 
   return (
     <div className={styles.page}>
-      <SectionHeading as="h1">{t("title")}</SectionHeading>
-      {isFallback ? <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice> : null}
-
-      {articles.length > 0 ? (
-        <NewsFilters items={items} lang={isFallback ? servedLocale : undefined} />
-      ) : (
-        <p className={styles.empty}>{t("empty")}</p>
-      )}
+      <PageLayout
+        heading={
+          <>
+            <SectionHeading as="h1">{t("title")}</SectionHeading>
+            {isFallback ? (
+              <FallbackNotice locale={locale}>{t("fallbackNotice")}</FallbackNotice>
+            ) : null}
+          </>
+        }
+        aside={<Sidebar locale={locale} />}
+        asideOnMobile="below"
+      >
+        {articles.length > 0 ? (
+          <NewsFilters items={items} lang={isFallback ? servedLocale : undefined} />
+        ) : (
+          <p className={styles.empty}>{t("empty")}</p>
+        )}
+      </PageLayout>
     </div>
   );
 }

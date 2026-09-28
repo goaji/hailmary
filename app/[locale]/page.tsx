@@ -4,7 +4,7 @@ import { getLanguageAlternates } from "@/i18n";
 import { OriginStrip } from "@/components/home/OriginStrip/OriginStrip";
 import { HeroArticle } from "@/components/home/HeroArticle/HeroArticle";
 import { ArticleGrid } from "@/components/articles/ArticleGrid/ArticleGrid";
-import { Sidebar } from "@/components/home/Sidebar/Sidebar";
+import { Sidebar } from "@/components/layout/Sidebar/Sidebar";
 import { PageLayout } from "@/components/layout/PageLayout/PageLayout";
 import { FallbackNotice } from "@/components/ui/FallbackNotice/FallbackNotice";
 import { excludeArticleBySlug, getAllArticlesWithFallback, selectFeatured } from "@/utils/articles";

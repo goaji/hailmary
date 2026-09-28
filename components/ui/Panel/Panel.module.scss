@@ -1,0 +1,13 @@
+@use "variables" as v;
+
+.panel {
+  .heading {
+    margin: 0 0 14px 0; // bespoke to this component
+    font-family: v.$font-display;
+    font-size: 18px; // bespoke to this component
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    // 18px is below WCAG's large-text cutoff, so it needs accent2's 4.5:1 bar against the panel, not accent1's 3.0.
+    color: var(--accent-2);
+  }
+}
