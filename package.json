@@ -17,7 +17,7 @@
   "dependencies": {
     "@hailmary/shared": "github:goaji/hailmary-shared#v1.12.16",
     "gray-matter": "^4.0.3",
-    "next": "16.3.5",
+    "next": "16.3.6",
     "next-intl": "^4.13.7",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
@@ -33,7 +33,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.5",
+    "eslint-config-next": "16.3.6",
     "eslint-config-prettier": "10.1.8",
     "prettier": "3.9.7",
     "sass": "^1.103.1",
