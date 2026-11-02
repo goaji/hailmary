@@ -31,8 +31,10 @@ export function LiveScoreStatus({ initialIsLive, hasLiveGames }: LiveScoreStatus
   const isStale = data?.updatedAt
     ? now - new Date(data.updatedAt).getTime() > STALE_THRESHOLD_MS
     : false;
+  // The latest poll beats the possibly cached server render.
+  const isLive = data?.isLive ?? initialIsLive;
 
-  if (initialIsLive && !error && !isStale) {
+  if (isLive && !error && !isStale) {
     return null;
   }
 

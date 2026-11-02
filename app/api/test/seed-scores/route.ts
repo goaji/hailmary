@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { writeScores } from "@/utils/store";
+import { revalidateScorePages } from "@/utils/revalidateScorePages";
 import { isTestEnvironmentEnabled, isTestRequestAuthorized } from "@/utils/testAuth";
 
 // Only for hailmary-e2e. Never set E2E_TEST_SECRET
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
   }
 
   writeScores(parsed.data.games, { updatedAt: new Date().toISOString(), source: "test-seed" });
+  revalidateScorePages(); // same as a real sync, so tests see what visitors would
   return NextResponse.json({ status: "seeded", count: parsed.data.games.length });
 }
 
@@ -45,5 +47,6 @@ export async function DELETE(request: Request) {
   }
 
   writeScores([], { updatedAt: null });
+  revalidateScorePages();
   return NextResponse.json({ status: "cleared" });
 }

@@ -1,9 +1,8 @@
 import { timingSafeEqual } from "node:crypto";
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import { routing } from "@/routing";
 import { CURRENT_SEASON, fetchSeasonGames } from "@/utils/scores";
 import { readScores, shouldSkipSync, writeScores } from "@/utils/store";
+import { revalidateScorePages } from "@/utils/revalidateScorePages";
 
 export const dynamic = "force-dynamic";
 
@@ -65,10 +64,7 @@ export async function GET(request: Request) {
   });
 
   // Time-based revalidate isn't reliably landing on this host, so tell Next.js explicitly rather than waiting on it.
-  for (const locale of routing.locales) {
-    revalidatePath(`/${locale}`);
-    revalidatePath(`/${locale}/program`);
-  }
+  revalidateScorePages();
 
   return NextResponse.json({ status: "synced", count: result.games.length });
 }
