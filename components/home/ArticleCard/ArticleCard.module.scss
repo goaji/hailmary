@@ -14,6 +14,14 @@
   aspect-ratio: 16 / 9; // the site's one editorial cover-photo ratio, everywhere an article image appears
   border-radius: 3px;
   overflow: hidden;
+
+  :global([data-hide-image-mobile]) & {
+    display: none;
+
+    @include mix.mq(md) {
+      display: block;
+    }
+  }
 }
 
 .meta {

@@ -14,6 +14,8 @@ type ArticleGridProps = {
   lang?: string;
   /** Leading cards that render with next/image `priority` — above-the-fold grids only. */
   priorityCount?: number;
+  /** Hides card cover images below md, so the grid reads as a list on phones. */
+  hideImagesOnMobile?: boolean;
 };
 
 export function ArticleGrid({
@@ -23,12 +25,13 @@ export function ArticleGrid({
   articles,
   lang,
   priorityCount = 0,
+  hideImagesOnMobile = false,
 }: ArticleGridProps) {
   return (
     <section className={styles.articleGrid} aria-labelledby={headingId} lang={lang}>
       <SectionHeading id={headingId}>{heading}</SectionHeading>
       {articles.length > 0 ? (
-        <div className={styles.grid}>
+        <div className={styles.grid} data-hide-image-mobile={hideImagesOnMobile ? "" : undefined}>
           {articles.map((article, index) => (
             <ArticleCard key={article.slug} article={article} priority={index < priorityCount} />
           ))}

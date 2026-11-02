@@ -64,6 +64,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
             articles={gridArticles}
             lang={isFallback ? servedLocale : undefined}
             priorityCount={3}
+            hideImagesOnMobile
           />
         </PageLayout>
       </div>
