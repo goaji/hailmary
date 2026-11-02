@@ -1,0 +1,51 @@
+name: Smoke after deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# A newer push supersedes a run still waiting on an older deploy.
+concurrency:
+  group: smoke-after-deploy
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # Hostinger builds on the same push; wait until /api/version reports this commit.
+      - name: Wait for deploy
+        run: |
+          for i in $(seq 1 30); do
+            live=$(curl -s https://hailmary.ro/api/version | jq -r .commit || true)
+            echo "attempt $i: live=$live"
+            [ "$live" = "unknown" ] && { echo "::error::/api/version reports unknown - the build had no git history"; exit 1; }
+            [ "$live" = "$GITHUB_SHA" ] && exit 0
+            sleep 20
+          done
+          echo "::error::Deploy of $GITHUB_SHA not live after 10 minutes"
+          exit 1
+
+      - uses: actions/checkout@v4
+        with:
+          repository: goaji/hailmary-e2e
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # One worker keeps the request rate below Hostinger's bot challenge.
+      - run: npm run test:smoke -- --workers=1
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: smoke-report
+          path: playwright-report/
+          retention-days: 7
