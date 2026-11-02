@@ -1,8 +1,19 @@
 import path from "node:path";
+import { execSync } from "node:child_process";
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
+// Commit baked in at build, so the smoke workflow can tell when a deploy is live.
+function buildCommit(): string {
+  try {
+    return execSync("git rev-parse HEAD", { encoding: "utf8" }).trim();
+  } catch {
+    return "unknown";
+  }
+}
+
 const nextConfig: NextConfig = {
+  env: { BUILD_COMMIT: buildCommit() },
   // Bundle it: as a runtime ESM external its node:process import reads process.stdin, which throws EEXIST on Hostinger.
   transpilePackages: ["next-mdx-remote"],
   images: {
